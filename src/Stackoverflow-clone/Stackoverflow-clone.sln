@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stackoverflow-clone", "Stackoverflow-clone\Stackoverflow-clone.csproj", "{B040846A-6AFB-4D47-B277-7F62B1382927}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stackoverflow.Web", "Stackoverflow.Web\Stackoverflow.Web.csproj", "{DB5A1F88-DEF9-4110-9807-34A998A8128B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B040846A-6AFB-4D47-B277-7F62B1382927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B040846A-6AFB-4D47-B277-7F62B1382927}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B040846A-6AFB-4D47-B277-7F62B1382927}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B040846A-6AFB-4D47-B277-7F62B1382927}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB5A1F88-DEF9-4110-9807-34A998A8128B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB5A1F88-DEF9-4110-9807-34A998A8128B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB5A1F88-DEF9-4110-9807-34A998A8128B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB5A1F88-DEF9-4110-9807-34A998A8128B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
