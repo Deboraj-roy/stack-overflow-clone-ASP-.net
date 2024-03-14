@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Stackoverflow_clone.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
