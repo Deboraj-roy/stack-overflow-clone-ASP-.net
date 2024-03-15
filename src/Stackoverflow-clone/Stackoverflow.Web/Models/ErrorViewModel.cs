@@ -1,4 +1,4 @@
-namespace Stackoverflow_clone.Models
+namespace Stackoverflow.Web.Models
 {
     public class ErrorViewModel
     {

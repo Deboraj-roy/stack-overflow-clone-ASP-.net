@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Stackoverflow.Infrastructure
 {
-    public class ApplicationDbContext : IdentityDbContext,
-        IApplicationDbContext
+    public class ApplicationDbContext : IdentityDbContext, IApplicationDbContext
     {
         private readonly string _connectionString;
         private readonly string _migrationAssembly;
@@ -14,7 +13,6 @@ namespace Stackoverflow.Infrastructure
             _connectionString = connectionString;
             _migrationAssembly = migrationAssembly;
         }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -22,16 +20,9 @@ namespace Stackoverflow.Infrastructure
                 optionsBuilder.UseSqlServer(_connectionString,
                     x => x.MigrationsAssembly(_migrationAssembly));
             }
-
             base.OnConfiguring(optionsBuilder);
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            
-
-            base.OnModelCreating(builder);
-        }
-         
+       
     }
 }

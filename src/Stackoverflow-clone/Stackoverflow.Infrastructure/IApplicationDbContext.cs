@@ -9,4 +9,5 @@ namespace Stackoverflow.Infrastructure
     public interface IApplicationDbContext
     {
     }
+//dotnet ef migrations add initial --project Stackoverflow.Web --context ApplicationDbContext
 }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Stackoverflow.Application;
 using Stackoverflow.Infrastructure;
-using Stackoverflow_clone;
+using Stackoverflow.Web;
 using System.Reflection;
 using Serilog;
 using Serilog.Events;
@@ -22,7 +22,7 @@ try
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
     var migrationAssembly = Assembly.GetExecutingAssembly().FullName;
 
-    Log.Information("Connection String:" + connectionString);
+   // Log.Information("Connection String:" + connectionString);
 
     builder.Host.UseSerilog((ctx, lc) => lc
         .MinimumLevel.Debug()
@@ -46,9 +46,11 @@ try
         (m) => m.MigrationsAssembly(migrationAssembly)));
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     //builder.Services.AddIdentity();
 
+    builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+        .AddEntityFrameworkStores<ApplicationDbContext>();
 
     builder.Services.AddControllersWithViews();
 
@@ -74,9 +76,13 @@ try
     app.UseAuthorization();
 
     app.MapControllerRoute(
+        name: "areas",
+        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+    app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
-    app.MapRazorPages();
+    //app.MapRazorPages();
 
     app.Run();
 }

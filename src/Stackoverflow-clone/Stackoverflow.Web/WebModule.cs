@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace Stackoverflow_clone
+namespace Stackoverflow.Web
 {
     public class WebModule : Module
     {

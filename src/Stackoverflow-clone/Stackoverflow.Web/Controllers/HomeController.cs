@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Stackoverflow_clone.Models;
+using Stackoverflow.Web.Models;
 using System.Diagnostics;
 
-namespace Stackoverflow_clone.Controllers
+namespace Stackoverflow.Web.Controllers
 {
     public class HomeController : Controller
     {

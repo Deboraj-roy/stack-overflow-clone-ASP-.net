@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Stackoverflow_clone
+namespace Stackoverflow.Web
 {
     public class WebProfile : Profile
     {
