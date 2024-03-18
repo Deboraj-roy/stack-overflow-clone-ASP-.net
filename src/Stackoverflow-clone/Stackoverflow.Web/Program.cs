@@ -8,6 +8,7 @@ using Stackoverflow.Web;
 using System.Reflection;
 using Serilog;
 using Serilog.Events;
+using Stackoverflow.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,13 +48,9 @@ try
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
     //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-    //builder.Services.AddIdentity();
-
-    builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<ApplicationDbContext>();
-
+    builder.Services.AddIdentity();
     builder.Services.AddControllersWithViews();
-
+    builder.Services.AddCookieAuthentication();
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
