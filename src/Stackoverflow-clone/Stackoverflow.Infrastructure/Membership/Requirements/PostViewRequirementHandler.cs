@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿/*using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 
 namespace Stackoverflow.Infrastructure.Requirements
@@ -19,3 +19,4 @@ namespace Stackoverflow.Infrastructure.Requirements
         }
     }
 }
+*/

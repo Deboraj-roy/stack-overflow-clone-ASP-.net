@@ -12,7 +12,7 @@ using Stackoverflow.Infrastructure;
 namespace Stackoverflow.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240318141920_registrationTable")]
+    [Migration("20240318143643_registrationTable")]
     partial class registrationTable
     {
         /// <inheritdoc />

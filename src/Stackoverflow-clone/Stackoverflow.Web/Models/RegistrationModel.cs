@@ -55,10 +55,11 @@ namespace Stackoverflow.Web.Models
             var user = new ApplicationUser { UserName = Email, Email = Email, FirstName = "", LastName = "" };
             var result = await _userManager.CreateAsync(user, Password);
             if (result.Succeeded)
-            { 
+            {
 
-                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdateCourse", "true"));
-                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewCourse", "true"));
+                await _userManager.AddToRoleAsync(user, UserRoles.Newbie);
+                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdateCourse", "true"));
+                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewCourse", "true"));
 
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

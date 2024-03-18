@@ -1,4 +1,4 @@
-﻿
+﻿/*
 using System.Security.Claims;
 
 namespace Stackoverflow.Infrastructure.Membership
@@ -7,4 +7,4 @@ namespace Stackoverflow.Infrastructure.Membership
     {
         Task<string> GetJwtToken(IList<Claim> claims, string key, string issuer, string audience);
     }
-}
+}*/

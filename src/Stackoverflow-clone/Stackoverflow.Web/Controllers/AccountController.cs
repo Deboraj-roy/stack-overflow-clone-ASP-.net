@@ -14,7 +14,7 @@ namespace Stackoverflow.Web.Controllers
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ITokenService _tokenService;
+        //private readonly ITokenService _tokenService;
         private readonly IConfiguration _configuration;
 
         public AccountController(ILifetimeScope scope,
@@ -22,7 +22,7 @@ namespace Stackoverflow.Web.Controllers
             RoleManager<ApplicationRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
-            ITokenService tokenService,
+            //ITokenService tokenService,
             IConfiguration configuration)
         {
             _scope = scope;
@@ -30,7 +30,7 @@ namespace Stackoverflow.Web.Controllers
             _roleManager = roleManager;
             _signInManager = signInManager;
             _userManager = userManager;
-            _tokenService = tokenService;
+            //_tokenService = tokenService;
             _configuration = configuration;
         }
 
@@ -69,6 +69,22 @@ namespace Stackoverflow.Web.Controllers
             return View(model);
 
 
+        }
+
+        public async Task<IActionResult> CreateRoles()
+        {
+            //await _roleManager.CreateAsync(new ApplicationRole { Name = "Admin"});
+            //await _roleManager.CreateAsync(new ApplicationRole { Name = "User" });
+            //await _roleManager.CreateAsync(new ApplicationRole { Name = "Employee" });
+            //await _roleManager.CreateAsync(new ApplicationRole { Name = "Supervisor" });
+            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.Admin });
+            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.User });
+            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.Newbie });
+            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.Elite});
+            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.PowerUser });
+            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.VIP });
+
+            return View();
         }
     }
 }
