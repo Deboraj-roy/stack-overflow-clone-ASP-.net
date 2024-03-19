@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Stackoverflow.Infrastructure.Membership;
 using Stackoverflow.Web.Models;
+using System.Text;
 
 namespace Stackoverflow.Web.Controllers
 {
@@ -123,6 +125,40 @@ namespace Stackoverflow.Web.Controllers
             else
             {
                 return RedirectToAction("Index", "Home");
+            }
+        }
+
+        public async Task<IActionResult> ConfirmEmail(string userId, string code, string returnUrl)
+        {
+            if (userId == null || code == null)
+            {
+                // Handle invalid parameters
+                return BadRequest("User Id or code is missing.");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                // Handle user not found
+                return NotFound("User not found.");
+            }
+
+            // Decode the code
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+
+            // Confirm the user's email
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            if (result.Succeeded)
+            {
+                // Email confirmed successfully
+                // Redirect to the specified returnUrl or a default page
+                return Redirect(returnUrl ?? "/"); // You may adjust the default page as needed
+            }
+            else
+            {
+                // Failed to confirm email
+                // You may handle the failure appropriately, such as showing an error message
+                return BadRequest("Failed to confirm email.");
             }
         }
 
