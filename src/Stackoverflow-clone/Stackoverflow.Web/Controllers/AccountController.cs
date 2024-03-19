@@ -65,10 +65,13 @@ namespace Stackoverflow.Web.Controllers
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
+                    _logger.LogInformation("User Register Failed");
                     return View(model);
+
                 }
                 else
                     TempData["success"] = "User Registered Successfully ";
+                    _logger.LogInformation("User Registered Successfully");
                     return Redirect(response.redirectLocation);
             }
             return View(model);
@@ -101,11 +104,13 @@ namespace Stackoverflow.Web.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    _logger.LogInformation("Login Successfully");
                     TempData["success"] = "Login Successfully ";
                     return LocalRedirect(model.ReturnUrl);
                 }
                 else
                 {
+                    _logger.LogInformation("Invalid login attempt.");
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 }
 
@@ -120,6 +125,7 @@ namespace Stackoverflow.Web.Controllers
         {
             await _signInManager.SignOutAsync();
 
+            _logger.LogInformation("LogOut Successfully.");
             TempData["warning"] = "LogOut Successfully ";
             if (returnUrl != null)
             {
