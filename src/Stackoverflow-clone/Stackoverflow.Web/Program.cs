@@ -10,6 +10,7 @@ using Serilog;
 using Serilog.Events;
 using Stackoverflow.Infrastructure.Extensions;
 using Stackoverflow.Infrastructure.Email;
+using Stackoverflow.Infrastructure.Membership;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +54,17 @@ try
     builder.Services.AddControllersWithViews();
     builder.Services.AddCookieAuthentication();
     builder.Services.Configure<Smtp>(builder.Configuration.GetSection("Smtp"));
+    
+    builder.Services.AddAuthorization( options =>
+    {
+        options.AddPolicy("SupperAdmin", policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.RequireRole(UserRoles.Admin);
+            policy.RequireRole(UserRoles.Elite);
+        });
+    });
+
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.

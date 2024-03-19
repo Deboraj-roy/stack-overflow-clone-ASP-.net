@@ -61,7 +61,8 @@ namespace Stackoverflow.Web.Models
             if (result.Succeeded)
             {
 
-                await _userManager.AddToRoleAsync(user, UserRoles.Newbie);
+                await _userManager.AddToRoleAsync(user, UserRoles.Elite);
+                await _userManager.AddToRoleAsync(user, UserRoles.Admin);
                 //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdateCourse", "true"));
                 //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewCourse", "true"));
 
