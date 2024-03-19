@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Stackoverflow.Application.Utilities;
+using Stackoverflow.Infrastructure.Email;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +31,8 @@ namespace Stackoverflow.Infrastructure
                 .WithParameter("migrationAssembly", _migrationAssembly)
                 .InstancePerLifetimeScope();
 
-            
+            builder.RegisterType<HtmlEmailService>().As<IEmailService>()
+                .InstancePerLifetimeScope();
         }
     }
 }

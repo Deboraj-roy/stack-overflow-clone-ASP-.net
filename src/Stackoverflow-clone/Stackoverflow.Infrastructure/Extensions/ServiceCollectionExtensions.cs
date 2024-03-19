@@ -55,7 +55,7 @@ namespace Stackoverflow.Infrastructure.Extensions
                     options.LoginPath = new PathString("/Account/Login");
                     options.AccessDeniedPath = new PathString("/Account/Login");
                     options.LogoutPath = new PathString("/Account/Logout");
-                    options.Cookie.Name = "FirstDemoPortal.Identity";
+                    options.Cookie.Name = "StackoverflowPortal.Identity";
                     options.SlidingExpiration = true;
                     options.ExpireTimeSpan = TimeSpan.FromHours(1);
                 });

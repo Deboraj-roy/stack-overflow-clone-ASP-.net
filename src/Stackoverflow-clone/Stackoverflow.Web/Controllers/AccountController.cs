@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Stackoverflow.Infrastructure.Membership;
@@ -71,12 +72,11 @@ namespace Stackoverflow.Web.Controllers
 
         }
 
+
+        //only for admin
+        [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> CreateRoles()
         {
-            //await _roleManager.CreateAsync(new ApplicationRole { Name = "Admin"});
-            //await _roleManager.CreateAsync(new ApplicationRole { Name = "User" });
-            //await _roleManager.CreateAsync(new ApplicationRole { Name = "Employee" });
-            //await _roleManager.CreateAsync(new ApplicationRole { Name = "Supervisor" });
             await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.Admin });
             await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.User });
             await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.Newbie });

@@ -9,6 +9,7 @@ using System.Reflection;
 using Serilog;
 using Serilog.Events;
 using Stackoverflow.Infrastructure.Extensions;
+using Stackoverflow.Infrastructure.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,7 @@ try
     builder.Services.AddIdentity();
     builder.Services.AddControllersWithViews();
     builder.Services.AddCookieAuthentication();
+    builder.Services.Configure<Smtp>(builder.Configuration.GetSection("Smtp"));
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
