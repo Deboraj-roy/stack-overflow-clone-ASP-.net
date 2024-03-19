@@ -68,6 +68,7 @@ namespace Stackoverflow.Web.Controllers
                     return View(model);
                 }
                 else
+                    TempData["success"] = "User Registered Successfully ";
                     return Redirect(response.redirectLocation);
             }
             return View(model);
@@ -100,6 +101,7 @@ namespace Stackoverflow.Web.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    TempData["success"] = "Login Successfully ";
                     return LocalRedirect(model.ReturnUrl);
                 }
                 else
@@ -118,6 +120,7 @@ namespace Stackoverflow.Web.Controllers
         {
             await _signInManager.SignOutAsync();
 
+            TempData["warning"] = "LogOut Successfully ";
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);
@@ -149,7 +152,8 @@ namespace Stackoverflow.Web.Controllers
             // Confirm the user's email
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Succeeded)
-            {
+            {  
+                TempData["success"] = "Email confirmed successfully ";
                 // Email confirmed successfully
                 // Redirect to the specified returnUrl or a default page
                 return Redirect(returnUrl ?? "/"); // You may adjust the default page as needed

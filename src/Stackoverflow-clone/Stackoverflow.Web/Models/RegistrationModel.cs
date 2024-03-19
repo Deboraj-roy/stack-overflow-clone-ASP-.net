@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Text;
 using Stackoverflow.Application.Utilities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Stackoverflow.Web.Models
 {
@@ -60,7 +61,6 @@ namespace Stackoverflow.Web.Models
             var result = await _userManager.CreateAsync(user, Password);
             if (result.Succeeded)
             {
-
                 await _userManager.AddToRoleAsync(user, UserRoles.Elite);
                 await _userManager.AddToRoleAsync(user, UserRoles.Admin);
                 //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdateCourse", "true"));
