@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Stackoverflow.Application.Features.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace Stackoverflow.Application
     {
         protected override void Load(ContainerBuilder builder)
         {
-
+            builder.RegisterType<PostManagementService>().As<IPostManagementService>()
+                .InstancePerLifetimeScope();
         }
     }
 }

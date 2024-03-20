@@ -1,6 +1,9 @@
 ﻿using Autofac;
+using Stackoverflow.Application;
 using Stackoverflow.Application.Utilities;
+using Stackoverflow.Domain.Repositories;
 using Stackoverflow.Infrastructure.Email;
+using Stackoverflow.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +32,12 @@ namespace Stackoverflow.Infrastructure
             builder.RegisterType<ApplicationDbContext>().As<IApplicationDbContext>()
                 .WithParameter("connectionString", _connectionString)
                 .WithParameter("migrationAssembly", _migrationAssembly)
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<ApplicationUnitOfWork>().As<IApplicationUnitOfWork>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<PostRepository>().As<IPostRepository>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<HtmlEmailService>().As<IEmailService>()
