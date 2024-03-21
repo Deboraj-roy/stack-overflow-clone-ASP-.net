@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Stackoverflow.Domain.Entities;
 using Stackoverflow.Infrastructure.Membership;
 
 namespace Stackoverflow.Infrastructure
@@ -28,6 +29,7 @@ namespace Stackoverflow.Infrastructure
             base.OnConfiguring(optionsBuilder);
         }
 
-       
+        public DbSet<Post> posts { get; set; }
+
     }
 }

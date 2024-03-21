@@ -12,8 +12,7 @@ namespace Stackoverflow.Domain.Entities
         public Guid UserId { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
-        public PostType PostType { get; set; }
-        public Guid? ParentPostId { get; set; }
+        public PostType PostType { get; set; } 
         public int Upvotes { get; set; }
         public int Downvotes { get; set; }
         public DateTime CreationDate { get; set; }

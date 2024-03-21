@@ -7,31 +7,51 @@ using System.Threading.Tasks;
 
 namespace Stackoverflow.Application.Features.Services
 {
-    internal class PostManagementService : IPostManagementService
+    public class PostManagementService : IPostManagementService
     {
-        public Task CreatePostAsync()
+        private readonly IApplicationUnitOfWork _unitOfWork;
+        public PostManagementService(IApplicationUnitOfWork unitOfWork)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork;
+        }
+        public async Task CreatePostAsync(string title, string body)
+        {
+            Post post = new Post
+            {
+                Title = title,
+                Body = body
+            };
+
+            await _unitOfWork.PostRepository.AddAsync(post);
+            await _unitOfWork.SaveAsync();
         }
 
-        public Task DeletePostAsync(Guid id)
+        public async Task DeletePostAsync(Guid id)
         {
-            throw new NotImplementedException();
+            await _unitOfWork.PostRepository.RemoveAsync(id);
+            await _unitOfWork.SaveAsync();
         }
 
-        public Task<IEnumerable<Post>>? GetAllPostAsync()
+        public async Task<IEnumerable<Post>> GetAllPostAsync()
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.PostRepository.GetAllAsync();
         }
 
-        public Task<Post> GetPostAsync(Guid id)
+        public async Task<Post> GetPostAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.PostRepository.GetByIdAsync(id);
         }
 
-        public Task UpdatePostAsync()
+        public async Task UpdatePostAsync(Guid id, string title, string body)
         {
-            throw new NotImplementedException();
+            var post = await GetPostAsync(id);
+            if (post is not null)
+            {
+                post.Title = title;
+                post.Body = body;
+            }
+
+            await _unitOfWork.SaveAsync();
         }
     }
 }
