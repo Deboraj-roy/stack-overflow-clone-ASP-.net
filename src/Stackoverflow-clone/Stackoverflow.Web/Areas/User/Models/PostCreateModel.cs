@@ -24,7 +24,7 @@ namespace Stackoverflow.Web.Areas.User.Models
             _postManagementService = _scope.Resolve<IPostManagementService>();
         }
 
-        internal async Task CreateCourseAsync()
+        internal async Task CreatePostAsync()
         {
             await _postManagementService.CreatePostAsync(Title, Body);
         }
