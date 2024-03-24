@@ -37,6 +37,11 @@ namespace Stackoverflow.Application.Features.Services
             return await _unitOfWork.PostRepository.GetAllAsync();
         }
 
+        public Task<IEnumerable<Post>>? GetAllPostAsync(int pageIndex, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Post> GetPostAsync(Guid id)
         {
             return await _unitOfWork.PostRepository.GetByIdAsync(id);

@@ -13,6 +13,6 @@ namespace Stackoverflow.Application.Features.Services
         Task DeletePostAsync(Guid id);
         Task<Post> GetPostAsync(Guid id);
         Task UpdatePostAsync(Guid id, string title, string body);
-        Task<IEnumerable<Post>>? GetAllPostAsync();
+        Task<IEnumerable<Post>>? GetAllPostAsync(int pageIndex, int pageSize);
     }
 }
