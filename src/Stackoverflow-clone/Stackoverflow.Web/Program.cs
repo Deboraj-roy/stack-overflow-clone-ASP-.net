@@ -11,6 +11,8 @@ using Serilog.Events;
 using Stackoverflow.Infrastructure.Extensions;
 using Stackoverflow.Infrastructure.Email;
 using Stackoverflow.Infrastructure.Membership;
+using GoogleReCaptcha.V3.Interface;
+using GoogleReCaptcha.V3;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,7 +56,9 @@ try
     builder.Services.AddControllersWithViews();
     builder.Services.AddCookieAuthentication();
     builder.Services.Configure<Smtp>(builder.Configuration.GetSection("Smtp"));
-    
+    //googleReCaptcha
+    builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
+
     builder.Services.AddAuthorization( options =>
     {
         options.AddPolicy("SupperAdmin", policy =>

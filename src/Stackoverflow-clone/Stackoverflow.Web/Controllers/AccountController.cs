@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +21,7 @@ namespace Stackoverflow.Web.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         //private readonly ITokenService _tokenService;
         private readonly IConfiguration _configuration;
+        private readonly ICaptchaValidator _captchaValidator;
 
         public AccountController(ILifetimeScope scope,
             ILogger<AccountController> logger,
@@ -27,7 +29,8 @@ namespace Stackoverflow.Web.Controllers
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             //ITokenService tokenService,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ICaptchaValidator captchaValidator)
         {
             _scope = scope;
             _logger = logger;
@@ -36,6 +39,7 @@ namespace Stackoverflow.Web.Controllers
             _userManager = userManager;
             //_tokenService = tokenService;
             _configuration = configuration;
+            _captchaValidator = captchaValidator;
         }
 
         public IActionResult Register()

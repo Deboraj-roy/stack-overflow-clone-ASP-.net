@@ -15,6 +15,8 @@
     Toastr Notification
     -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+
 <style>
 body {
   font-family: "Lato", sans-serif;
@@ -89,6 +91,7 @@ body {
     <div class="container">
         <main role="main" class="pb-3">
             <partial name="_Notification" />
+            <partial name="_CaptchainputPartial" />
             @RenderBody()
         </main>
     </div>
@@ -103,7 +106,13 @@ body {
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdn.tiny.cloud/1/564ylwbaerzj225tacpjc7jkrcpg2n91ny8q7k3g0a3eppk6/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script>
+        function onSubmit(token) {
+            document.getElementById("form").submit();
+        }
+        <partial name="_CaptchaScriptsPartial" />
+    </script>
 
     <!-- Toastr options -->
     <script>
