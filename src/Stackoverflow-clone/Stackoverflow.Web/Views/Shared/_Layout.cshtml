@@ -15,7 +15,10 @@
     Toastr Notification
     -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
-
+   
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LeQgqYpAAAAAILcUrWQ7SrqUGJUYX1UIH8mTQ9f"></script>
+    <!-- Your code -->
+   
 <style>
 body {
   font-family: "Lato", sans-serif;
@@ -78,7 +81,13 @@ body {
                        
                         <form asp-controller="" asp-action="">
                             <input type="text" id="search-input" placeholder="Search...">
-                            <button type="submit"><i class="bi bi-search"></i></button>
+                            <!-- Replace the variables below. -->
+                            <button class="g-recaptcha"
+                                    data-sitekey="6LeQgqYpAAAAAILcUrWQ7SrqUGJUYX1UIH8mTQ9f"
+                                    data-callback='onSubmit'
+                                    data-action='submit'>
+                                <i class="bi bi-search"></i>
+                            </button>
                         </form>
                     </div>
                     <partial name="_LoginPartial" />
@@ -125,6 +134,12 @@ body {
             "hideEasing": "linear",
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
+        }
+    </script>
+    <!-- Replace the variables below. -->
+    <script>
+        function onSubmit(token) {
+            document.getElementById("demo-form").submit();
         }
     </script>
     @await RenderSectionAsync("Scripts", required: false)
