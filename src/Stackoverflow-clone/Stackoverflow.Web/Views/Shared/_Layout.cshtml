@@ -91,7 +91,7 @@ body {
     <div class="container">
         <main role="main" class="pb-3">
             <partial name="_Notification" />
-            <partial name="_CaptchainputPartial" />
+            @* <partial name="_CaptchainputPartial" /> *@
             @RenderBody()
         </main>
     </div>
@@ -111,7 +111,7 @@ body {
         function onSubmit(token) {
             document.getElementById("form").submit();
         }
-        <partial name="_CaptchaScriptsPartial" />
+        // <partial name="_CaptchaScriptsPartial" />
     </script>
 
     <!-- Toastr options -->

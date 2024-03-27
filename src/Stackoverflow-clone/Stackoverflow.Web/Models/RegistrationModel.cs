@@ -42,6 +42,9 @@ namespace Stackoverflow.Web.Models
 
         public string? ReturnUrl { get; set; }
 
+        //[Required]
+        public string Captcha { get; set; }
+
         public RegistrationModel() { }
 
         public RegistrationModel(UserManager<ApplicationUser> userManager,

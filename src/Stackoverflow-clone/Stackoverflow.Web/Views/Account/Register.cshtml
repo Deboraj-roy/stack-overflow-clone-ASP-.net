@@ -10,6 +10,7 @@
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Create a new account.</h2>
             <hr />
+            <input type="hidden" asp-for="@Model.Captcha" id="captchaInput" />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <input asp-for="Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
@@ -33,4 +34,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <partial name="_CaptchaScriptsPartial" />
 }

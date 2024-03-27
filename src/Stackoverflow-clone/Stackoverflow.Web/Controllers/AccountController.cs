@@ -51,7 +51,10 @@ namespace Stackoverflow.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegistrationModel model)
         {
-
+            //if (!await _captchaValidator.IsCaptchaPassedAsync(model.Captcha))
+            //{
+            //    await Console.Out.WriteLineAsync("Invalid captcha");
+            //}
             if (ModelState.IsValid)
             {
                 model.Resolve(_scope);
