@@ -42,7 +42,7 @@ namespace Stackoverflow.Web.Models
 
         public string? ReturnUrl { get; set; }
 
-        //[Required]
+        [Required]
         public string Captcha { get; set; }
 
         public RegistrationModel() { }

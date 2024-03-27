@@ -11,6 +11,7 @@
             <form id="account" method="post" asp-antiforgery="true" asp-controller="Account" asp-action="Login" asp-area="" asp-route-returnurl="/Home/index">
                 <h2>Use a local account to log in.</h2>
                 <hr />
+                <input type="hidden" asp-for="@Model.Captcha" id="captchaInput" />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
                     <input asp-for="Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
@@ -47,6 +48,8 @@
     </div>
 </div>
 
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <partial name="_CaptchaScriptsPartial" />
 }

@@ -19,5 +19,8 @@ namespace Stackoverflow.Web.Models
         public bool RememberMe { get; set; }
 
         public string? ReturnUrl { get; set; }
+
+        [Required]
+        public string Captcha { get; set; }
     }
 }
