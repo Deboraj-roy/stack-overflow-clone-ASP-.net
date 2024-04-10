@@ -1,0 +1,20 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
+RUN apt-get update && apt-get install -y nodejs
+COPY ["Stackoverflow.Web/*.csproj", "Stackoverflow.Web/"]
+COPY ["Stackoverflow.Application/*.csproj", "Stackoverflow.Application/"]
+COPY ["Stackoverflow.Domain/*.csproj", "Stackoverflow.Domain/"]
+COPY ["Stackoverflow.Infrastructure/*.csproj", "Stackoverflow.Infrastructure/"]
+RUN dotnet restore "Stackoverflow.Web/Stackoverflow.Web.csproj"
+COPY . .
+WORKDIR "/src/Stackoverflow.Web"
+RUN dotnet build "Stackoverflow.Web.csproj" -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish "Stackoverflow.Web.csproj" -c Release -o /app
+
+FROM build AS final
+WORKDIR /app
+COPY --from=publish /app .
+EXPOSE 80
+ENTRYPOINT ["dotnet", "Stackoverflow.Web.dll"]

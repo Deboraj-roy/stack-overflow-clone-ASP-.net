@@ -1,0 +1,18 @@
+version: "3"
+services:
+    web:
+        build: 
+            context: .
+            dockerfile: Stackoverflow.Web/DockerFile
+        image: deboraj/stackoverflow.web
+        env_file: 
+            - Stackoverflow.Web/web.env
+        volumes:
+            - stackoverflow-data:/app/Logs
+        ports:
+            - "6969:80"
+        entrypoint: ["dotnet", "Stackoverflow.Web.dll"]
+volumes:
+    stackoverflow-data:
+      external: true
+     
