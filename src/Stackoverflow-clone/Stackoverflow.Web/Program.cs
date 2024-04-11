@@ -27,7 +27,7 @@ try
     var connectionString = builder.Configuration.GetConnectionString("DefaultStackoverflowConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
     var migrationAssembly = Assembly.GetExecutingAssembly().FullName;
 
-   // Log.Information("Connection String:" + connectionString);
+    Log.Information("Connection String:" + connectionString);
 
     builder.Host.UseSerilog((ctx, lc) => lc
         .MinimumLevel.Debug()
