@@ -5,11 +5,13 @@ VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stackoverflow.Web", "Stackoverflow.Web\Stackoverflow.Web.csproj", "{DB5A1F88-DEF9-4110-9807-34A998A8128B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stackoverflow.Application", "Stackoverflow.Application\Stackoverflow.Application.csproj", "{3C05BB1A-7A5E-43BC-80E0-FB5F9EE55FED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stackoverflow.Application", "Stackoverflow.Application\Stackoverflow.Application.csproj", "{3C05BB1A-7A5E-43BC-80E0-FB5F9EE55FED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stackoverflow.Domain", "Stackoverflow.Domain\Stackoverflow.Domain.csproj", "{9D08E6C6-FBB4-4B7A-99D2-6141E49AD161}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stackoverflow.Domain", "Stackoverflow.Domain\Stackoverflow.Domain.csproj", "{9D08E6C6-FBB4-4B7A-99D2-6141E49AD161}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stackoverflow.Infrastructure", "Stackoverflow.Infrastructure\Stackoverflow.Infrastructure.csproj", "{B820E196-6D8E-4CCA-BC83-A2A85A40D633}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stackoverflow.Infrastructure", "Stackoverflow.Infrastructure\Stackoverflow.Infrastructure.csproj", "{B820E196-6D8E-4CCA-BC83-A2A85A40D633}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stackoverflow.API", "Stackoverflow.API\Stackoverflow.API.csproj", "{6D4ABB6A-5161-472A-881F-C6A4DC0EBEE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{B820E196-6D8E-4CCA-BC83-A2A85A40D633}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B820E196-6D8E-4CCA-BC83-A2A85A40D633}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B820E196-6D8E-4CCA-BC83-A2A85A40D633}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D4ABB6A-5161-472A-881F-C6A4DC0EBEE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D4ABB6A-5161-472A-881F-C6A4DC0EBEE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D4ABB6A-5161-472A-881F-C6A4DC0EBEE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D4ABB6A-5161-472A-881F-C6A4DC0EBEE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
