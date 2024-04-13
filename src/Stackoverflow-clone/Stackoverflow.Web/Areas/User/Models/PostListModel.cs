@@ -10,6 +10,7 @@ namespace Stackoverflow.Web.Areas.User.Models
 
         private ILifetimeScope _scope;
         private IPostManagementService _postManagementService;
+        public PostSearch searchTitle { get; set; }
           
         public PostListModel()
         {
@@ -28,12 +29,14 @@ namespace Stackoverflow.Web.Areas.User.Models
 
         public async Task<object> GetPagedCoursesAsync(DataTablesAjaxRequestUtility dataTablesUtility)
         {
-            var data = await _postManagementService.GetAllPostAsync(
+            var data = await _postManagementService.GetPagedPostsAsync(
                 dataTablesUtility.PageIndex,
-                dataTablesUtility.PageSize);
+                dataTablesUtility.PageSize,
+                searchTitle.Title,
+                dataTablesUtility.GetSortText(new string[] { "Title" })
+                );
 
-            return data;
-            /*return new
+            return new
             {
                 recordsTotal = data.total,
                 recordsFiltered = data.totalDisplay,
@@ -41,12 +44,10 @@ namespace Stackoverflow.Web.Areas.User.Models
                         select new string[]
                         {
                                 HttpUtility.HtmlEncode(record.Title),
-                                HttpUtility.HtmlEncode(record.Description),
-                                record.Fees.ToString(),
                                 record.Id.ToString()
                         }
                     ).ToArray()
-            };*/
+            };
         }
 
         internal async Task DeleteCourseAsync(Guid id)

@@ -90,14 +90,15 @@ try
 
     app.UseAuthorization();
 
-    app.MapControllerRoute(
-        name: "areas",
-        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-    app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-    app.MapRazorPages();
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllerRoute(
+            name: "default",
+            pattern: "{area:exists}/{controller=Post}/{action=Index}/{id?}",
+            defaults: new { area = "user" }
+        );
+        endpoints.MapRazorPages();
+    });
 
     app.Run();
 }
