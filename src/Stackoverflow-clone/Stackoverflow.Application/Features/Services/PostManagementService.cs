@@ -32,14 +32,14 @@ namespace Stackoverflow.Application.Features.Services
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<Post>> GetAllPostAsync()
-        {
-            return await _unitOfWork.PostRepository.GetAllAsync();
-        }
+        //public async Task<IEnumerable<Post>> GetAllPostAsync()
+        //{
+        //    return await _unitOfWork.PostRepository.GetAllAsync();
+        //}
 
-        public Task<IEnumerable<Post>>? GetAllPostAsync(int pageIndex, int pageSize)
+        public async Task<(IList<Post> records, int total, int totalDisplay)> GetPagedPostsAsync(int pageIndex, int pageSize, string searchTitle, string sortBy)
         {
-            throw new NotImplementedException();
+           return await _unitOfWork.PostRepository.GetTableDataAsync(searchTitle, sortBy, pageIndex, pageSize);
         }
 
         public async Task<Post> GetPostAsync(Guid id)
@@ -57,6 +57,11 @@ namespace Stackoverflow.Application.Features.Services
             }
 
             await _unitOfWork.SaveAsync();
+        }
+
+        async Task<IList<Post>>? IPostManagementService.GetPostAsync()
+        {
+            return await _unitOfWork.PostRepository.GetAllAsync();
         }
     }
 }

@@ -28,7 +28,7 @@ try
             .Enrich.FromLogContext()
             .ReadFrom.Configuration(builder.Configuration));
 
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+    var connectionString = builder.Configuration.GetConnectionString("DefaultAPIConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
     var migrationAssembly = Assembly.GetExecutingAssembly().FullName;
 
     builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -50,17 +50,17 @@ try
 
     //builder.Services.AddAuthorization(options =>
     //{
-    //    options.AddPolicy("CourseViewRequirementPolicy", policy =>
+    //    options.AddPolicy("PostViewRequirementPolicy", policy =>
     //    {
     //        policy.AuthenticationSchemes.Clear();
     //        policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
     //        policy.RequireAuthenticatedUser();
-    //        policy.Requirements.Add(new CourseViewRequirement());
+    //        policy.Requirements.Add(new PostViewRequirement());
     //    });
     //});
 
 
-    //builder.Services.AddSingleton<IAuthorizationHandler, CourseViewRequirementHandler>();
+    //builder.Services.AddSingleton<IAuthorizationHandler, PostViewRequirementHandler>();
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
