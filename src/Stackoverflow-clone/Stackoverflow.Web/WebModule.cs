@@ -9,6 +9,7 @@ namespace Stackoverflow.Web
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<PostCreateModel>().AsSelf();
+            builder.RegisterType<PostListModel>().AsSelf();
             builder.RegisterType<RegistrationModel>().AsSelf();   
             builder.RegisterType<LoginModel>().AsSelf();
         }

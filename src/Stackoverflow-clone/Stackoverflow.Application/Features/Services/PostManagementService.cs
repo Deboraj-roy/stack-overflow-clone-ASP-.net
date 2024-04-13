@@ -1,4 +1,5 @@
-﻿using Stackoverflow.Domain.Entities;
+﻿using Newtonsoft.Json;
+using Stackoverflow.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Stackoverflow.Application.Features.Services
     public class PostManagementService : IPostManagementService
     {
         private readonly IApplicationUnitOfWork _unitOfWork;
+
         public PostManagementService(IApplicationUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -39,7 +41,7 @@ namespace Stackoverflow.Application.Features.Services
 
         public async Task<(IList<Post> records, int total, int totalDisplay)> GetPagedPostsAsync(int pageIndex, int pageSize, string searchTitle, string sortBy)
         {
-           return await _unitOfWork.PostRepository.GetTableDataAsync(searchTitle, sortBy, pageIndex, pageSize);
+            return await _unitOfWork.PostRepository.GetTableDataAsync(searchTitle, sortBy, pageIndex, pageSize);
         }
 
         public async Task<Post> GetPostAsync(Guid id)
@@ -59,9 +61,10 @@ namespace Stackoverflow.Application.Features.Services
             await _unitOfWork.SaveAsync();
         }
 
-        async Task<IList<Post>>? IPostManagementService.GetPostAsync()
+        public async Task<IList<Post>>? GetPostAsync()
         {
             return await _unitOfWork.PostRepository.GetAllAsync();
         }
+        
     }
 }

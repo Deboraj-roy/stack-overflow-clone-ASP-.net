@@ -21,9 +21,14 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = _scope.Resolve<PostListModel>();
+
+            var posts = await model.GetPostsAsync();
+
+            // Pass posts to your view
+            return View(posts);
         }
 
         public IActionResult Create()
