@@ -8,6 +8,7 @@ namespace Stackoverflow.API
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<ViewPostRequestHandler>().AsSelf();
+            builder.RegisterType<PostCreateModel>().AsSelf();
             base.Load(builder);
         }
     }

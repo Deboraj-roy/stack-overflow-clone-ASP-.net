@@ -20,7 +20,7 @@ namespace Stackoverflow.API.Controllers
             _scope = scope;
         }
 
-        [HttpPost]
+        [HttpPost("view")]
         //[HttpPost, Authorize(Policy = "PostViewRequirementPolicy")]
         public async Task<object> Post([FromBody] ViewPostRequestHandler handler)
         {
@@ -79,6 +79,35 @@ namespace Stackoverflow.API.Controllers
         //        return BadRequest();
         //    }
         //}
+
+        [HttpPost("Create")]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([FromBody] PostCreateModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    model.Resolve(_scope);
+                    await model.CreatePostAsync();
+
+                    _logger.LogInformation("Post created successfully");
+
+                    return Ok(new { message = "Post created successfully" });
+
+
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Server Error");
+                    return StatusCode(500, new { error = "Internal Server Error", message = ex.Message });
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
 
         //[HttpPut]
         //public IActionResult Put(ViewPostRequestHandler model)

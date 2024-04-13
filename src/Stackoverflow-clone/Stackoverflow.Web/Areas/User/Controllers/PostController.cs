@@ -50,6 +50,34 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             return View(model);
         }
 
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(PostCreateModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    model.Resolve(_scope);
+                    await model.CreatePostAsync();
+
+                    TempData["success"] = "Course created successfuly ";
+                    _logger.LogInformation("Course created successfuly");
+
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception de)
+                {
+                    _logger.LogError(de, "Server Error");
+
+                    TempData["warning"] = de.Message + "There was a problem in creating course";
+
+                }
+            }
+
+            return View(model);
+        }
+
         public async Task<IActionResult> Details(Guid id)
         {
             var model = _scope.Resolve<PostDetailsModel>();
@@ -63,34 +91,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
 
             return View(post);
         }
-
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PostCreateModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    model.Resolve(_scope);
-                    await model.CreatePostAsync();
-
-                    TempData["success"] = "Course created successfuly ";
-                    _logger.LogInformation("Course created successfuly");
-                    
-
-                    return RedirectToAction("Index");
-                } 
-                catch (Exception de)
-                {
-                    _logger.LogError(de, "Server Error");
-
-                    TempData["warning"] = de.Message + "There was a problem in creating course";
-                     
-                }
-            }
-
-            return View(model);
-        }
+         
 
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
