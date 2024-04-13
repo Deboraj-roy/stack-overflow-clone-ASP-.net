@@ -51,7 +51,7 @@ try
         (m) => m.MigrationsAssembly(migrationAssembly)));
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-    //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     builder.Services.AddIdentity();
     builder.Services.AddControllersWithViews();
     builder.Services.AddCookieAuthentication();

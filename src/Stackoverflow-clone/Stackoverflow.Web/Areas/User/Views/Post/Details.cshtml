@@ -21,7 +21,7 @@
 <!-- Add a section for the options -->
   
 <div>
-    <button onclick="editPost('@Model.Id')">Edit</button> 
+    <a href="@Url.Action("Update", "Post", new { id = Model.Id })" class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
     <a onclick="Delete('@Url.Action("Delete", "Post", new { id = @Model.Id })')" class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
     <a asp-action="Index">Back to Index</a>
 </div>
@@ -45,10 +45,15 @@
 <script>
     function DeletePost(id) {
         // Confirm deletion using a modal or alert
-            $.ajax({
-                url: '/Post/Delete/' + id,
-                type: 'DELETE',
-            });
+        $.ajax({
+            url: '/Post/Delete/' + id,
+            type: 'DELETE',
+        });
+    } 
+    
+    function editPost(id) {
+        // Redirect to the edit page with the post ID as a parameter
+        window.location.href = '/Post/Edit/' + id;
     }
 
     function Delete(url) {

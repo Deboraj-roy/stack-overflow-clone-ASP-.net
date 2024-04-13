@@ -1,5 +1,4 @@
-﻿using Autofac;
-using Stackoverflow.Web.Areas.Admin.Models;
+﻿using Autofac; 
 using Stackoverflow.Web.Areas.User.Models;
 using Stackoverflow.Web.Models;
 

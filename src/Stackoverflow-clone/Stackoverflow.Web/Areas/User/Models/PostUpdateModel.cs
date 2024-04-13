@@ -5,7 +5,7 @@ using Stackoverflow.Domain.Entities;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using System.ComponentModel.DataAnnotations;
 
-namespace Stackoverflow.Web.Areas.Admin.Models
+namespace Stackoverflow.Web.Areas.User.Models
 {
     public class PostUpdateModel
     {
@@ -13,9 +13,8 @@ namespace Stackoverflow.Web.Areas.Admin.Models
         public Guid Id { get; set; }
         [Required]
         public string Title { get; set; }
-        [Required, Range(0, 50000, ErrorMessage = "Fees should be between 0 & 50000")]
-
-        public string body { get; set; }
+        [Required]
+        public string Body { get; set; }
 
         private IPostManagementService _postService;
         private IMapper _mapper;
@@ -39,6 +38,11 @@ namespace Stackoverflow.Web.Areas.Admin.Models
 
         internal async Task LoadAsync(Guid id)
         {
+            if (_mapper == null)
+            {
+                throw new Exception("Mapper is not initialized");
+            }
+
             Post post = await _postService.GetPostAsync(id);
             if (post != null)
             {
@@ -50,7 +54,7 @@ namespace Stackoverflow.Web.Areas.Admin.Models
         {
             if (!string.IsNullOrWhiteSpace(Title))
             {
-                await _postService.UpdatePostAsync(Id, Title, body);
+                await _postService.UpdatePostAsync(Id, Title, Body);
             }
         }
     }

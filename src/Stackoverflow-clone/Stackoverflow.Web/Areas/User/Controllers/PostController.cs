@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Stackoverflow.Domain.Exceptions;
-using Stackoverflow.Infrastructure;
+using Stackoverflow.Infrastructure; 
 using Stackoverflow.Web.Areas.User.Models;
 
 namespace Stackoverflow.Web.Areas.User.Controllers
@@ -103,6 +103,56 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             TempData["warning"] = "Your Post deleted successfuly ";
             return Json(new { success = true, message = "Delete Successful" });
             //return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var model = _scope.Resolve<PostUpdateModel>();
+
+            await model.LoadAsync(id);
+             
+            return View(model);
+        }
+
+        //[HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "CourseUpdatePolicy")]
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(PostUpdateModel model)
+        {
+            model.Resolve(_scope);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await model.UpdateCourseAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (DuplicateTitleException de)
+                {
+                    TempData["warning"] = de.Message;
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Server Error");
+
+
+                    TempData["warning"] = "There was a problem in updating course ";
+                }
+            }
+            else
+            {
+               
+                foreach (var modelStateEntry in ModelState.Values)
+                {
+                    foreach (var error in modelStateEntry.Errors)
+                    {
+                        _logger.LogError($"Validation error: {error.ErrorMessage}");
+                    }
+                }
+                
+            }
+
+            return View(model);
         }
 
     }

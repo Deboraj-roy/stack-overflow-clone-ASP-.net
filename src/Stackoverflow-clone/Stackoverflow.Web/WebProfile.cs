@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Stackoverflow.Domain.Entities;
-using Stackoverflow.Web.Areas.Admin.Models;
+using Stackoverflow.Web.Areas.User.Models;
 
 namespace Stackoverflow.Web
 {
