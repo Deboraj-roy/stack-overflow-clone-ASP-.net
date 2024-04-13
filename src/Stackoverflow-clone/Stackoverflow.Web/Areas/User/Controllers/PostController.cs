@@ -21,14 +21,27 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            int pageSize = 10; // Number of posts per page
+            
+            // Calculate the number of posts to skip based on the page number
+            int skip = (page - 1) * pageSize;
+
+            // Fetch only the posts for the current page
+
             var model = _scope.Resolve<PostListModel>();
 
             var posts = await model.GetPostsAsync();
 
             // Pass posts to your view
-            return View(posts);
+            var pagedPosts = posts.Skip(skip).Take(pageSize).ToArray();
+
+            // Pass pagedPosts and other pagination information to your view
+            ViewBag.PageNumber = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)posts.Length / pageSize);
+            return View(pagedPosts);
+
         }
 
         public IActionResult Create()
