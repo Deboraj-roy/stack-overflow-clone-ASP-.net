@@ -8,8 +8,7 @@ using System.Web;
 namespace Stackoverflow.Web.Areas.User.Models
 {
     public class PostListModel
-    {
-
+    { 
         private ILifetimeScope _scope;
         private IPostManagementService _postManagementService;
         public PostSearch searchTitle { get; set; }

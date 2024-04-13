@@ -12,6 +12,7 @@
             <p class="text-secondary lh-sm">@Html.Raw(post.Body)</p>
         </div>
         <p>Created on: @post.CreationDate</p>
+        <a asp-action="Details" asp-route-id="@post.Id">Details</a> <!-- Add Details button -->
     </div>
 }
 

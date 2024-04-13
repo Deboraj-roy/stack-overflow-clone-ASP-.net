@@ -50,6 +50,20 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var model = _scope.Resolve<PostDetailsModel>();
+
+            var post = await model.GetPostsDetailsAsync(id);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return View(post);
+        }
+
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PostCreateModel model)
         {

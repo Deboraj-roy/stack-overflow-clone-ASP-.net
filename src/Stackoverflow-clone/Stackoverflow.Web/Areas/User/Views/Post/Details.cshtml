@@ -1,0 +1,61 @@
+﻿@using Stackoverflow.Domain.Entities
+@model Post
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h2>@Model.Title</h2> 
+    <p class="text-secondary lh-sm">@Html.Raw(@Model.Body)</p>
+    <p>Created on: @Model.CreationDate</p>
+    <!-- Display other details of the post -->
+    <div>
+        <p><strong>Post Type:</strong> @Model.PostType</p>
+        <p><strong>Upvotes:</strong> @Model.Upvotes</p>
+        <p><strong>Downvotes:</strong> @Model.Downvotes</p>
+        <p><strong>Creation Date:</strong> @Model.CreationDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+        <p><strong>Last Modified Date:</strong> @Model.LastModifiedDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+    </div>
+</div>
+
+<!-- Add a section for the options -->
+<div>
+    <button onclick="editPost('@Model.Id')">Edit</button>
+    <button onclick="deletePost('@Model.Id')">Delete</button>
+    <a asp-action="Index">Back to Index</a>
+</div>
+
+<script>
+    // JavaScript functions to handle edit and delete actions
+    function editPost(id) {
+        // Redirect to the edit page with the post ID as a parameter
+        window.location.href = '/Post/Edit?id=' + id;
+    }
+
+    function deletePost(id) {
+        // Perform delete operation (you can use AJAX to delete the post)
+        // After successful deletion, redirect to the index page
+        // Example:
+        // $.ajax({
+        //     url: '/Post/Delete?id=' + id,
+        //     type: 'DELETE',
+        //     success: function(result) {
+        //         window.location.href = '/Post/Index';
+        //     }
+        // });
+    }
+</script>
+<hr />
+
+<div>
+    <h2>@Model.Title</h2>
+    <p class="text-secondary lh-sm">@Html.Raw(@Model.Body)</p>
+    <p>Created on: @Model.CreationDate</p>
+    <!-- Display other details as needed -->
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
+    <a asp-action="Index">Back to Index</a>
+</div>
