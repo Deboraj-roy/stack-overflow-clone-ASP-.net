@@ -60,6 +60,19 @@ try
     //});
 
 
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowSites",
+            builder =>
+            {
+                //builder.WithOrigins("https://localhost:7000", "https://localhost:5041", "http://localhost:7000", "http://localhost:5001", "http://localhost:5041", "http://localhost")
+                builder.WithOrigins("https://localhost:7000", "http://localhost:5041", "http://localhost")
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+            });
+    });
+
+
     //builder.Services.AddSingleton<IAuthorizationHandler, PostViewRequirementHandler>();
 
     builder.Services.AddControllers();
@@ -79,6 +92,8 @@ try
     }
 
     app.UseHttpsRedirection();
+    
+    app.UseCors();
 
     app.UseAuthorization();
 

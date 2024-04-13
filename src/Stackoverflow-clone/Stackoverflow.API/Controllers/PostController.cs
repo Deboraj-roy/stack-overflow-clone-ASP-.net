@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Stackoverflow.Api.RequestHandlers;
 using Stackoverflow.Domain.Entities;
@@ -6,7 +7,8 @@ using Stackoverflow.Domain.Entities;
 namespace Stackoverflow.API.Controllers
 {
     [ApiController]
-    [Route("v3/[controller]")] 
+    [Route("v3/[controller]")]
+    [EnableCors("AllowSites")]
     public class PostController : ControllerBase
     {
         private readonly ILifetimeScope _scope;
@@ -17,13 +19,14 @@ namespace Stackoverflow.API.Controllers
             _logger = logger;
             _scope = scope;
         }
+
         [HttpPost]
         //[HttpPost, Authorize(Policy = "PostViewRequirementPolicy")]
         public async Task<object> Post([FromBody] ViewPostRequestHandler handler)
         {
             handler.ResolveDependency(_scope);
-
             var data = await handler.GetPagedPosts();
+            _logger.LogInformation("Posts found");
             return data;
         }
 
@@ -35,6 +38,8 @@ namespace Stackoverflow.API.Controllers
             try
             {
                 var model = _scope.Resolve<ViewPostRequestHandler>();
+
+                _logger.LogInformation("All Posts found");
                 return await model?.GetPostsAsync();
             }
             catch (Exception ex)
