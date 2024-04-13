@@ -33,12 +33,7 @@ namespace Stackoverflow.Application.Features.Services
             await _unitOfWork.PostRepository.RemoveAsync(id);
             await _unitOfWork.SaveAsync();
         }
-
-        //public async Task<IEnumerable<Post>> GetAllPostAsync()
-        //{
-        //    return await _unitOfWork.PostRepository.GetAllAsync();
-        //}
-
+          
         public async Task<(IList<Post> records, int total, int totalDisplay)> GetPagedPostsAsync(int pageIndex, int pageSize, string searchTitle, string sortBy)
         {
             return await _unitOfWork.PostRepository.GetTableDataAsync(searchTitle, sortBy, pageIndex, pageSize);

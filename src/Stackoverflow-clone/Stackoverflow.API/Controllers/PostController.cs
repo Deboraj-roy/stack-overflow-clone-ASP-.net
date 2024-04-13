@@ -97,20 +97,21 @@ namespace Stackoverflow.API.Controllers
         //    }
         //}
 
-        //[HttpDelete("{id}")]
-        //public IActionResult Delete(Guid id)
-        //{
-        //    try
-        //    {
-        //        var model = _scope.Resolve<PostModel>();
-        //        model.DeletePost(id);
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Couldn't delete Post");
-        //        return BadRequest();
-        //    }
-        //}
+        [HttpDelete("{id}")]
+        public IActionResult Delete(Guid id)
+        {
+            try
+            {
+                var model = _scope.Resolve<ViewPostRequestHandler>();
+                model.DeletePost(id);
+                _logger.LogInformation("Post deleted");
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Couldn't delete Post");
+                return BadRequest();
+            }
+        }
     }
 }

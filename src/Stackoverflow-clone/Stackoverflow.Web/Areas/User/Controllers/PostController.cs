@@ -92,6 +92,18 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             return View(model);
         }
 
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            // Delete the post with the specified ID
+            // You need to implement the delete logic in your PostService
+            var model = _scope.Resolve<PostDeleteModel>();
+
+            await model.DeletePostAsync(id);
+            TempData["warning"] = "Course deleted successfuly ";
+            //return Json(new { success = true, message = "Delete Successful" });
+            return RedirectToAction(nameof(Index));
+        }
 
     }
 }

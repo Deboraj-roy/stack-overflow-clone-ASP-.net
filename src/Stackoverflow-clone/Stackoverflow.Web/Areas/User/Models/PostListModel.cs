@@ -31,7 +31,7 @@ namespace Stackoverflow.Web.Areas.User.Models
             _postManagementService = _scope.Resolve<IPostManagementService>();
         }
 
-        public async Task<object> GetPagedCoursesAsync(DataTablesAjaxRequestUtility dataTablesUtility)
+        public async Task<object> GetPagedPostsAsync(DataTablesAjaxRequestUtility dataTablesUtility)
         {
             var data = await _postManagementService.GetPagedPostsAsync(
                 dataTablesUtility.PageIndex,
@@ -53,11 +53,7 @@ namespace Stackoverflow.Web.Areas.User.Models
                     ).ToArray()
             };
         }
-
-        internal async Task DeleteCourseAsync(Guid id)
-        {
-            await _postManagementService.DeletePostAsync(id);
-        }
+         
 
         public async Task<Post[]> GetPostsAsync()
         {
