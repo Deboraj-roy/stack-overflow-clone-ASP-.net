@@ -68,8 +68,9 @@
                     success: function (data) {
                         // Update the UI after successful deletion
                         // For example, you can reload the page or show a message
-                        location.reload(); // Reload the page
-                        // toastr.success(data.message); // Show success message using Toastr
+                        window.location.href = '/';  // Reload the page
+                        //http://localhost/user/post/
+                        toastr.success(data.message); // Show success message using Toastr
                     },
                     error: function (xhr, status, error) {
                         // Handle error if deletion fails

@@ -100,9 +100,9 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             var model = _scope.Resolve<PostDeleteModel>();
 
             await model.DeletePostAsync(id);
-            TempData["warning"] = "Course deleted successfuly ";
-            //return Json(new { success = true, message = "Delete Successful" });
-            return RedirectToAction(nameof(Index));
+            TempData["warning"] = "Your Post deleted successfuly ";
+            return Json(new { success = true, message = "Delete Successful" });
+            //return RedirectToAction(nameof(Index));
         }
 
     }
