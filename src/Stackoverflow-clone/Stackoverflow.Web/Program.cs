@@ -92,13 +92,28 @@ try
 
     app.UseEndpoints(endpoints =>
     {
+        // Route for the Login action of the AccountController without specifying an area
+        endpoints.MapControllerRoute(
+            name: "login",
+            pattern: "Account/Login",
+            defaults: new { controller = "Account", action = "Login" });
+
+        // Route for the Register action of the AccountController without specifying an area
+        endpoints.MapControllerRoute(
+            name: "register",
+            pattern: "Account/Register",
+            defaults: new { controller = "Account", action = "Register" });
+
+        // Route for the default area with the PostController
         endpoints.MapControllerRoute(
             name: "default",
             pattern: "{area:exists}/{controller=Post}/{action=Index}/{id?}",
-            defaults: new { area = "user" }
-        );
+            defaults: new { area = "user" });
+
+        // Map Razor Pages
         endpoints.MapRazorPages();
     });
+
 
     app.Run();
 }
