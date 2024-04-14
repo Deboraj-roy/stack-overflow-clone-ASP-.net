@@ -1,4 +1,4 @@
-﻿/*using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 
 namespace Stackoverflow.Infrastructure.Requirements
 {
@@ -6,4 +6,3 @@ namespace Stackoverflow.Infrastructure.Requirements
     {
     }
 }
-*/

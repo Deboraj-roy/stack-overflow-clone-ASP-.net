@@ -26,22 +26,6 @@
     <a asp-action="Index">Back to Index</a>
 </div>
 
-<hr />
-
-<div>
-    <h2>@Model.Title</h2>
-    <p class="text-secondary lh-sm">@Html.Raw(@Model.Body)</p>
-    <p>Created on: @Model.CreationDate</p>
-    <!-- Display other details as needed -->
-</div>
-
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
-    <a asp-action="Index">Back to Index</a>
-</div>
-
-
 <script>
     function DeletePost(id) {
         // Confirm deletion using a modal or alert
@@ -73,7 +57,8 @@
                     success: function (data) {
                         // Update the UI after successful deletion
                         // For example, you can reload the page or show a message
-                        window.location.href = '/';  // Reload the page
+                        // Reload the page
+                        window.location.href = '/User/Post'; // Assuming "User" is the area and "Post" is the controller
                         //http://localhost/user/post/
                         toastr.success(data.message); // Show success message using Toastr
                     },

@@ -1,4 +1,4 @@
-﻿/*using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 
 namespace Stackoverflow.Infrastructure.Requirements
@@ -10,7 +10,7 @@ namespace Stackoverflow.Infrastructure.Requirements
                AuthorizationHandlerContext context,
                PostViewRequirement requirement)
         {
-            if (context.User.HasClaim(x => x.Type == "ViewCourse" && x.Value == "true"))
+            if (context.User.HasClaim(x => x.Type == "ViewPost" && x.Value == "true"))
             {
                 context.Succeed(requirement);
             }
@@ -19,4 +19,3 @@ namespace Stackoverflow.Infrastructure.Requirements
         }
     }
 }
-*/

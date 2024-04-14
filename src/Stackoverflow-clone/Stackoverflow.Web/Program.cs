@@ -14,6 +14,9 @@ using Stackoverflow.Infrastructure.Membership;
 using GoogleReCaptcha.V3.Interface;
 using GoogleReCaptcha.V3;
 using Microsoft.AspNetCore.Builder;
+using Stackoverflow.Infrastructure.Requirements;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +60,7 @@ try
     builder.Services.AddControllersWithViews();
     builder.Services.AddCookieAuthentication();
     builder.Services.Configure<Smtp>(builder.Configuration.GetSection("Smtp"));
+     
     //googleReCaptcha
     builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 
@@ -87,13 +91,17 @@ try
             policy.RequireClaim("ViewPost", "true");
         });
 
-        //options.AddPolicy("PostViewRequirementPolicy", policy =>
-        //{
-        //    policy.RequireAuthenticatedUser();
-        //    policy.Requirements.Add(new PostViewRequirement());
-        //});
+        options.AddPolicy("PostViewRequirementPolicy", policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.Requirements.Add(new PostViewRequirement());
+        });
 
     });
+
+    builder.Services.AddSingleton<IAuthorizationHandler, PostViewRequirementHandler>();
+    builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
+
 
     var app = builder.Build();
 

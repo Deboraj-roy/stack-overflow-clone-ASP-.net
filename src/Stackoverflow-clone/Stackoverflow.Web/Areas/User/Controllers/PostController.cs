@@ -83,7 +83,8 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             return View(model);
         }
          
-        [Authorize(Policy = "PostViewPolicy")]
+        //[Authorize(Policy = "PostViewPolicy")]
+        [Authorize(Policy = "PostViewRequirementPolicy")]
         public async Task<IActionResult> Details(Guid id)
         {
             var model = _scope.Resolve<PostDetailsModel>();
