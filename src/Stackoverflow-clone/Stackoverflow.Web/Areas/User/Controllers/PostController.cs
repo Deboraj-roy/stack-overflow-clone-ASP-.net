@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Stackoverflow.Domain.Exceptions;
-using Stackoverflow.Infrastructure; 
+using Stackoverflow.Infrastructure;
+using Stackoverflow.Infrastructure.Membership;
 using Stackoverflow.Web.Areas.User.Models;
 
 namespace Stackoverflow.Web.Areas.User.Controllers
 {
     [Area("User")]
+    [Authorize]
     public class PostController : Controller
     {
         private readonly ILifetimeScope _scope;
@@ -21,6 +23,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             _logger = logger;
         }
 
+        [AllowAnonymous] 
         public async Task<IActionResult> Index(int page = 1)
         {
             int pageSize = 10; // Number of posts per page
@@ -51,6 +54,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> Create(PostCreateModel model)
         {
             if (ModelState.IsValid)
@@ -78,6 +82,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Details(Guid id)
         {
             var model = _scope.Resolve<PostDetailsModel>();
