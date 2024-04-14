@@ -16,7 +16,7 @@ namespace Stackoverflow.Web.Models
     public class UserUpdateModel
     {
         private ILifetimeScope _scope;
-        
+ 
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -34,17 +34,16 @@ namespace Stackoverflow.Web.Models
 
         public string? ProfilePicture { get; set; }
 
-
         // New property to handle file upload
         [Display(Name = "Profile Picture")]
         public IFormFile ProfilePictureFile { get; set; }
+
 
         [Required]
         public string Captcha { get; set; }
 
         public UserUpdateModel() { }
       
-
         public async Task<bool> UpdateProfileAsync(UserManager<ApplicationUser> userManager2, string uploadPath)
         {
             if (!string.IsNullOrEmpty(ProfilePictureFile?.FileName))
@@ -92,6 +91,7 @@ namespace Stackoverflow.Web.Models
                 PhoneNumber = user.PhoneNumber;
                 ProfilePicture = user.ProfilePicture;
             }
+
         }
 
         internal void Resolve(ILifetimeScope scope)
