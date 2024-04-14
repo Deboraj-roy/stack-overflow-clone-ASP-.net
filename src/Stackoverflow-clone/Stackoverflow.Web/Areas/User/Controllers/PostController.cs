@@ -46,7 +46,8 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             return View(pagedPosts);
 
         }
-
+         
+        [Authorize(Policy = "PostCreatePolicy")]
         public IActionResult Create()
         {
             var model = _scope.Resolve<PostCreateModel>();
@@ -54,7 +55,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Policy = "PostCreatePolicy")]
         public async Task<IActionResult> Create(PostCreateModel model)
         {
             if (ModelState.IsValid)
@@ -64,8 +65,8 @@ namespace Stackoverflow.Web.Areas.User.Controllers
                     model.Resolve(_scope);
                     await model.CreatePostAsync();
 
-                    TempData["success"] = "Course created successfuly ";
-                    _logger.LogInformation("Course created successfuly");
+                    TempData["success"] = "Post created successfuly ";
+                    _logger.LogInformation("Post created successfuly");
 
 
                     return RedirectToAction("Index");
@@ -74,15 +75,15 @@ namespace Stackoverflow.Web.Areas.User.Controllers
                 {
                     _logger.LogError(de, "Server Error");
 
-                    TempData["warning"] = de.Message + "There was a problem in creating course";
+                    TempData["warning"] = de.Message + "There was a problem in creating Post";
 
                 }
             }
 
             return View(model);
         }
-
-        [AllowAnonymous]
+         
+        [Authorize(Policy = "PostViewPolicy")]
         public async Task<IActionResult> Details(Guid id)
         {
             var model = _scope.Resolve<PostDetailsModel>();
@@ -98,7 +99,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
         }
          
 
-        [HttpDelete]
+        [HttpDelete, Authorize(Policy = "SupperAdmin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             // Delete the post with the specified ID
@@ -111,6 +112,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             //return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Policy = "PostUpdatePolicy")]
         public async Task<IActionResult> Update(Guid id)
         {
             var model = _scope.Resolve<PostUpdateModel>();
@@ -119,9 +121,9 @@ namespace Stackoverflow.Web.Areas.User.Controllers
              
             return View(model);
         }
-
-        //[HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "CourseUpdatePolicy")]
+         
         [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Policy = "PostUpdatePolicy")]
         public async Task<IActionResult> Update(PostUpdateModel model)
         {
             model.Resolve(_scope);
@@ -130,7 +132,8 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             {
                 try
                 {
-                    await model.UpdatePostAsync();
+                    await model.UpdatePostAsync(); 
+                    TempData["success"] = "Your Post updated successfuly ";
                     return RedirectToAction("Index");
                 }
                 catch (DuplicateTitleException de)
@@ -141,8 +144,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
                 {
                     _logger.LogError(e, "Server Error");
 
-
-                    TempData["warning"] = "There was a problem in updating course ";
+                    TempData["warning"] = "There was a problem in updating Post ";
                 }
             }
             else

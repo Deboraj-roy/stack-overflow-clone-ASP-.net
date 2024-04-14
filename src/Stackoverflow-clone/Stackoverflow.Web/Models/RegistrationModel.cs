@@ -7,6 +7,7 @@ using System.Text.Encodings.Web;
 using System.Text;
 using Stackoverflow.Application.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Stackoverflow.Web.Models
 {
@@ -75,8 +76,12 @@ namespace Stackoverflow.Web.Models
             {
                 await _userManager.AddToRoleAsync(user, UserRoles.Elite);
                 await _userManager.AddToRoleAsync(user, UserRoles.Admin);
-                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdateCourse", "true"));
-                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewCourse", "true"));
+                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("CreatePost", "true"));
+                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdatePost", "true"));
+                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewPost", "true"));
+                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("CreateComment", "true"));
+                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdateComment", "true"));
+                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewComment", "true"));
 
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

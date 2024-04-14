@@ -68,6 +68,31 @@ try
             policy.RequireRole(UserRoles.Admin);
             policy.RequireRole(UserRoles.Elite);
         });
+
+        options.AddPolicy("PostCreatePolicy", policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.RequireClaim("CreatePost", "true");
+        });
+
+        options.AddPolicy("PostUpdatePolicy", policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.RequireClaim("UpdatePost", "true");
+        });
+
+        options.AddPolicy("PostViewPolicy", policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.RequireClaim("ViewPost", "true");
+        });
+
+        //options.AddPolicy("PostViewRequirementPolicy", policy =>
+        //{
+        //    policy.RequireAuthenticatedUser();
+        //    policy.Requirements.Add(new PostViewRequirement());
+        //});
+
     });
 
     var app = builder.Build();
