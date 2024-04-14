@@ -13,6 +13,7 @@ using Stackoverflow.Infrastructure.Email;
 using Stackoverflow.Infrastructure.Membership;
 using GoogleReCaptcha.V3.Interface;
 using GoogleReCaptcha.V3;
+using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,6 +98,11 @@ try
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    app.MapControllerRoute(
+           name: "Manage",
+           pattern: "Account/Manage/{userId}",
+           defaults: new { controller = "Account", action = "Manage" });
 
     // Route for the Login action of the AccountController without specifying an area
     //app.MapControllerRoute(

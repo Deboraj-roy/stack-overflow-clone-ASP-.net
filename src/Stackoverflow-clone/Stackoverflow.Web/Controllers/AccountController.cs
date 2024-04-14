@@ -179,9 +179,24 @@ namespace Stackoverflow.Web.Controllers
             }
         }
 
+        //public async Task<IActionResult> Manage(string[] userId)
+        //{
+        //    var user = await _userManager.FindByIdAsync(userId[0].ToString());
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(user);
+        //}
         [HttpGet]
         public async Task<IActionResult> Manage(string userId)
         {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound();
+            }
+
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
@@ -190,6 +205,7 @@ namespace Stackoverflow.Web.Controllers
 
             return View(user);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> UploadProfilePicture(string userId, IFormFile file)
