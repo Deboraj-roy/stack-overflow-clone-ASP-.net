@@ -179,6 +179,32 @@ namespace Stackoverflow.Web.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Manage(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadProfilePicture(string userId, IFormFile file)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Handle file upload logic and update user profile picture property
+
+            return RedirectToAction(nameof(Manage), new { userId });
+        }
+
 
         //only for admin
         [Authorize(Roles = UserRoles.Admin)]

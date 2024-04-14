@@ -1,0 +1,41 @@
+﻿@using Stackoverflow.Infrastructure.Membership
+@model ApplicationUser
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<h1>User Profile</h1>
+
+<body>
+
+    <div class="profile-container">
+        @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+        {
+            <img class="profile-picture" src="@Model.ProfilePicture" alt="Profile Picture" />
+        }
+        <h2>@Model.FirstName @Model.LastName</h2>
+        <p>Reputation: @Model.Reputation</p>
+        <p>Registration Date: @Model.RegistrationDate</p>
+        <p>User Type: @Model.UserType</p>
+    </div>
+
+</body>
+
+<hr />
+
+<div>
+    <h3>First Name: @Model.FirstName</h3>
+    <h3>Last Name: @Model.LastName</h3>
+    <h3>Reputation: @Model.Reputation</h3>
+    <h3>Registration Date: @Model.RegistrationDate</h3>
+    <h3>User Type: @Model.UserType</h3>
+
+    @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+    {
+        <img src="@Model.ProfilePicture" alt="Profile Picture" />
+    }
+    else
+    {
+        <p>No profile picture uploaded.</p>
+    }
+</div>
