@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Stackoverflow.Web.Models
 {
-    public class RegistrationModel
+    public class UserUpdateModel
     {
         private ILifetimeScope _scope;
         private UserManager<ApplicationUser> _userManager;
@@ -51,9 +51,9 @@ namespace Stackoverflow.Web.Models
         [Required]
         public string Captcha { get; set; }
 
-        public RegistrationModel() { }
+        public UserUpdateModel() { }
 
-        public RegistrationModel(UserManager<ApplicationUser> userManager,
+        public UserUpdateModel(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailService emailService)
         {

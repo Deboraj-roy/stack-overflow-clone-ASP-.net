@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Stackoverflow.Domain.Exceptions;
 using Stackoverflow.Infrastructure.Membership;
+using Stackoverflow.Web.Areas.User.Models;
 using Stackoverflow.Web.Models;
 using System.Text;
 
@@ -179,17 +181,7 @@ namespace Stackoverflow.Web.Controllers
             }
         }
 
-        //public async Task<IActionResult> Manage(string[] userId)
-        //{
-        //    var user = await _userManager.FindByIdAsync(userId[0].ToString());
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(user);
-        //}
-        [HttpGet]
+        
         public async Task<IActionResult> Manage(string userId)
         {
             if (string.IsNullOrEmpty(userId))
@@ -204,6 +196,53 @@ namespace Stackoverflow.Web.Controllers
             }
 
             return View(user);
+        }
+
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var model = _scope.Resolve<UserUpdateModel>();
+
+            return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(UserUpdateModel model)
+        {
+            model.Resolve(_scope);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await model.UpdateCourseAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (DuplicateTitleException de)
+                {
+                    TempData["warning"] = de.Message;
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Server Error");
+
+
+                    TempData["warning"] = "There was a problem in updating course ";
+                }
+            }
+            else
+            {
+
+                foreach (var modelStateEntry in ModelState.Values)
+                {
+                    foreach (var error in modelStateEntry.Errors)
+                    {
+                        _logger.LogError($"Validation error: {error.ErrorMessage}");
+                    }
+                }
+
+            }
+
+            return View(model);
         }
 
 

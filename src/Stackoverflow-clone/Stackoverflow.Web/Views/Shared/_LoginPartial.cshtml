@@ -29,12 +29,10 @@
     document.getElementById("profile-link").addEventListener("click", function (e) {
         e.preventDefault();
         var userId = "@(UserManager.GetUserId(User))";
-        if (userId) {
-            console.log("userId: " + userId); // Log userId to console for debugging
+        if (userId) { 
             window.location.href = "/Account/Manage?userId=" + userId;
         } else {
-            console.error("User ID not available.");
-            // Handle the case where user ID is not available, maybe display an error message.
+            console.error("User ID not available."); 
         }
     });
 </script>

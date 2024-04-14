@@ -14,6 +14,7 @@ namespace Stackoverflow.Web
             builder.RegisterType<PostDetailsModel>().AsSelf();
             builder.RegisterType<PostDeleteModel>().AsSelf();
             builder.RegisterType<RegistrationModel>().AsSelf();   
+            builder.RegisterType<UserUpdateModel>().AsSelf();
             builder.RegisterType<LoginModel>().AsSelf();
         }
     
