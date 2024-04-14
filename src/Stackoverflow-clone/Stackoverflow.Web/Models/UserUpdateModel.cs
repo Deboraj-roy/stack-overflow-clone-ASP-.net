@@ -16,16 +16,16 @@ namespace Stackoverflow.Web.Models
     public class UserUpdateModel
     {
         private ILifetimeScope _scope;
- 
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
-        
+
         [Required]
         [Display(Name = "First Name")]
         public string? FirstName { get; set; }
-        
+
         [Required]
         [Display(Name = "Last Name")]
         public string? LastName { get; set; }
@@ -38,12 +38,11 @@ namespace Stackoverflow.Web.Models
         [Display(Name = "Profile Picture")]
         public IFormFile ProfilePictureFile { get; set; }
 
-
         [Required]
         public string Captcha { get; set; }
 
         public UserUpdateModel() { }
-      
+
         public async Task<bool> UpdateProfileAsync(UserManager<ApplicationUser> userManager2, string uploadPath)
         {
             if (!string.IsNullOrEmpty(ProfilePictureFile?.FileName))
@@ -56,7 +55,7 @@ namespace Stackoverflow.Web.Models
                 {
                     await ProfilePictureFile.CopyToAsync(stream);
                 }
-                
+
                 //ProfilePicturePath = filePath;
                 ProfilePicture = $"/files/{fileName}";
             }
@@ -80,7 +79,7 @@ namespace Stackoverflow.Web.Models
             return false;
         }
 
-        internal async Task LoadAsync(UserManager<ApplicationUser> userManager1,string userId)
+        internal async Task LoadAsync(UserManager<ApplicationUser> userManager1, string userId)
         {
             var user = await userManager1.FindByIdAsync(userId);
             if (user != null)
@@ -91,13 +90,12 @@ namespace Stackoverflow.Web.Models
                 PhoneNumber = user.PhoneNumber;
                 ProfilePicture = user.ProfilePicture;
             }
-
         }
 
         internal void Resolve(ILifetimeScope scope)
         {
             _scope = scope;
         }
-         
+
     }
 }

@@ -27,7 +27,7 @@ namespace Stackoverflow.Web.Controllers
         private readonly ICaptchaValidator _captchaValidator;
         //private readonly IHostingEnvironment _hostingEnvironment; 
         private readonly IWebHostEnvironment _webHostEnvironment;
-          
+
         public AccountController(ILifetimeScope scope,
             ILogger<AccountController> logger,
             RoleManager<ApplicationRole> roleManager,
@@ -37,7 +37,7 @@ namespace Stackoverflow.Web.Controllers
             IConfiguration configuration,
             ICaptchaValidator captchaValidator,
             //IHostingEnvironment hostingEnvironment, 
-            IWebHostEnvironment webHostEnvironment) 
+            IWebHostEnvironment webHostEnvironment)
         {
             _scope = scope;
             _logger = logger;
@@ -49,7 +49,6 @@ namespace Stackoverflow.Web.Controllers
             _captchaValidator = captchaValidator;
             //_hostingEnvironment = hostingEnvironment;
             _webHostEnvironment = webHostEnvironment;
- 
         }
 
         public IActionResult Register()
@@ -211,14 +210,14 @@ namespace Stackoverflow.Web.Controllers
         {
 
             var model = _scope.Resolve<UserUpdateModel>();
-  
+
             await model.LoadAsync(_userManager, userId);
-   
+
             return View(model);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken] 
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(UserUpdateModel model)
         {
             if (ModelState.IsValid)
@@ -240,7 +239,7 @@ namespace Stackoverflow.Web.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "Failed to update user profile.");
                 }
-            } 
+            }
             return View(model);
         }
 
