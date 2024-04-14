@@ -125,7 +125,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             {
                 try
                 {
-                    await model.UpdateCourseAsync();
+                    await model.UpdatePostAsync();
                     return RedirectToAction("Index");
                 }
                 catch (DuplicateTitleException de)

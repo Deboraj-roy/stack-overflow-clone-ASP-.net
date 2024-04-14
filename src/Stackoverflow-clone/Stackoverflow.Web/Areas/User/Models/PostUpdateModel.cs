@@ -50,7 +50,7 @@ namespace Stackoverflow.Web.Areas.User.Models
             }
         }
 
-        internal async Task UpdateCourseAsync()
+        internal async Task UpdatePostAsync()
         {
             if (!string.IsNullOrWhiteSpace(Title))
             {

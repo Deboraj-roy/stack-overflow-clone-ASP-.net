@@ -198,11 +198,16 @@ namespace Stackoverflow.Web.Controllers
             return View(user);
         }
 
-        public async Task<IActionResult> Update(Guid id)
-        {
-            var model = _scope.Resolve<UserUpdateModel>();
 
-            return View(model);
+        public async Task<IActionResult> Update(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -214,7 +219,7 @@ namespace Stackoverflow.Web.Controllers
             {
                 try
                 {
-                    await model.UpdateCourseAsync();
+                    //await model.RegisterAsync();
                     return RedirectToAction("Index");
                 }
                 catch (DuplicateTitleException de)

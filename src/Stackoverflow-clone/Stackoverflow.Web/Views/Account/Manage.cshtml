@@ -1,5 +1,11 @@
 ﻿@using Stackoverflow.Infrastructure.Membership
 @model ApplicationUser
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager 
+
+
 @{
     ViewData["Title"] = "User Profile";
 }
@@ -28,7 +34,13 @@
     <h3>Reputation: @Model.Reputation</h3>
     <h3>Registration Date: @Model.RegistrationDate</h3>
     <h3>User Type: @Model.UserType</h3>
-     
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <a id="profile-link" class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Update" asp-route-userId="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Edit Profile <i class="bi bi-pencil-square"></i></a>
+        
+    }
+
 </div>
 
 @section Scripts {
@@ -37,5 +49,6 @@
             var output = document.getElementById('ProfilePicturePreview');
             output.src = $("#ProfilePicture").val();
         })
+         
     </script>
 }
