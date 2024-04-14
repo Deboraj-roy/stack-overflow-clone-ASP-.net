@@ -7,15 +7,20 @@ using System.Text.Encodings.Web;
 using System.Text;
 using Stackoverflow.Application.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using Stackoverflow.Domain.Entities;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Stackoverflow.Web.Models
 {
     public class UserUpdateModel
     {
         private ILifetimeScope _scope;
-        private UserManager<ApplicationUser> _userManager;
-        private SignInManager<ApplicationUser> _signInManager;
-        private IEmailService _emailService;
+        //private UserManager<ApplicationUser> _userManager;
+        //private SignInManager<ApplicationUser> _signInManager;
+        //private IEmailService _emailService;
+        private IMapper _mapper;
+
 
         [Required]
         [EmailAddress]
@@ -44,62 +49,87 @@ namespace Stackoverflow.Web.Models
 
         public string? PhoneNumber { get; set; }
 
-        public string? ProfilePicture { get; set; } = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
-        
+        public string? ProfilePicture { get; set; }
+
+        // Updated to store the file path on the server
+        internal string ProfilePicturePath { get; set; }
+
+        // New property to handle file upload
+        [Display(Name = "Profile Picture")]
+        internal IFormFile ProfilePictureFile { get; set; }
+
         [Required]
         public string Captcha { get; set; }
 
         public UserUpdateModel() { }
 
-        public UserUpdateModel(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            IEmailService emailService)
+        public UserUpdateModel(
+            //UserManager<ApplicationUser> userManager,
+            //SignInManager<ApplicationUser> signInManager,
+            //IEmailService emailService,
+            IMapper mapper
+            )
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _emailService = emailService;
+            //    _userManager = userManager;
+            //    _signInManager = signInManager;
+            //    _emailService = emailService;
+            _mapper = mapper;
         }
 
-        //internal async Task<(IEnumerable<IdentityError>? errors, string? redirectLocation)> RegisterAsync(string urlPrefix)
-        //{
-        //    ReturnUrl ??= urlPrefix;
+        public async Task<bool> UpdateProfileAsync(UserManager<ApplicationUser> userManager2, string uploadPath)
+        {
+            if (!string.IsNullOrEmpty(ProfilePictureFile?.FileName))
+            {
+                string extension = Path.GetExtension(ProfilePictureFile.FileName);
+                string fileName = $"{Guid.NewGuid()}" +"."+ $"{extension}";
 
-        //    var user = new ApplicationUser { 
-        //        UserName = Email, Email = Email, FirstName = FirstName, LastName = LastName,
-        //        PhoneNumber = PhoneNumber, ProfilePicture = ProfilePicture
-        //    };
-        //    var result = await _userManager.CreateAsync(user, Password);
-        //    if (result.Succeeded)
-        //    {
-        //        await _userManager.AddToRoleAsync(user, UserRoles.Elite);
-        //        await _userManager.AddToRoleAsync(user, UserRoles.Admin);
-        //        //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdateCourse", "true"));
-        //        //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewCourse", "true"));
+                string filePath = Path.Combine(uploadPath, fileName);
 
-        //        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        //        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        //        var callbackUrl = $"{urlPrefix}/Account/ConfirmEmail?userId={user.Id}&code={code}&returnUrl={ReturnUrl}";
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ProfilePictureFile.CopyToAsync(stream);
+                }
 
-        //        _emailService.SendSingleEmail(FirstName + " " + LastName, Email, "Confirm your email",
-        //            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                ProfilePicturePath = filePath;
+            }
 
+            var user = await userManager2.FindByEmailAsync(Email);
+            if (user != null)
+            {
+                user.FirstName = FirstName;
+                user.LastName = LastName;
+                user.PhoneNumber = PhoneNumber;
 
-        //        if (_userManager.Options.SignIn.RequireConfirmedAccount)
-        //        {
-        //            var confirmationPageLink = $"RegisterConfirmation?email={Email}&returnUrl={ReturnUrl}";
-        //            return (null, confirmationPageLink);
-        //        }
-        //        else
-        //        {
-        //            await _signInManager.SignInAsync(user, isPersistent: false);
-        //            return (null, ReturnUrl);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return (result.Errors, null);
-        //    }
-        //}
+                if (!string.IsNullOrEmpty(ProfilePicturePath))
+                {
+                    user.ProfilePicture = ProfilePicturePath;
+                }
+
+                var result = await userManager2.UpdateAsync(user);
+                return result.Succeeded;
+            }
+
+            return false;
+        }
+
+        internal async Task LoadAsync(string userId)
+        {
+            if (_mapper == null)
+            {
+                throw new Exception("Mapper is not initialized");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+               _mapper.Map(user, this);
+            }
+            //return user;
+            //Post post = await _postService.GetPostAsync(id);
+            //if (post != null)
+            //{
+            //    _mapper.Map(post, this);
+            //}
+        }
 
         internal void Resolve(ILifetimeScope scope)
         {
@@ -108,5 +138,6 @@ namespace Stackoverflow.Web.Models
             _signInManager = _scope.Resolve<SignInManager<ApplicationUser>>();
             _emailService = _scope.Resolve<IEmailService>();
         }
+         
     }
 }
