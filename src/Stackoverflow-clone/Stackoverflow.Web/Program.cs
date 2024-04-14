@@ -59,7 +59,7 @@ try
     //googleReCaptcha
     builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 
-    builder.Services.AddAuthorization( options =>
+    builder.Services.AddAuthorization(options =>
     {
         options.AddPolicy("SupperAdmin", policy =>
         {
@@ -90,39 +90,87 @@ try
 
     app.UseAuthorization();
 
-    app.MapControllerRoute(
-    name: "areas",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    //app.MapControllerRoute(
+    //name: "areas",
+    //pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-    app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
+    //app.MapControllerRoute(
+    //    name: "default",
+    //    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-    // Route for the Login action of the AccountController without specifying an area
-    app.MapControllerRoute(
-        name: "login",
-        pattern: "Account/Login",
-        defaults: new { controller = "Account", action = "Login" });
+    //// Route for the Login action of the AccountController without specifying an area
+    //app.MapControllerRoute(
+    //    name: "login",
+    //    pattern: "Account/Login",
+    //    defaults: new { controller = "Account", action = "Login" });
 
-    // Route for the Register action of the AccountController without specifying an area
-    app.MapControllerRoute(
-        name: "register",
-        pattern: "Account/Register",
-        defaults: new { controller = "Account", action = "Register" });
+    //// Route for the Register action of the AccountController without specifying an area
+    //app.MapControllerRoute(
+    //    name: "register",
+    //    pattern: "Account/Register",
+    //    defaults: new { controller = "Account", action = "Register" });
 
-    // Route for the Manage action of the AccountController
-    app.MapControllerRoute(
-        name: "manage",
-        pattern: "Account/Manage/{userId}",
-        defaults: new { controller = "Account", action = "Manage" });
+    //// Route for the Manage action of the AccountController
+    //app.MapControllerRoute(
+    //    name: "manage",
+    //    pattern: "Account/Manage/{userId}",
+    //    defaults: new { controller = "Account", action = "Manage" });
 
-    // Route for uploading profile picture action
-    app.MapControllerRoute(
-        name: "uploadProfilePicture",
-        pattern: "Account/UploadProfilePicture/{userId}",
-        defaults: new { controller = "Account", action = "UploadProfilePicture" });
+    //// Route for uploading profile picture action
+    //app.MapControllerRoute(
+    //    name: "uploadProfilePicture",
+    //    pattern: "Account/UploadProfilePicture/{userId}",
+    //    defaults: new { controller = "Account", action = "UploadProfilePicture" });
 
-    app.MapRazorPages();
+    //app.MapRazorPages();
+
+    app.UseEndpoints(endpoints =>
+    {
+        // Route for the Login action of the AccountController without specifying an area
+        endpoints.MapControllerRoute(
+            name: "login",
+            pattern: "Account/Login",
+            defaults: new { controller = "Account", action = "Login" });
+
+        // Route for the Register action of the AccountController without specifying an area
+        endpoints.MapControllerRoute(
+            name: "register",
+            pattern: "Account/Register",
+            defaults: new { controller = "Account", action = "Register" });
+
+        // Route for the Register action of the AccountController without specifying an area
+        endpoints.MapControllerRoute(
+            name: "Logout",
+            pattern: "Account/Logout",
+            defaults: new { controller = "Account", action = "Logout" });
+
+        // Route for the Register action of the AccountController without specifying an area
+        endpoints.MapControllerRoute(
+            name: "ConfirmEmail",
+            pattern: "Account/ConfirmEmail",
+            defaults: new { controller = "Account", action = "ConfirmEmail" });
+
+        // Route for the default area with the PostController
+        endpoints.MapControllerRoute(
+            name: "default", 
+            pattern: "{area:exists}/{controller=Post}/{action=Index}/{id?}", 
+            defaults: new { area = "user" });
+
+        // Route for user profile actions
+        endpoints.MapControllerRoute(
+            name: "Manage", 
+            pattern: "Account/Manage/{userId}", 
+            defaults: new { controller = "Account", action = "Manage" });
+
+        // Route for uploading profile picture action
+        endpoints.MapControllerRoute(
+            name: "uploadProfilePicture", 
+            pattern: "Account/UploadProfilePicture/{userId}", 
+            defaults: new { controller = "Account", action = "UploadProfilePicture" });
+
+        // Map Razor Pages
+        endpoints.MapRazorPages();
+    });
 
 
     app.Run();
