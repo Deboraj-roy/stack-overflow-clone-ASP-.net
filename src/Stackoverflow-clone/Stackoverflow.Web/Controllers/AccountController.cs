@@ -25,9 +25,10 @@ namespace Stackoverflow.Web.Controllers
         //private readonly ITokenService _tokenService;
         private readonly IConfiguration _configuration;
         private readonly ICaptchaValidator _captchaValidator;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        //private readonly IHostingEnvironment _hostingEnvironment; 
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-         
+
         public AccountController(ILifetimeScope scope,
             ILogger<AccountController> logger,
             RoleManager<ApplicationRole> roleManager,
@@ -36,7 +37,8 @@ namespace Stackoverflow.Web.Controllers
             //ITokenService tokenService,
             IConfiguration configuration,
             ICaptchaValidator captchaValidator,
-            IHostingEnvironment hostingEnvironment)
+            //IHostingEnvironment hostingEnvironment, 
+            IWebHostEnvironment webHostEnvironment)
         {
             _scope = scope;
             _logger = logger;
@@ -46,7 +48,8 @@ namespace Stackoverflow.Web.Controllers
             //_tokenService = tokenService;
             _configuration = configuration;
             _captchaValidator = captchaValidator;
-            _hostingEnvironment = hostingEnvironment;
+            //_hostingEnvironment = hostingEnvironment;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Register()
@@ -85,8 +88,8 @@ namespace Stackoverflow.Web.Controllers
                 }
                 else
                     TempData["success"] = "User Registered Successfully ";
-                    _logger.LogInformation("User Registered Successfully");
-                    return Redirect(response.redirectLocation);
+                _logger.LogInformation("User Registered Successfully");
+                return Redirect(response.redirectLocation);
             }
             return View(model);
 
@@ -172,7 +175,7 @@ namespace Stackoverflow.Web.Controllers
             // Confirm the user's email
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Succeeded)
-            {  
+            {
                 TempData["success"] = "Email confirmed successfully ";
                 // Email confirmed successfully
                 // Redirect to the specified returnUrl or a default page
@@ -186,7 +189,7 @@ namespace Stackoverflow.Web.Controllers
             }
         }
 
-        
+
         public async Task<IActionResult> Manage(string userId)
         {
             if (string.IsNullOrEmpty(userId))
@@ -209,29 +212,35 @@ namespace Stackoverflow.Web.Controllers
 
             var model = _scope.Resolve<UserUpdateModel>();
 
-            await model.LoadAsync(userId);
-             
+            await model.LoadAsync(_userManager, userId);
+
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(UserUpdateModel model, IFormFile files)
+        public async Task<IActionResult> Update(UserUpdateModel model)
         {
-            //if (ModelState.IsValid)
-            //{
-                string uploadPath = Path.Combine(_hostingEnvironment.WebRootPath, "files");
+            if (ModelState.IsValid)
+            {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                //string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                string productPath = @"Files";
+                string uploadPath = Path.Combine(wwwRootPath, productPath);
+
+                //string uploadPath = Path.Combine("~/", "files");
                 bool updateResult = await model.UpdateProfileAsync(_userManager, uploadPath);
 
                 if (updateResult)
                 {
-                    return RedirectToAction("Index", "Post");
+                    return RedirectToAction("Index", "Post", new { area = "User" });
+
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Failed to update user profile.");
                 }
-            //}
+            }
 
             return View(model);
         }
@@ -244,7 +253,7 @@ namespace Stackoverflow.Web.Controllers
             await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.Admin });
             await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.User });
             await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.Newbie });
-            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.Elite});
+            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.Elite });
             await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.PowerUser });
             await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.VIP });
 

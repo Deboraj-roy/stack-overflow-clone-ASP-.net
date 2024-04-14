@@ -19,7 +19,6 @@
         <div class="form-group">
             <input hidden asp-for="ProfilePicture" class="form-control" readonly /> 
         </div>
-
         <div class="form-group text-center">
             <img class="border-info rounded-circle" style="max-width: 150px" id="ProfilePicturePreview" />
         </div>
@@ -48,7 +47,6 @@
         $(document).ready(function () {
             var output = document.getElementById('ProfilePicturePreview');
             output.src = $("#ProfilePicture").val();
-        })
-         
+        }) 
     </script>
 }
