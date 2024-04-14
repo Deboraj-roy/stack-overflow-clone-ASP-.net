@@ -99,10 +99,6 @@ try
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
 
-    app.MapControllerRoute(
-           name: "Manage",
-           pattern: "Account/Manage/{userId}",
-           defaults: new { controller = "Account", action = "Manage" });
 
     // Route for the Login action of the AccountController without specifying an area
     //app.MapControllerRoute(
