@@ -10,6 +10,7 @@ using Stackoverflow.Infrastructure.Membership;
 using Stackoverflow.Web.Areas.User.Models;
 using Stackoverflow.Web.Models;
 using System.Text;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Stackoverflow.Web.Controllers
 {
@@ -24,7 +25,9 @@ namespace Stackoverflow.Web.Controllers
         //private readonly ITokenService _tokenService;
         private readonly IConfiguration _configuration;
         private readonly ICaptchaValidator _captchaValidator;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
+         
         public AccountController(ILifetimeScope scope,
             ILogger<AccountController> logger,
             RoleManager<ApplicationRole> roleManager,
@@ -32,7 +35,8 @@ namespace Stackoverflow.Web.Controllers
             UserManager<ApplicationUser> userManager,
             //ITokenService tokenService,
             IConfiguration configuration,
-            ICaptchaValidator captchaValidator)
+            ICaptchaValidator captchaValidator,
+            IHostingEnvironment hostingEnvironment)
         {
             _scope = scope;
             _logger = logger;
@@ -42,6 +46,7 @@ namespace Stackoverflow.Web.Controllers
             //_tokenService = tokenService;
             _configuration = configuration;
             _captchaValidator = captchaValidator;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Register()
@@ -201,68 +206,34 @@ namespace Stackoverflow.Web.Controllers
 
         public async Task<IActionResult> Update(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return NotFound();
-            }
 
-            return View(user);
-        }
+            var model = _scope.Resolve<UserUpdateModel>();
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(UserUpdateModel model)
-        {
-            model.Resolve(_scope);
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    //await model.RegisterAsync();
-                    return RedirectToAction("Index");
-                }
-                catch (DuplicateTitleException de)
-                {
-                    TempData["warning"] = de.Message;
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Server Error");
-
-
-                    TempData["warning"] = "There was a problem in updating course ";
-                }
-            }
-            else
-            {
-
-                foreach (var modelStateEntry in ModelState.Values)
-                {
-                    foreach (var error in modelStateEntry.Errors)
-                    {
-                        _logger.LogError($"Validation error: {error.ErrorMessage}");
-                    }
-                }
-
-            }
-
+            await model.LoadAsync(userId);
+             
             return View(model);
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> UploadProfilePicture(string userId, IFormFile file)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(UserUpdateModel model, IFormFile files)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            //if (ModelState.IsValid)
+            //{
+                string uploadPath = Path.Combine(_hostingEnvironment.WebRootPath, "files");
+                bool updateResult = await model.UpdateProfileAsync(_userManager, uploadPath);
 
-            // Handle file upload logic and update user profile picture property
+                if (updateResult)
+                {
+                    return RedirectToAction("Index", "Post");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Failed to update user profile.");
+                }
+            //}
 
-            return RedirectToAction(nameof(Manage), new { userId });
+            return View(model);
         }
 
 
