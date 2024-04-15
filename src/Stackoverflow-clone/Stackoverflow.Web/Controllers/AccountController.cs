@@ -5,12 +5,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Stackoverflow.Domain.Exceptions;
 using Stackoverflow.Infrastructure.Membership;
-using Stackoverflow.Web.Areas.User.Models;
 using Stackoverflow.Web.Models;
+using System.Drawing;
 using System.Text;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using System.IO;
+using Stackoverflow.Domain.Exceptions;
+using Stackoverflow.Web.Areas.User.Models;
+
 
 namespace Stackoverflow.Web.Controllers
 {
@@ -220,24 +225,58 @@ namespace Stackoverflow.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(UserUpdateModel model)
         {
+
             if (ModelState.IsValid)
             {
-                string wwwRootPath = _webHostEnvironment.WebRootPath;
-                //string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                string productPath = @"Files";
-                string uploadPath = Path.Combine(wwwRootPath, productPath);
-
-                //string uploadPath = Path.Combine("~/", "files");
-                bool updateResult = await model.UpdateProfileAsync(_userManager, uploadPath);
-
-                if (updateResult)
+                if (model.ProfilePictureFile is not null && model.ProfilePictureFile.Length > 0)
                 {
-                    return RedirectToAction("Index", "Post", new { area = "User" });
+                    try
+                    {
+                        using (var image = SixLabors.ImageSharp.Image.Load<Rgba32>(model.ProfilePictureFile.OpenReadStream()))
+                        { 
+
+                            if (!model.IsImage(model.ProfilePictureFile))
+                            {
+                                _logger.LogInformation("Invalid image file type. Please upload a valid image file.");
+                                ModelState.AddModelError("ProfilePictureFile", "Please upload a valid image file.");
+                                return View(model);
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        _logger.LogInformation("An error occurred while processing the uploaded file.");
+                        ModelState.AddModelError("ProfilePictureFile", "An error occurred while processing the uploaded file.");
+                        return View(model);
+                    }
+
+                    string wwwRootPath = _webHostEnvironment.WebRootPath;
+                    //string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = @"Files";
+                    string uploadPath = Path.Combine(wwwRootPath, productPath);
+
+                    //string uploadPath = Path.Combine("~/", "files");
+                    bool updateResult = await model.UpdateProfileAsync(_userManager, uploadPath);
+
+                    if (updateResult)
+                    {
+                        _logger.LogInformation("User profile updated successfully.");
+                        TempData["success"] = "User profile updated successfully.";
+                        return RedirectToAction("Index", "Post", new { area = "User" });
+
+                    }
+                    else
+                    {
+                        _logger.LogInformation("Failed to update user profile.");
+                        TempData["error"] = "Failed to update user profile.";
+                        ModelState.AddModelError(string.Empty, "Failed to update user profile.");
+                    }
 
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Failed to update user profile.");
+                    ModelState.AddModelError("ProfilePictureFile", "Please select a file to upload.");
+                    return View(model);
                 }
             }
             return View(model);

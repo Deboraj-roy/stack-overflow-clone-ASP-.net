@@ -1,15 +1,8 @@
 ﻿using Autofac;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.WebUtilities;
 using Stackoverflow.Infrastructure.Membership;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Text;
-using Stackoverflow.Application.Utilities;
-using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
-using Stackoverflow.Domain.Entities;
-using static System.Formats.Asn1.AsnWriter;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Stackoverflow.Web.Models
 {
@@ -95,6 +88,21 @@ namespace Stackoverflow.Web.Models
         internal void Resolve(ILifetimeScope scope)
         {
             _scope = scope;
+        }
+
+        internal bool IsImage(IFormFile ProfilePictureFile)
+        {
+            try
+            {
+                using (var image = SixLabors.ImageSharp.Image.Load<Rgba32>(ProfilePictureFile.OpenReadStream()))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
 
     }
