@@ -2,6 +2,8 @@
 **/bin
 **/obj
 **/*.user
+# Ignore web.env file
+src/Stackoverflow-clone/Stackoverflow.Web/web.env
 **/Logs/*
 
 
