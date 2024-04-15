@@ -104,7 +104,7 @@ namespace Stackoverflow.Web.Controllers
 
         public async Task<IActionResult> LoginAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            //returnUrl ??= Url.Content("~/");
 
             // Check if the user is already authenticated
             if (User.Identity.IsAuthenticated)
@@ -119,6 +119,16 @@ namespace Stackoverflow.Web.Controllers
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                // Decode and set the return URL
+                model.ReturnUrl = Uri.UnescapeDataString(returnUrl);
+            }
+            else
+            {
+                model.ReturnUrl = Url.Content("~/");
+            }
+
             model.ReturnUrl = returnUrl;
             return View(model);
         }
@@ -128,8 +138,8 @@ namespace Stackoverflow.Web.Controllers
         {
             model.ReturnUrl ??= Url.Content("~/");
 
-            //if (ModelState.IsValid)
-            //{
+            if (ModelState.IsValid)
+            {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
@@ -146,7 +156,15 @@ namespace Stackoverflow.Web.Controllers
 
                     _logger.LogInformation("Login Successfully");
                     TempData["success"] = "Login Successfully ";
-                    return LocalRedirect(model.ReturnUrl);
+                    // Check if the returnUrl is a valid URL
+                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Post", new { area = "User" });
+                    }
                 }
                 else
                 {
@@ -155,10 +173,10 @@ namespace Stackoverflow.Web.Controllers
                     return View(model);
                 }
 
-            //}
+            }
 
-            //// If we got this far, something failed, redisplay form
-            //return View(model);
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -226,8 +244,8 @@ namespace Stackoverflow.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> ResendEmailConfirmation(EmailConfirmationModel model)
         {
-            //if (ModelState.IsValid)
-            //{
+            if (ModelState.IsValid)
+            {
                 var baseUrl = $"{Request.Scheme}://{Request.Host}";
 
 
@@ -235,11 +253,11 @@ namespace Stackoverflow.Web.Controllers
 
                 TempData["success"] = "Email confirmation link has been sent successfully, check your email.";
                 return RedirectToAction("Index", "Post", new { area = "User" });
-            //}
-            //else
-            //{
-            //    return View(model);
-            //}
+            }
+            else
+            {
+                return View(model);
+            }
 
         }
 
@@ -276,8 +294,8 @@ namespace Stackoverflow.Web.Controllers
         public async Task<IActionResult> Update(UserUpdateModel model)
         {
 
-            //if (ModelState.IsValid)
-            //{
+            if (ModelState.IsValid)
+            {
                 if (model.ProfilePictureFile is not null && model.ProfilePictureFile.Length > 0)
                 {
                     try
@@ -320,18 +338,18 @@ namespace Stackoverflow.Web.Controllers
                         _logger.LogInformation("Failed to update user profile.");
                         TempData["error"] = "Failed to update user profile.";
                         ModelState.AddModelError(string.Empty, "Failed to update user profile.");
-                    return View(model);
+                        return View(model);
+
+                    }
 
                 }
-
-            }
                 else
                 {
                     ModelState.AddModelError("ProfilePictureFile", "Please select a file to upload.");
                     return View(model);
                 }
-            //}
-            //return View(model);
+            }
+            return View(model);
         }
 
 
