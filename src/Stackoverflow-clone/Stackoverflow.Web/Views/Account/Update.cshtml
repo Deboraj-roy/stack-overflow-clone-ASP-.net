@@ -3,14 +3,12 @@
     ViewData["Title"] = "Update";
 }
 
-<h1>@ViewData["Title"]</h1>
-
 <div class="row">
     <div class="col-md-4">
 
         <form id="UpdateForm" asp-controller="Account" asp-action="Update" method="post" asp-antiforgery="true" enctype="multipart/form-data">
 
-            <h2>Create a new account.</h2>
+            <h2>Update Profile</h2>
             <hr />
             <input type="hidden" asp-for="@Model.Captcha" id="captchaInput" />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>

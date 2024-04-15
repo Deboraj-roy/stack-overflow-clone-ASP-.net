@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Stackoverflow.Api.RequestHandlers;
@@ -20,8 +21,8 @@ namespace Stackoverflow.API.Controllers
             _scope = scope;
         }
 
-        [HttpPost("view")]
-        //[HttpPost, Authorize(Policy = "PostViewRequirementPolicy")]
+        //[HttpPost("view")]
+        [HttpPost, Authorize(Policy = "PostViewRequirementPolicy")]
         public async Task<object> Post([FromBody] ViewPostRequestHandler handler)
         {
             handler.ResolveDependency(_scope);
@@ -31,8 +32,8 @@ namespace Stackoverflow.API.Controllers
         }
 
 
-        [HttpGet]
-        //[HttpGet, Authorize(Policy = "PostViewRequirementPolicy")]
+        //[HttpGet]
+        [HttpGet, Authorize(Policy = "PostViewRequirementPolicy")]
         public async Task<IEnumerable<Post>> Get()
         {
             try

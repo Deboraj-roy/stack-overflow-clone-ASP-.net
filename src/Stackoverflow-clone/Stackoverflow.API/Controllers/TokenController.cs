@@ -22,16 +22,19 @@ namespace Stackoverflow.API.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenService _tokenService;
+        private readonly ILogger<TokenController> _logger;
 
         public TokenController(IConfiguration config,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ITokenService tokenService)
+            ITokenService tokenService,
+            ILogger<TokenController> logger)
         {
             _configuration = config;
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -40,22 +43,33 @@ namespace Stackoverflow.API.Controllers
             if (email != null && password != null)
             {
                 var user = await _userManager.FindByEmailAsync(email);
+                _logger.LogInformation($"User found. {user.PasswordHash}:", user.PasswordHash);
                 var result = await _signInManager.CheckPasswordSignInAsync(user, password, true);
-
-                if (result != null && result.Succeeded)
+                var LockedOut = await _userManager.IsLockedOutAsync(user);
+                if (LockedOut)
                 {
-                    var claims = (await _userManager.GetClaimsAsync(user)).ToArray();
-                    var token = await _tokenService.GetJwtToken(claims,
-                            _configuration["Jwt:Key"], 
-                            _configuration["Jwt:Issuer"],
-                            _configuration["Jwt:Audience"]
-                        );
-
-                    return Ok(token);
+                    // User account is locked out
+                    _logger.LogWarning("User account locked out. {Email}", email);
+                    await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MinValue);
+                    return BadRequest("Your account is locked. Please try again later or contact support for assistance.");
                 }
                 else
                 {
-                    return BadRequest("Invalid credentials");
+                    if (result != null && result.Succeeded)
+                    {
+                        var claims = (await _userManager.GetClaimsAsync(user)).ToArray();
+                        var token = await _tokenService.GetJwtToken(claims,
+                                _configuration["Jwt:Key"],
+                                _configuration["Jwt:Issuer"],
+                                _configuration["Jwt:Audience"]
+                            );
+
+                        return Ok(token);
+                    }
+                    else
+                    {
+                        return BadRequest("Invalid credentials");
+                    }
                 }
             }
             else
