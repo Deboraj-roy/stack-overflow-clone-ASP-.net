@@ -106,6 +106,14 @@ namespace Stackoverflow.Web.Controllers
         {
             returnUrl ??= Url.Content("~/");
 
+            // Check if the user is already authenticated
+            if (User.Identity.IsAuthenticated)
+            {
+                await _signInManager.SignOutAsync(); // Log out the user
+                //recomended to clear the session
+                HttpContext.Session.Remove("token");
+                HttpContext.Session.Clear();
+            }
             var model = _scope.Resolve<LoginModel>();
 
             // Clear the existing external cookie to ensure a clean login process
@@ -120,8 +128,8 @@ namespace Stackoverflow.Web.Controllers
         {
             model.ReturnUrl ??= Url.Content("~/");
 
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
@@ -144,18 +152,22 @@ namespace Stackoverflow.Web.Controllers
                 {
                     _logger.LogInformation("Invalid login attempt.");
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return View(model);
                 }
 
-            }
+            //}
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            //// If we got this far, something failed, redisplay form
+            //return View(model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> LogoutAsync(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
+            //recomended to clear the session
+            HttpContext.Session.Remove("token");
+            //HttpContext.Session.Clear();
 
             _logger.LogInformation("LogOut Successfully.");
             TempData["warning"] = "LogOut Successfully ";
@@ -165,7 +177,7 @@ namespace Stackoverflow.Web.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Post", new { area = "User" });
             }
         }
 
@@ -214,8 +226,8 @@ namespace Stackoverflow.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> ResendEmailConfirmation(EmailConfirmationModel model)
         {
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 var baseUrl = $"{Request.Scheme}://{Request.Host}";
 
 
@@ -223,11 +235,11 @@ namespace Stackoverflow.Web.Controllers
 
                 TempData["success"] = "Email confirmation link has been sent successfully, check your email.";
                 return RedirectToAction("Index", "Post", new { area = "User" });
-            }
-            else
-            {
-                return View(model);
-            }
+            //}
+            //else
+            //{
+            //    return View(model);
+            //}
 
         }
 
@@ -264,8 +276,8 @@ namespace Stackoverflow.Web.Controllers
         public async Task<IActionResult> Update(UserUpdateModel model)
         {
 
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 if (model.ProfilePictureFile is not null && model.ProfilePictureFile.Length > 0)
                 {
                     try
@@ -308,16 +320,18 @@ namespace Stackoverflow.Web.Controllers
                         _logger.LogInformation("Failed to update user profile.");
                         TempData["error"] = "Failed to update user profile.";
                         ModelState.AddModelError(string.Empty, "Failed to update user profile.");
-                    }
+                    return View(model);
 
                 }
+
+            }
                 else
                 {
                     ModelState.AddModelError("ProfilePictureFile", "Please select a file to upload.");
                     return View(model);
                 }
-            }
-            return View(model);
+            //}
+            //return View(model);
         }
 
 

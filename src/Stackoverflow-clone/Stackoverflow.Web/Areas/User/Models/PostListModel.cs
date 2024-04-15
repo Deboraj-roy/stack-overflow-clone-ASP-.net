@@ -3,12 +3,14 @@ using Newtonsoft.Json;
 using Stackoverflow.Application.Features.Services;
 using Stackoverflow.Domain.Entities;
 using Stackoverflow.Infrastructure;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Web;
 
 namespace Stackoverflow.Web.Areas.User.Models
 {
     public class PostListModel
-    { 
+    {
         private ILifetimeScope _scope;
         private IPostManagementService _postManagementService;
         public PostSearch searchTitle { get; set; }
@@ -53,15 +55,37 @@ namespace Stackoverflow.Web.Areas.User.Models
                     ).ToArray()
             };
         }
-         
 
-        public async Task<Post[]> GetPostsAsync()
+
+        public async Task<Post[]> GetPostsAsync(string token)
         {
-            var response = await _httpClient.GetAsync("Post");
-            response.EnsureSuccessStatusCode(); // Throw exception if not success
+            try
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<Post[]>(content);
+                var response = await _httpClient.GetAsync("Post");
+                response.EnsureSuccessStatusCode(); // Throw exception if not success
+
+                var content = await response.Content.ReadAsStringAsync();
+
+
+                //var response = await _httpClient.GetAsync("Post");
+                //response.EnsureSuccessStatusCode(); // Throw exception if not success
+
+                //var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<Post[]>(content);
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                // Handle 401 Unauthorized exception
+                // Redirect to login page or display a message asking the user to login again
+                throw; // Rethrow the exception if you want to handle it further up the call stack
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                throw;
+            }
         }
 
     }

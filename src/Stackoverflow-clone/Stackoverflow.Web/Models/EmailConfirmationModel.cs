@@ -24,7 +24,7 @@ namespace Stackoverflow.Web.Models
         public string? ReturnUrl { get; set; }
 
         [Required]
-        public string Captcha { get; set; }
+        public string? Captcha { get; set; }
 
         public EmailConfirmationModel() { }
          

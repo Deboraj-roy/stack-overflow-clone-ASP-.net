@@ -32,7 +32,7 @@ namespace Stackoverflow.Web.Models
         public IFormFile ProfilePictureFile { get; set; }
 
         [Required]
-        public string Captcha { get; set; }
+        public string? Captcha { get; set; }
 
         public UserUpdateModel() { }
 
