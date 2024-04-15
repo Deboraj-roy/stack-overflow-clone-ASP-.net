@@ -4,3 +4,4 @@ By - Jalal Uddin
 
 
 - Image validation server side and client side
+- Add Jwt Authentication Configuration

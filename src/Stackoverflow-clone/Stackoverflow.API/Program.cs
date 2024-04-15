@@ -5,9 +5,11 @@ using Serilog.Events;
 using Stackoverflow.API;
 using Stackoverflow.Application;
 using Stackoverflow.Infrastructure;
+using Stackoverflow.Infrastructure.Extensions;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Stackoverflow.Infrastructure.Requirements;
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -44,20 +46,20 @@ try
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
     builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-    //builder.Services.AddIdentity();
-    //builder.Services.AddJwtAuthentication(builder.Configuration["Jwt:Key"], builder.Configuration["Jwt:Issuer"],
-    //    builder.Configuration["Jwt:Audience"]);
+    builder.Services.AddIdentity();
+    builder.Services.AddJwtAuthentication(builder.Configuration["Jwt:Key"], builder.Configuration["Jwt:Issuer"],
+        builder.Configuration["Jwt:Audience"]);
 
-    //builder.Services.AddAuthorization(options =>
-    //{
-    //    options.AddPolicy("PostViewRequirementPolicy", policy =>
-    //    {
-    //        policy.AuthenticationSchemes.Clear();
-    //        policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
-    //        policy.RequireAuthenticatedUser();
-    //        policy.Requirements.Add(new PostViewRequirement());
-    //    });
-    //});
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("PostViewRequirementPolicy", policy =>
+        {
+            policy.AuthenticationSchemes.Clear();
+            policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+            policy.RequireAuthenticatedUser();
+            policy.Requirements.Add(new PostViewRequirement());
+        });
+    });
 
 
     builder.Services.AddCors(options =>
@@ -73,7 +75,7 @@ try
     });
 
 
-    //builder.Services.AddSingleton<IAuthorizationHandler, PostViewRequirementHandler>();
+    builder.Services.AddSingleton<IAuthorizationHandler, PostViewRequirementHandler>();
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();

@@ -1,4 +1,4 @@
-﻿/*using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,7 +19,7 @@ namespace Stackoverflow.Infrastructure.Membership
                 Issuer = issuer,
                 Audience = audience,
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(securityKey), 
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(securityKey),
                     SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -28,4 +28,3 @@ namespace Stackoverflow.Infrastructure.Membership
         }
     }
 }
-*/

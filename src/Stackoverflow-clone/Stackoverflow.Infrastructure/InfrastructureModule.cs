@@ -3,6 +3,7 @@ using Stackoverflow.Application;
 using Stackoverflow.Application.Utilities;
 using Stackoverflow.Domain.Repositories;
 using Stackoverflow.Infrastructure.Email;
+using Stackoverflow.Infrastructure.Membership;
 using Stackoverflow.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,9 @@ namespace Stackoverflow.Infrastructure
 
             builder.RegisterType<HtmlEmailService>().As<IEmailService>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<TokenService>().As<ITokenService>()
+               .InstancePerLifetimeScope();
         }
     }
 }

@@ -62,7 +62,7 @@ namespace Stackoverflow.Infrastructure.Extensions
         }
 
         public static void AddJwtAuthentication(this IServiceCollection services,
-            string key, string issuer, string audience)
+           string key, string issuer, string audience)
         {
             services.AddAuthentication()
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, x =>
