@@ -1,0 +1,52 @@
+﻿@using Stackoverflow.Infrastructure.Membership
+@model ApplicationUser
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager 
+
+
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<h1>User Profile</h1>
+ 
+
+<div>
+    @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+    {
+        <div class="form-group">
+            <input hidden asp-for="ProfilePicture" class="form-control" readonly /> 
+        </div>
+        <div class="form-group text-center">
+            <img class="border-info rounded-circle" style="max-width: 150px" id="ProfilePicturePreview" />
+        </div>
+    }
+    else
+    {
+        <p>No profile picture uploaded.</p>
+    }
+
+    <h3>First Name: @Model.FirstName</h3>
+    <h3>Last Name: @Model.LastName</h3>
+    <h3>Reputation: @Model.Reputation</h3>
+    <h3>Registration Date: @Model.RegistrationDate</h3>
+    <h3>User Type: @Model.UserType</h3>
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <a id="profile-link" class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Update" asp-route-userId="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Edit Profile <i class="bi bi-pencil-square"></i></a>
+        
+    }
+
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var output = document.getElementById('ProfilePicturePreview');
+            output.src = $("#ProfilePicture").val();
+        }) 
+    </script>
+}
