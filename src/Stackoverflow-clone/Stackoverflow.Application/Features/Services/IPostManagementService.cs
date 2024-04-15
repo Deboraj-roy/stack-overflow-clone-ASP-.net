@@ -11,6 +11,7 @@ namespace Stackoverflow.Application.Features.Services
     {
         Task CreatePostAsync(string title, string body);
         Task DeletePostAsync(Guid id);
+        Task DeletePostAPIAsync(Guid id);
         Task<Post> GetPostAsync(Guid id);
         Task UpdatePostAsync(Guid id, string title, string body);
         Task<(IList<Post> records, int total, int totalDisplay)>

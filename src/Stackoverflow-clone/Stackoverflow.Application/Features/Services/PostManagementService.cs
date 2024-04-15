@@ -28,13 +28,13 @@ namespace Stackoverflow.Application.Features.Services
             await _unitOfWork.SaveAsync();
         }
 
-        //public async Task DeletePostAsync(Guid id)
-        //{
-        //    //await _unitOfWork.PostRepository.RemoveAsync(id);
-        //    _unitOfWork.PostRepository.Remove(id);
-        //    await _unitOfWork.SaveAsync();
-        //}
         public async Task DeletePostAsync(Guid id)
+        {
+            await _unitOfWork.PostRepository.RemoveAsync(id);
+            //_unitOfWork.PostRepository.Remove(id);
+            await _unitOfWork.SaveAsync();
+        }
+        public async Task DeletePostAPIAsync(Guid id)
         {
             _unitOfWork.PostRepository.Remove(id);
             await _unitOfWork.SaveAsync();

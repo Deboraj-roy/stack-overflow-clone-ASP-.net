@@ -36,15 +36,17 @@ namespace Stackoverflow.Web.Areas.User.Models
             await _postManagementService.DeletePostAsync(id);
         }
 
-        //internal async Task DeletePostAsyncAPI(Guid id)
-        //{
-        //    var response = await _httpClient.GetAsync($"Post/{postId}");
-        //    response.EnsureSuccessStatusCode(); // Throw exception if not success
+        internal async Task DeletePostAsyncAPI(Guid id)
+        {
+            //var response = await _httpClient.GetAsync($"Post/{postId}");
+            //response.EnsureSuccessStatusCode(); // Throw exception if not success
 
-        //    var content = await response.Content.ReadAsStringAsync();
-        //    return JsonConvert.DeserializeObject<Post>(content);
+            //var content = await response.Content.ReadAsStringAsync();
+            //return JsonConvert.DeserializeObject<Post>(content);
 
-        //    await _postManagementService.DeletePostAsync(id);
-        //}
+            var response = await _httpClient.DeleteAsync($"https://localhost:7278/v3/Post/{id}");
+            response.EnsureSuccessStatusCode(); // Throw exception if not successful
+
+        }
     }
 }

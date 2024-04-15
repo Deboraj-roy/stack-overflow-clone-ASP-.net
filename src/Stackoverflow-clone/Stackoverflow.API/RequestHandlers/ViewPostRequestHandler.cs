@@ -42,7 +42,7 @@ namespace Stackoverflow.Api.RequestHandlers
             var post = await GetPostAsync(id);
             if (post != null)
             {
-                await _postService?.DeletePostAsync(id);
+                await _postService?.DeletePostAPIAsync(id);
                 return true;
             }
             else

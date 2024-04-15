@@ -135,7 +135,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             // You need to implement the delete logic in your PostService
             var model = _scope.Resolve<PostDeleteModel>();
 
-            await model.DeletePostAsync(id);
+            await model.DeletePostAsyncAPI(id);
             TempData["warning"] = "Your Post deleted successfuly ";
             return Json(new { success = true, message = "Delete Successful" });
             //return RedirectToAction(nameof(Index));
