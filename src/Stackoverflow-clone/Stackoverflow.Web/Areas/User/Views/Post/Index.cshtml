@@ -1,4 +1,6 @@
 ﻿@using Stackoverflow.Domain.Entities
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 @model Post[]
 @{
     ViewData["Title"] = "All Post";

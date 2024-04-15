@@ -29,12 +29,10 @@ namespace Stackoverflow.Web.Controllers
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        // private readonly IEmailSender _emailSender;
         private IEmailService _emailService;
-        //private readonly ITokenService _tokenService;
+        private readonly ITokenService _tokenService;
         private readonly IConfiguration _configuration;
         private readonly ICaptchaValidator _captchaValidator;
-        //private readonly IHostingEnvironment _hostingEnvironment; 
         private readonly IWebHostEnvironment _webHostEnvironment;
 
         public AccountController(ILifetimeScope scope,
@@ -42,11 +40,10 @@ namespace Stackoverflow.Web.Controllers
             RoleManager<ApplicationRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
-            //ITokenService tokenService,
+            ITokenService tokenService,
             IConfiguration configuration,
             ICaptchaValidator captchaValidator,
             IEmailService emailService,
-            //IHostingEnvironment hostingEnvironment, 
             IWebHostEnvironment webHostEnvironment)
         {
             _scope = scope;
@@ -54,11 +51,10 @@ namespace Stackoverflow.Web.Controllers
             _roleManager = roleManager;
             _signInManager = signInManager;
             _userManager = userManager;
-            //_tokenService = tokenService;
+            _tokenService = tokenService;
             _configuration = configuration;
             _captchaValidator = captchaValidator;
             _emailService = emailService;
-            //_hostingEnvironment = hostingEnvironment;
             _webHostEnvironment = webHostEnvironment;
         }
 
@@ -131,6 +127,15 @@ namespace Stackoverflow.Web.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    var claims = (await _userManager.GetClaimsAsync(user)).ToArray();
+                    var token = await _tokenService.GetJwtToken(claims,
+                            _configuration["Jwt:Key"],
+                            _configuration["Jwt:Issuer"],
+                            _configuration["Jwt:Audience"]
+                        );
+                    HttpContext.Session.SetString("token", token);
+
                     _logger.LogInformation("Login Successfully");
                     TempData["success"] = "Login Successfully ";
                     return LocalRedirect(model.ReturnUrl);

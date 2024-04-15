@@ -18,20 +18,25 @@ using Stackoverflow.Infrastructure.Requirements;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
-var builder = WebApplication.CreateBuilder(args);
-
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json")
+    .Build();
 
 Log.Logger = new LoggerConfiguration()
-            .WriteTo.File("Logs/web-log-.log", rollOnFileSizeLimit: true, rollingInterval: RollingInterval.Day)
-            .CreateBootstrapLogger();
+            .ReadFrom.Configuration(configuration)
+            .CreateBootstrapLogger(); 
+
 try
 {
     Log.Information("Application Starting...");
 
+    var builder = WebApplication.CreateBuilder(args);
+
     var connectionString = builder.Configuration.GetConnectionString("DefaultStackoverflowConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
     var migrationAssembly = Assembly.GetExecutingAssembly().FullName;
 
-    Log.Information("Connection String:" + connectionString);
+    //Log.Information("Connection String:" + connectionString);
 
     builder.Host.UseSerilog((ctx, lc) => lc
         .MinimumLevel.Debug()
@@ -99,6 +104,13 @@ try
 
     });
 
+    builder.Services.AddSession(options =>
+    {
+        options.IdleTimeout = TimeSpan.FromMinutes(30);
+        options.Cookie.HttpOnly = true;
+        options.Cookie.IsEssential = true;
+    });
+
     builder.Services.AddSingleton<IAuthorizationHandler, PostViewRequirementHandler>();
     builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
 
@@ -117,12 +129,12 @@ try
         app.UseHsts();
     }
 
-    app.UseHttpsRedirection();
-    app.UseStaticFiles();
-
-    app.UseRouting();
-
-    app.UseAuthorization();
+    app.UseHttpsRedirection()
+        .UseStaticFiles()
+        .UseRouting()
+        .UseAuthentication()
+        .UseAuthorization()
+        .UseSession();
 
     app.MapControllerRoute(
     name: "areas",
