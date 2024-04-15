@@ -15,6 +15,8 @@ using SixLabors.ImageSharp.PixelFormats;
 using System.IO;
 using Stackoverflow.Domain.Exceptions;
 using Stackoverflow.Web.Areas.User.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Stackoverflow.Application.Utilities;
 
 
 namespace Stackoverflow.Web.Controllers
@@ -27,6 +29,8 @@ namespace Stackoverflow.Web.Controllers
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        // private readonly IEmailSender _emailSender;
+        private IEmailService _emailService;
         //private readonly ITokenService _tokenService;
         private readonly IConfiguration _configuration;
         private readonly ICaptchaValidator _captchaValidator;
@@ -41,6 +45,7 @@ namespace Stackoverflow.Web.Controllers
             //ITokenService tokenService,
             IConfiguration configuration,
             ICaptchaValidator captchaValidator,
+            IEmailService emailService,
             //IHostingEnvironment hostingEnvironment, 
             IWebHostEnvironment webHostEnvironment)
         {
@@ -52,6 +57,7 @@ namespace Stackoverflow.Web.Controllers
             //_tokenService = tokenService;
             _configuration = configuration;
             _captchaValidator = captchaValidator;
+            _emailService = emailService;
             //_hostingEnvironment = hostingEnvironment;
             _webHostEnvironment = webHostEnvironment;
         }
@@ -183,7 +189,8 @@ namespace Stackoverflow.Web.Controllers
                 TempData["success"] = "Email confirmed successfully ";
                 // Email confirmed successfully
                 // Redirect to the specified returnUrl or a default page
-                return Redirect(returnUrl ?? "/"); // You may adjust the default page as needed
+                //return Redirect(returnUrl ?? "/"); // You may adjust the default page as needed
+                return RedirectToAction("Index", "Post", new { area = "User" });
             }
             else
             {
@@ -191,6 +198,32 @@ namespace Stackoverflow.Web.Controllers
                 // You may handle the failure appropriately, such as showing an error message
                 return BadRequest("Failed to confirm email.");
             }
+        }
+
+        public IActionResult ResendEmailConfirmation()
+        {
+            var model = _scope.Resolve<EmailConfirmationModel>();
+            return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResendEmailConfirmation(EmailConfirmationModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var baseUrl = $"{Request.Scheme}://{Request.Host}";
+
+
+                await model.SendMailAsync(_emailService, _userManager, baseUrl);
+
+                TempData["success"] = "Email confirmation link has been sent successfully, check your email.";
+                return RedirectToAction("Index", "Post", new { area = "User" });
+            }
+            else
+            {
+                return View(model);
+            }
+
         }
 
 
@@ -233,7 +266,7 @@ namespace Stackoverflow.Web.Controllers
                     try
                     {
                         using (var image = SixLabors.ImageSharp.Image.Load<Rgba32>(model.ProfilePictureFile.OpenReadStream()))
-                        { 
+                        {
 
                             if (!model.IsImage(model.ProfilePictureFile))
                             {
