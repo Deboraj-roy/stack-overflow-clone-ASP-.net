@@ -30,10 +30,21 @@ namespace Stackoverflow.Web.Areas.User.Models
             _scope = scope;
             _postManagementService = _scope.Resolve<IPostManagementService>();
         }
- 
+
         internal async Task DeletePostAsync(Guid id)
         {
             await _postManagementService.DeletePostAsync(id);
-        } 
+        }
+
+        //internal async Task DeletePostAsyncAPI(Guid id)
+        //{
+        //    var response = await _httpClient.GetAsync($"Post/{postId}");
+        //    response.EnsureSuccessStatusCode(); // Throw exception if not success
+
+        //    var content = await response.Content.ReadAsStringAsync();
+        //    return JsonConvert.DeserializeObject<Post>(content);
+
+        //    await _postManagementService.DeletePostAsync(id);
+        //}
     }
 }

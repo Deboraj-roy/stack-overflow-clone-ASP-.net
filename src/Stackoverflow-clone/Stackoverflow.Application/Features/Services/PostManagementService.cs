@@ -28,12 +28,18 @@ namespace Stackoverflow.Application.Features.Services
             await _unitOfWork.SaveAsync();
         }
 
+        //public async Task DeletePostAsync(Guid id)
+        //{
+        //    //await _unitOfWork.PostRepository.RemoveAsync(id);
+        //    _unitOfWork.PostRepository.Remove(id);
+        //    await _unitOfWork.SaveAsync();
+        //}
         public async Task DeletePostAsync(Guid id)
         {
-            await _unitOfWork.PostRepository.RemoveAsync(id);
+            _unitOfWork.PostRepository.Remove(id);
             await _unitOfWork.SaveAsync();
         }
-          
+
         public async Task<(IList<Post> records, int total, int totalDisplay)> GetPagedPostsAsync(int pageIndex, int pageSize, string searchTitle, string sortBy)
         {
             return await _unitOfWork.PostRepository.GetTableDataAsync(searchTitle, sortBy, pageIndex, pageSize);

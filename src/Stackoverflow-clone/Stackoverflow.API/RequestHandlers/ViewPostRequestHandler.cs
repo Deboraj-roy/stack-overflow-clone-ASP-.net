@@ -4,6 +4,7 @@ using Stackoverflow.Application.Features.Services;
 using Stackoverflow.Domain.Entities;
 using Stackoverflow.Infrastructure;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Stackoverflow.Api.RequestHandlers
 {
@@ -36,9 +37,18 @@ namespace Stackoverflow.Api.RequestHandlers
             return await _postService?.GetPostAsync();
         }
 
-        internal void DeletePost(Guid id)
+        internal async Task<bool> DeletePost(Guid id)
         {
-            _postService?.DeletePostAsync(id);
+            var post = await GetPostAsync(id);
+            if (post != null)
+            {
+                await _postService?.DeletePostAsync(id);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         //internal Post GetPost(string name)

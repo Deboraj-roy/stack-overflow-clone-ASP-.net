@@ -23,6 +23,7 @@ namespace Stackoverflow.API.Controllers
 
         //[HttpPost("view")]
         [HttpPost, Authorize(Policy = "PostViewRequirementPolicy")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<object> Post([FromBody] ViewPostRequestHandler handler)
         {
             handler.ResolveDependency(_scope);
@@ -34,6 +35,7 @@ namespace Stackoverflow.API.Controllers
 
         //[HttpGet]
         [HttpGet, Authorize(Policy = "PostViewRequirementPolicy")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IEnumerable<Post>> Get()
         {
             try
@@ -51,6 +53,9 @@ namespace Stackoverflow.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<Post> Get(Guid id)
         {
             var model = _scope.Resolve<ViewPostRequestHandler>();
@@ -83,6 +88,10 @@ namespace Stackoverflow.API.Controllers
 
         [HttpPost("Create")]
         //[ValidateAntiForgeryToken]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Create([FromBody] PostCreateModel model)
         {
             if (ModelState.IsValid)
@@ -125,23 +134,34 @@ namespace Stackoverflow.API.Controllers
         //        _logger.LogError(ex, "Couldn't delete Post");
         //        return BadRequest();
         //    }
-        //}
+        //} 
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
                 var model = _scope.Resolve<ViewPostRequestHandler>();
-                model.DeletePost(id);
-                _logger.LogInformation("Post deleted");
-                return Ok();
+                if (await model.DeletePost(id))
+                {
+                    _logger.LogInformation("Post deleted");
+                    return NoContent();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Couldn't delete Post");
+                _logger.LogError(ex, $"Couldn't delete Post {id}");
                 return BadRequest();
             }
         }
+
+
     }
 }

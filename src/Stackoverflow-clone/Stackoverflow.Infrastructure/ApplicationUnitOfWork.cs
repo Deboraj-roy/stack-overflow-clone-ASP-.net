@@ -14,11 +14,11 @@ namespace Stackoverflow.Infrastructure
 	{
 		public IPostRepository PostRepository { get; private set; }
 
-		public ApplicationUnitOfWork(IPostRepository postRepository, 
-			IApplicationDbContext dbContext) : base((DbContext)dbContext)
-		{
-			this.PostRepository = postRepository;
-		}
-		 
-	}
+        public ApplicationUnitOfWork(IPostRepository postRepository,
+             IApplicationDbContext dbContext) : base((DbContext)dbContext)
+        {
+            PostRepository = postRepository;
+        }
+
+    }
 }

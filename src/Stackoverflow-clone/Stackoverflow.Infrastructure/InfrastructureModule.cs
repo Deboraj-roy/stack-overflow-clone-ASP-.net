@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Stackoverflow.Application;
 using Stackoverflow.Application.Utilities;
+using Stackoverflow.Domain;
 using Stackoverflow.Domain.Repositories;
 using Stackoverflow.Infrastructure.Email;
 using Stackoverflow.Infrastructure.Membership;
@@ -46,6 +47,10 @@ namespace Stackoverflow.Infrastructure
 
             builder.RegisterType<TokenService>().As<ITokenService>()
                .InstancePerLifetimeScope();
+
+            //builder.RegisterType<UnitOfWork>()
+            //            .As<IUnitOfWork>()
+            //            .InstancePerLifetimeScope();
         }
     }
 }
