@@ -41,7 +41,8 @@ namespace Stackoverflow.Web.Models
             if (!string.IsNullOrEmpty(ProfilePictureFile?.FileName))
             {
                 string extension = Path.GetExtension(ProfilePictureFile.FileName);
-                string fileName = $"{Guid.NewGuid()}{extension}";
+                string originalFileName = Path.GetFileNameWithoutExtension(ProfilePictureFile.FileName);
+                string fileName = $"{Guid.NewGuid()}{originalFileName}{extension}";
                 string filePath = Path.Combine(uploadPath, fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
