@@ -317,7 +317,7 @@ namespace Stackoverflow.Web.Controllers
                 {
                     _logger.LogInformation("User profile updated successfully.");
                     TempData["success"] = "User profile updated successfully.";
-                    return RedirectToAction("Index", "Post", new { area = "User" });
+                    return RedirectToAction("index", "Home");
 
                 }
                 else
