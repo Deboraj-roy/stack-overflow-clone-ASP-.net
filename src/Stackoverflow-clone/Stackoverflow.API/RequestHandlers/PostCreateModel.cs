@@ -1,13 +1,14 @@
 ﻿using Autofac;
 using Stackoverflow.Application.Features.Services;
 
-namespace Stackoverflow.Api.RequestHandlers
+namespace Stackoverflow.API.RequestHandlers
 {
     public class PostCreateModel
     {
         private ILifetimeScope _scope;
         private IPostManagementService _postManagementService;
 
+        public Guid userId { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
 
@@ -26,7 +27,7 @@ namespace Stackoverflow.Api.RequestHandlers
 
         internal async Task CreatePostAsync()
         {
-            await _postManagementService.CreatePostAsync(Title, Body);
+            await _postManagementService.CreatePostAsync(Title, Body, userId);
         }
     }
 }

@@ -35,9 +35,11 @@
     <h3>User Type: @Model.UserType</h3>
 
     @if (SignInManager.IsSignedIn(User))
-    {
-        <a id="profile-link" class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Update" asp-route-userId="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Edit Profile <i class="bi bi-pencil-square"></i></a>
-        
+    { 
+        <div class="align-middle">
+            <a class="btn btn-outline-primary" asp-area="" asp-controller="Account" asp-action="Update" asp-route-userId="@User.FindFirstValue(ClaimTypes.NameIdentifier)"><i class="bi bi-pencil-square"></i>Edit </a> |
+            <a class="btn btn-outline-info" asp-action="Create" asp-controller="Post" asp-area="User" asp-route-userId="@User.FindFirstValue(ClaimTypes.NameIdentifier)"><i class="bi bi-eye"></i>Create Post </a>
+        </div>
     }
 
 </div>

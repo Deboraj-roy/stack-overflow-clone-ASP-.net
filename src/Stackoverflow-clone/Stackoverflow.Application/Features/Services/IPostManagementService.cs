@@ -9,7 +9,7 @@ namespace Stackoverflow.Application.Features.Services
 {
     public interface IPostManagementService
     {
-        Task CreatePostAsync(string title, string body);
+        Task CreatePostAsync(string title, string body, Guid userId);
         Task DeletePostAsync(Guid id);
         Task DeletePostAPIAsync(Guid id);
         Task<Post> GetPostAsync(Guid id);

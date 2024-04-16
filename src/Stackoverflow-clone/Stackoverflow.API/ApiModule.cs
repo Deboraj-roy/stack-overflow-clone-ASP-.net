@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Stackoverflow.Api.RequestHandlers;
+using Stackoverflow.API.RequestHandlers;
 
 namespace Stackoverflow.API
 {
@@ -9,6 +9,7 @@ namespace Stackoverflow.API
         {
             builder.RegisterType<ViewPostRequestHandler>().AsSelf();
             builder.RegisterType<PostCreateModel>().AsSelf();
+            builder.RegisterType<PostUpdateModel>().AsSelf();
             base.Load(builder);
         }
     }

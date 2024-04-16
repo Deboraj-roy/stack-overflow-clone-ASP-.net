@@ -16,12 +16,13 @@ namespace Stackoverflow.Application.Features.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task CreatePostAsync(string title, string body)
+        public async Task CreatePostAsync(string title, string body, Guid userId)
         {
             Post post = new Post
             {
                 Title = title,
-                Body = body
+                Body = body,
+                UserId = userId
             };
 
             await _unitOfWork.PostRepository.AddAsync(post);

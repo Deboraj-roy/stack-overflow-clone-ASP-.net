@@ -11,8 +11,8 @@
             </div>
         </div>
     </div>
-    <div class="card-body p-4"> 
-         <form asp-action="Create" asp-controller="Post" asp-area="user" asp-antiforgery="true">
+    <div class="card-body p-4">
+        <form asp-action="Create" asp-controller="Post" asp-area="user" asp-antiforgery="true" asp-route-userId="@Model.userId">
             <div class="row">
                 <div class="col-10">
                     <div class="border p-3">

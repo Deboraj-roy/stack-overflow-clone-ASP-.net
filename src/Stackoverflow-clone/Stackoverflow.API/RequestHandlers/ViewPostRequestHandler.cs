@@ -6,7 +6,7 @@ using Stackoverflow.Infrastructure;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace Stackoverflow.Api.RequestHandlers
+namespace Stackoverflow.API.RequestHandlers
 {
     public class ViewPostRequestHandler : DataTables
     {

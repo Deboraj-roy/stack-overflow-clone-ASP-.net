@@ -87,13 +87,14 @@ namespace Stackoverflow.Web.Areas.User.Controllers
 
         [HttpPost, ValidateAntiForgeryToken]
         [Authorize(Policy = "PostCreatePolicy")]
-        public async Task<IActionResult> Create(PostCreateModel model)
+        public async Task<IActionResult> Create(PostCreateModel model, Guid userId)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     model.Resolve(_scope);
+                    model.userId = userId;
                     await model.CreatePostAsync();
 
                     TempData["success"] = "Post created successfuly ";

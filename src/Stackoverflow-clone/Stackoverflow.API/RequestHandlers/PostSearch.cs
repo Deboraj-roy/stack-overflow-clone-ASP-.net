@@ -1,4 +1,4 @@
-﻿namespace Stackoverflow.Api.RequestHandlers
+﻿namespace Stackoverflow.API.RequestHandlers
 {
     public class PostSearch
     {
