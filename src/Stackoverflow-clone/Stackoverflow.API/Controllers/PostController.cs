@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Stackoverflow.Api.RequestHandlers;
 using Stackoverflow.Domain.Entities;
 
@@ -32,13 +33,18 @@ namespace Stackoverflow.API.Controllers
             return data;
         }
 
-        [HttpPost("search"), Authorize(Policy = "PostViewRequirementPolicy")]
-        public async Task<object> Search([FromBody] ViewPostRequestHandler handler)
+        //[HttpPost("search"), Authorize(Policy = "PostViewRequirementPolicy")]
+        [HttpPost("search")]
+        public async Task<object> Search([FromBody] string searchString)
         {
-            handler.ResolveDependency(_scope);
-            var data = await handler.GetPagedPosts();
+            var handler = _scope.Resolve<ViewPostRequestHandler>();
+            handler.Title = searchString;
+            var posts = await handler.GetPostsAsync();
             _logger.LogInformation("Posts found");
-            return data;
+             
+            var filteredPosts = posts.Where(p => p.Title.Contains(searchString)); // Filter posts based on the search query
+
+            return filteredPosts;
         }
          
 

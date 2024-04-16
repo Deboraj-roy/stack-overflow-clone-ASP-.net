@@ -8,12 +8,6 @@
 
 <p>Your search query: @ViewBag.SearchString</p>
 
-   
-<form class="form-inline my-2 my-lg-0" asp-controller="Post" asp-action="Search" asp-area="user" asp-antiforgery="true" style="padding-right: 25px;" method="post">
-    <input id="searchString" name="searchString" type="text" class="form-control" placeholder="Search for a post..." aria-label="Recipient's username" aria-describedby="button-addon2">
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
-</form>
-
 <div id="results"></div>
 
 @section Scripts
@@ -28,10 +22,11 @@
                 $.ajax({
                     url: "https://localhost:7278/v3/Post/search",
                     type: "POST",
-                    contentType: "application/json",
-                    dataType: "json",
+                    contentType: "application/json", //must be added
+                    dataType: "json", //better to add, not mandatory
                     beforeSend: function (xhr) {
-                        xhr.setRequestHeader("Authorization", "Bearer " + '@HttpContextAccessor.HttpContext.Session.GetString("token")');
+                        xhr.setRequestHeader("Authorization",
+                            "Bearer " + '@HttpContextAccessor.HttpContext.Session.GetString("token")');
                     },
                     data: JSON.stringify({
                         searchString: searchString
