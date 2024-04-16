@@ -1,0 +1,52 @@
+﻿@using Stackoverflow.Domain.Entities
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Search results";
+}
+
+<h1>Search results</h1>
+ 
+@section Scripts
+{
+    <script>
+        $(function () {
+            $.ajax({
+                url: "https://localhost:7278/v3/Post",
+                type: "POST",
+                contentType: "application/json", //must be added
+                dataType: "json", //better to add, not mandatory
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization",
+                        "Bearer " + '@HttpContextAccessor.HttpContext.Session.GetString("token")');
+                },
+                data: JSON.stringify({
+                    start: 0,
+                    length: 0,
+                    order: [{ column: 0, dir: "string" }],
+                    search: { regex: true, value: "" },
+                    searchItem: { title: $("#searchString").val() } // Modify this according to your input field
+                }),
+                success: function (data) {
+                    // Handle successful response and update the view
+                    console.log(data);
+                    // Update the view with the received data
+                    $.each(data, function (index, item) {
+                        // Display the data in your HTML elements
+                        var title = item.title;
+                        var body = item.body;
+                        // Append the data to your view
+                        $("#results").append("<div><h2>" + title + "</h2><p>" + body + "</p></div>");
+                    });
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    </script>
+}
+
+<!-- Add an element to display the results -->
+<div id="results"></div>

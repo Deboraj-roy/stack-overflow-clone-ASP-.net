@@ -12,8 +12,8 @@ namespace Stackoverflow.Api.RequestHandlers
     {
         private IPostManagementService? _postService;
         private IMapper _mapper;
-
-        public PostSearch SearchItem { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; } = string.Empty;        public PostSearch SearchItem { get; set; }
 
         public ViewPostRequestHandler()
         {

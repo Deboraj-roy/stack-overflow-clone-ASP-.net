@@ -59,6 +59,7 @@ body {
  
 </style>
 </head>
+@* @model PostListModel; *@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -82,9 +83,8 @@ body {
 
                     <div class="search-container">
                        
-                        <form asp-controller="" asp-action="">
-                            <input type="text" id="search-input" placeholder="Search...">
-                            <!-- Replace the variables below. -->
+                        <form asp-controller="Post" asp-action="Search" asp-area="user" asp-antiforgery="true" method="post">
+                            <input type="text" id="search-input" name="searchTerm" placeholder="Search...">
                             <button class="g-recaptcha"
                                     data-sitekey="6LeQgqYpAAAAAILcUrWQ7SrqUGJUYX1UIH8mTQ9f"
                                     data-callback='onSubmit'
@@ -92,6 +92,15 @@ body {
                                 <i class="bi bi-search"></i>
                             </button>
                         </form>
+
+
+                        <form class="form-inline my-2 my-lg-0" asp-controller="Post" asp-action="Search" asp-area="user" asp-antiforgery="true" style="padding-right: 25px;" method="post">
+                            <input name="searchString" type="text" class="form-control" placeholder="Search for a movie..." aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
+                        </form>
+
+
+
                     </div>
                     <partial name="_LoginPartial" />
                     <partial name="_SidebarPartia" />

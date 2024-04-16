@@ -1,12 +1,15 @@
 ﻿using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
+using Stackoverflow.Domain.Entities;
 using Stackoverflow.Domain.Exceptions;
 using Stackoverflow.Infrastructure;
 using Stackoverflow.Infrastructure.Membership;
 using Stackoverflow.Web.Areas.User.Models;
 using System.Net;
+using System.Net.Http;
 
 namespace Stackoverflow.Web.Areas.User.Controllers
 {
@@ -190,6 +193,22 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             }
 
             return View(model);
+        }
+
+        //public async Task<IActionResult> Search(string searchTerm)
+        //{
+        //    var model = _scope.Resolve<PostListModel>();
+
+        //    //await model.GetPostsSearchAPIAsync(searchTerm);
+        //    await model.GetPagedPostsAsync(searchTerm);
+
+        //    return View(model);
+        //}
+        //[HttpPost]
+        [AllowAnonymous]
+        public IActionResult Search(string searchString)
+        {
+            return View();
         }
 
     }

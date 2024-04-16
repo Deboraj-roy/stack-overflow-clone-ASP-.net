@@ -21,9 +21,9 @@ namespace Stackoverflow.API.Controllers
             _scope = scope;
         }
 
-        //[HttpPost("view")]
+        //[HttpPost("view"), Authorize(Policy = "PostViewRequirementPolicy")]
+        //[HttpPost]
         [HttpPost, Authorize(Policy = "PostViewRequirementPolicy")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<object> Post([FromBody] ViewPostRequestHandler handler)
         {
             handler.ResolveDependency(_scope);
