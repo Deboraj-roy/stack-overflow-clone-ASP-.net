@@ -67,39 +67,43 @@ namespace Stackoverflow.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegistrationModel model)
         {
-            model.Resolve(_scope);
-            var baseUrl = $"{Request.Scheme}://{Request.Host}";
-
-            // If you need to include the port number in the URL
-            // var baseUrl = $"{Request.Scheme}://{Request.Host.Value}";
-            //var response = await model.RegisterAsync(Url.Content("~/"));
-
-            var response = await model.RegisterAsync(Url.Content(baseUrl));
-
-            if (response.errors is not null)
+            if (ModelState.IsValid)
             {
-                foreach (var error in response.errors)
+                model.Resolve(_scope);
+                var baseUrl = $"{Request.Scheme}://{Request.Host}";
+
+                // If you need to include the port number in the URL
+                // var baseUrl = $"{Request.Scheme}://{Request.Host.Value}";
+                //var response = await model.RegisterAsync(Url.Content("~/"));
+
+                var response = await model.RegisterAsync(Url.Content(baseUrl));
+
+                if (response.errors is not null)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-                _logger.LogInformation("User Register Failed");
-                return View(model);
+                    foreach (var error in response.errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    _logger.LogInformation("User Register Failed");
+                    return View(model);
 
+                }
+                else
+                {
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    var claims = (await _userManager.GetClaimsAsync(user)).ToArray();
+                    var token = await _tokenService.GetJwtToken(claims,
+                            _configuration["Jwt:Key"],
+                            _configuration["Jwt:Issuer"],
+                            _configuration["Jwt:Audience"]
+                        );
+                    HttpContext.Session.SetString("token", token);
+                    TempData["success"] = "User Registered Successfully ";
+                    _logger.LogInformation("User Registered Successfully");
+                    return Redirect(response.redirectLocation);
+                }
             }
-            else
-            {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                var claims = (await _userManager.GetClaimsAsync(user)).ToArray();
-                var token = await _tokenService.GetJwtToken(claims,
-                        _configuration["Jwt:Key"],
-                        _configuration["Jwt:Issuer"],
-                        _configuration["Jwt:Audience"]
-                    );
-                HttpContext.Session.SetString("token", token);
-                TempData["success"] = "User Registered Successfully ";
-                _logger.LogInformation("User Registered Successfully");
-                return Redirect(response.redirectLocation);
-            }
+            return View(model);
         }
 
         public async Task<IActionResult> LoginAsync(string returnUrl = null)
@@ -127,40 +131,44 @@ namespace Stackoverflow.Web.Controllers
         public async Task<IActionResult> LoginAsync(LoginModel model)
         {
             model.ReturnUrl ??= Url.Content("~/");
-
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                var claims = (await _userManager.GetClaimsAsync(user)).ToArray();
-                var token = await _tokenService.GetJwtToken(claims,
-                        _configuration["Jwt:Key"],
-                        _configuration["Jwt:Issuer"],
-                        _configuration["Jwt:Audience"]
-                    );
-                HttpContext.Session.SetString("token", token);
-
-                _logger.LogInformation("Login Successfully");
-                TempData["success"] = "Login Successfully ";
-                // Check if the returnUrl is a valid URL
-                if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                if (result.Succeeded)
                 {
-                    return Redirect(model.ReturnUrl);
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    var claims = (await _userManager.GetClaimsAsync(user)).ToArray();
+                    var token = await _tokenService.GetJwtToken(claims,
+                            _configuration["Jwt:Key"],
+                            _configuration["Jwt:Issuer"],
+                            _configuration["Jwt:Audience"]
+                        );
+                    HttpContext.Session.SetString("token", token);
+
+                    _logger.LogInformation("Login Successfully");
+                    TempData["success"] = "Login Successfully ";
+                    // Check if the returnUrl is a valid URL
+                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Post", new { area = "User" });
+                    }
                 }
                 else
                 {
-                    return RedirectToAction("Index", "Post", new { area = "User" });
+                    _logger.LogInformation("Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return View(model);
                 }
             }
-            else
-            {
-                _logger.LogInformation("Invalid login attempt.");
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return View(model);
-            }
 
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -246,13 +254,17 @@ namespace Stackoverflow.Web.Controllers
                 return NotFound();
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            // Check if the user is already authenticated
+            if (User.Identity.IsAuthenticated)
             {
-                return NotFound();
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                return View(user);
             }
-
-            return View(user);
+            return RedirectToAction("Login", "Account");
         }
 
 
