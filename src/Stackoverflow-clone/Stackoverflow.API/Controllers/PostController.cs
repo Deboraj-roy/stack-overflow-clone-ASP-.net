@@ -32,6 +32,15 @@ namespace Stackoverflow.API.Controllers
             return data;
         }
 
+        [HttpPost("search"), Authorize(Policy = "PostViewRequirementPolicy")]
+        public async Task<object> Search([FromBody] ViewPostRequestHandler handler)
+        {
+            handler.ResolveDependency(_scope);
+            var data = await handler.GetPagedPosts();
+            _logger.LogInformation("Posts found");
+            return data;
+        }
+         
 
         //[HttpGet]
         [HttpGet, Authorize(Policy = "PostViewRequirementPolicy")]

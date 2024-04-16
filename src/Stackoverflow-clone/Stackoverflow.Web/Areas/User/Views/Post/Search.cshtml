@@ -1,52 +1,70 @@
-﻿@using Stackoverflow.Domain.Entities
-@using Microsoft.AspNetCore.Http
+﻿@using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
+
 @{
     ViewData["Title"] = "Search results";
 }
-
 <h1>Search results</h1>
- 
+
+<p>Your search query: @ViewBag.SearchString</p>
+
+   
+<form class="form-inline my-2 my-lg-0" asp-controller="Post" asp-action="Search" asp-area="user" asp-antiforgery="true" style="padding-right: 25px;" method="post">
+    <input id="searchString" name="searchString" type="text" class="form-control" placeholder="Search for a post..." aria-label="Recipient's username" aria-describedby="button-addon2">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
+</form>
+
+<div id="results"></div>
+
 @section Scripts
 {
     <script>
         $(function () {
-            $.ajax({
-                url: "https://localhost:7278/v3/Post",
-                type: "POST",
-                contentType: "application/json", //must be added
-                dataType: "json", //better to add, not mandatory
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Authorization",
-                        "Bearer " + '@HttpContextAccessor.HttpContext.Session.GetString("token")');
-                },
-                data: JSON.stringify({
-                    start: 0,
-                    length: 0,
-                    order: [{ column: 0, dir: "string" }],
-                    search: { regex: true, value: "" },
-                    searchItem: { title: $("#searchString").val() } // Modify this according to your input field
-                }),
-                success: function (data) {
-                    // Handle successful response and update the view
-                    console.log(data);
-                    // Update the view with the received data
-                    $.each(data, function (index, item) {
-                        // Display the data in your HTML elements
-                        var title = item.title;
-                        var body = item.body;
-                        // Append the data to your view
-                        $("#results").append("<div><h2>" + title + "</h2><p>" + body + "</p></div>");
-                    });
-                },
-                error: function (xhr, status, error) {
-                    // Handle errors
-                    console.error(xhr.responseText);
-                }
+            $("form").submit(function (event) {
+                event.preventDefault();
+
+                var searchString = $("#searchString").val();
+
+                $.ajax({
+                    url: "https://localhost:7278/v3/Post/search",
+                    type: "POST",
+                    contentType: "application/json",
+                    dataType: "json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", "Bearer " + '@HttpContextAccessor.HttpContext.Session.GetString("token")');
+                    },
+                    data: JSON.stringify({
+                        searchString: searchString
+                    }),
+                    success: function (data) {
+                        // Handle successful response and update the view
+                        console.log(data);
+
+                        // Clear previous results
+                        $("#results").empty();
+
+                        // Check if any results found
+                        if (data && data.length > 0) {
+                            $.each(data, function (index, item) {
+                                // Create HTML elements to display the post data
+                                var postTitle = $("<h2>").text(item.title);
+                                var postId = $("<p>").text(item.id);
+
+                                // Append the elements to the results container
+                                $("#results").append(postTitle, postId);
+                            });
+                        } else {
+                            // Display a message when no results found
+                            $("#results").text("No posts found.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors
+                        console.error(xhr.responseText);
+                    }
+                });
             });
         });
     </script>
 }
 
-<!-- Add an element to display the results -->
-<div id="results"></div>

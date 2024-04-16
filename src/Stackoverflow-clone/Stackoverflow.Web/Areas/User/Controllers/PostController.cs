@@ -208,6 +208,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
         [AllowAnonymous]
         public IActionResult Search(string searchString)
         {
+            ViewBag.SearchString = searchString;
             return View();
         }
 
