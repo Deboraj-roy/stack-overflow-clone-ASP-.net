@@ -34,15 +34,15 @@ namespace Stackoverflow.API.Controllers
         }
 
         //[HttpPost("search"), Authorize(Policy = "PostViewRequirementPolicy")]
-        [HttpPost("search")]
-        public async Task<object> Search([FromBody] string searchString)
+        [HttpGet("search")]
+        public async Task<IEnumerable<Post>> Search(string title)
         {
             var handler = _scope.Resolve<ViewPostRequestHandler>();
-            handler.Title = searchString;
+            handler.Title = title;
             var posts = await handler.GetPostsAsync();
             _logger.LogInformation("Posts found");
              
-            var filteredPosts = posts.Where(p => p.Title.Contains(searchString)); // Filter posts based on the search query
+            var filteredPosts = posts.Where(p => p.Title.Contains(title)); // Filter posts based on the search query
 
             return filteredPosts;
         }

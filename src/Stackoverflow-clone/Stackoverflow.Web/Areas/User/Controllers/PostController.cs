@@ -206,10 +206,21 @@ namespace Stackoverflow.Web.Areas.User.Controllers
         //}
         //[HttpPost]
         [AllowAnonymous]
-        public IActionResult Search(string searchString)
+        public async Task<IActionResult> Search(string searchString)
         {
             ViewBag.SearchString = searchString;
-            return View();
+            var model = _scope.Resolve<PostSearchModel>();
+            model.Title = searchString;
+            var post = await model.GetPostsSearchAPIAsync();
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return View(post);
+
+            //return View();
         }
 
     }

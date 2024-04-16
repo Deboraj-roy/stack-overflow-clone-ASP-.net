@@ -9,25 +9,19 @@ namespace Stackoverflow.Web.Areas.User.Models
 {
     public class PostDetailsModel
     {
-        private ILifetimeScope _scope;
-        private IPostManagementService _postManagementService;
+        private ILifetimeScope _scope; 
         private readonly HttpClient _httpClient;
+         
 
         public PostDetailsModel()
-        {
-        }
-
-        public PostDetailsModel(IPostManagementService postManagementService)
-        {
-            _postManagementService = postManagementService;
+        { 
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7278/v3/");
         }
 
         public void Resolve(ILifetimeScope scope)
         {
-            _scope = scope;
-            _postManagementService = _scope.Resolve<IPostManagementService>();
+            _scope = scope; 
         }
            
         public async Task<Post> GetPostsDetailsAsync(Guid postId)

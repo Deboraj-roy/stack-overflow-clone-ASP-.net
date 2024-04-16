@@ -1,6 +1,7 @@
-﻿@using Microsoft.AspNetCore.Http
+﻿@using Stackoverflow.Domain.Entities
+@using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
-
+@model Post[]
 @{
     ViewData["Title"] = "Search results";
 }
@@ -8,58 +9,15 @@
 
 <p>Your search query: @ViewBag.SearchString</p>
 
-<div id="results"></div>
 
-@section Scripts
+@foreach (var post in Model)
 {
-    <script>
-        $(function () {
-            $("form").submit(function (event) {
-                event.preventDefault();
-
-                var searchString = $("#searchString").val();
-
-                $.ajax({
-                    url: "https://localhost:7278/v3/Post/search",
-                    type: "POST",
-                    contentType: "application/json", //must be added
-                    dataType: "json", //better to add, not mandatory
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader("Authorization",
-                            "Bearer " + '@HttpContextAccessor.HttpContext.Session.GetString("token")');
-                    },
-                    data: JSON.stringify({
-                        searchString: searchString
-                    }),
-                    success: function (data) {
-                        // Handle successful response and update the view
-                        console.log(data);
-
-                        // Clear previous results
-                        $("#results").empty();
-
-                        // Check if any results found
-                        if (data && data.length > 0) {
-                            $.each(data, function (index, item) {
-                                // Create HTML elements to display the post data
-                                var postTitle = $("<h2>").text(item.title);
-                                var postId = $("<p>").text(item.id);
-
-                                // Append the elements to the results container
-                                $("#results").append(postTitle, postId);
-                            });
-                        } else {
-                            // Display a message when no results found
-                            $("#results").text("No posts found.");
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        // Handle errors
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
-        });
-    </script>
+    <div>
+        <h2>@post.Title</h2>
+        <div class="row pl-2 my-3">
+            <p class="text-secondary lh-sm">@Html.Raw(post.Body)</p>
+        </div>
+        <p>Created on: @post.CreationDate</p>
+        <a asp-action="Details" asp-route-id="@post.Id">Details</a> <!-- Add Details button -->
+    </div>
 }
-
