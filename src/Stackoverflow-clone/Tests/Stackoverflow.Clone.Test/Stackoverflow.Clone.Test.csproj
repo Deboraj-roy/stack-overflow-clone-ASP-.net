@@ -16,11 +16,13 @@
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit.Analyzers" Version="3.6.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
+    <PackageReference Include="Shouldly" Version="4.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Stackoverflow.Application\Stackoverflow.Application.csproj" />
     <ProjectReference Include="..\..\Stackoverflow.Infrastructure\Stackoverflow.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Stackoverflow.Web\Stackoverflow.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

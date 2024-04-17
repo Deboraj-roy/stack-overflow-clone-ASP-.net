@@ -1,5 +1,6 @@
 using Autofac.Extras.Moq;
 using Moq;
+using Shouldly;
 using Stackoverflow.Application;
 using Stackoverflow.Application.Features.Services;
 using Stackoverflow.Domain.Entities;
@@ -7,7 +8,7 @@ using Stackoverflow.Domain.Repositories;
 
 namespace Stackoverflow.Clone.Test
 {
-    public class ManagementServiceTests
+    public class PostManagementServiceTests
     {
         private AutoMock _mock;
         private Mock<IPostRepository> _postRepositoryMock;
@@ -66,15 +67,16 @@ namespace Stackoverflow.Clone.Test
             // Act
             await _postManagementService.CreatePostAsync(title, body, userId);
 
+            //// Assert
+            //_unitOfWorkMock.VerifyAll();
+            //_postRepositoryMock.VerifyAll();
+
             // Assert
-            _unitOfWorkMock.VerifyAll();
-            _postRepositoryMock.VerifyAll();
+            this.ShouldSatisfyAllConditions(
+                () => _unitOfWorkMock.VerifyAll(),
+                () => _postRepositoryMock.VerifyAll()
+            );
         }
 
-        [Test]
-        public void CreatePostAsync()
-        {
-            Assert.Pass();
-        }
     }
 }
