@@ -7,6 +7,7 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using Amazon;
 using Amazon.S3.Model;
+using DotNetEnv;
 
 namespace Stackoverflow.Web.Models
 {
@@ -44,22 +45,15 @@ namespace Stackoverflow.Web.Models
         {
             if (!string.IsNullOrEmpty(ProfilePictureFile?.FileName))
             {
+                DotNetEnv.Env.Load();
                 string extension = Path.GetExtension(ProfilePictureFile.FileName);
                 string originalFileName = Path.GetFileNameWithoutExtension(ProfilePictureFile.FileName);
                 string fileName = $"{Guid.NewGuid()}{originalFileName}{extension}";
-                //string filePath = Path.Combine(uploadPath, fileName);
 
-                //using (var stream = new FileStream(filePath, FileMode.Create))
-                //{
-                //    await ProfilePictureFile.CopyToAsync(stream);
-                //}
-
-                ////ProfilePicturePath = filePath;
-                //ProfilePicture = $"/files/{fileName}";
-
-
-                string awsAccessKeyId = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? "default_value";
-                string awsSecretkey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ?? "default_value";
+                string awsAccessKeyId = System.Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? "default_value";
+                string awsSecretkey = System.Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ?? "default_value";
+                //string awsAccessKeyId = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? "AWS_ACCESS_KEY_ID";
+                //string awsSecretkey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ?? "AWS_SECRET_ACCESS_KEY";
                 RegionEndpoint bucketRegion = RegionEndpoint.USEast1;
                 var bucketName = "deborajaspb9";
                 var bucketFolder = "Image";

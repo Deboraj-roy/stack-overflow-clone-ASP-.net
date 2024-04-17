@@ -17,10 +17,16 @@ using Microsoft.AspNetCore.Builder;
 using Stackoverflow.Infrastructure.Requirements;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using DotNetEnv.Configuration;
+using DotNetEnv;
+
+DotNetEnv.Env.Load();
+DotNetEnv.Env.TraversePath().Load();
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json")
+    .AddDotNetEnv(".env", LoadOptions.TraversePath()) // Simply add the DotNetEnv configuration source!
     .Build();
 
 Log.Logger = new LoggerConfiguration()
@@ -43,7 +49,7 @@ try
         .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
         .Enrich.FromLogContext()
         .ReadFrom.Configuration(builder.Configuration));
-
+  
     builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
     builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
     {
