@@ -17,6 +17,12 @@ using Stackoverflow.Domain.Exceptions;
 using Stackoverflow.Web.Areas.User.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Stackoverflow.Application.Utilities;
+using Amazon.S3;
+using Amazon.S3.Transfer;
+using Amazon;
+using Amazon.S3.Model;
+using static System.Net.WebRequestMethods;
+using Microsoft.Extensions.Configuration;
 
 
 namespace Stackoverflow.Web.Controllers
@@ -71,11 +77,6 @@ namespace Stackoverflow.Web.Controllers
             {
                 model.Resolve(_scope);
                 var baseUrl = $"{Request.Scheme}://{Request.Host}";
-
-                // If you need to include the port number in the URL
-                // var baseUrl = $"{Request.Scheme}://{Request.Host.Value}";
-                //var response = await model.RegisterAsync(Url.Content("~/"));
-
                 var response = await model.RegisterAsync(Url.Content(baseUrl));
 
                 if (response.errors is not null)
@@ -305,13 +306,18 @@ namespace Stackoverflow.Web.Controllers
                     return View(model);
                 }
 
-                string wwwRootPath = _webHostEnvironment.WebRootPath;
-                //string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                string productPath = @"Files";
-                string uploadPath = Path.Combine(wwwRootPath, productPath);
+                //string wwwRootPath = _webHostEnvironment.WebRootPath;
+                //string productPath = @"Files";
+                //string uploadPath = Path.Combine(wwwRootPath, productPath);
+                //string awsAccessKeyId = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
+                string awsAccessKeyId = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? "default_value";
+                _logger.LogInformation("AWS_ACCESS_KEY_ID: {AwsAccessKeyId}", awsAccessKeyId);
+
+                //string uploadPath = "https://us-east-1.console.aws.amazon.com/s3/object/deborajaspb9?region=us-east-1&bucketType=general&prefix=files/";
 
                 //string uploadPath = Path.Combine("~/", "files");
-                bool updateResult = await model.UpdateProfileAsync(_userManager, uploadPath);
+                //bool updateResult = await model.UpdateProfileAsync(_userManager, uploadPath);
+                bool updateResult = await model.UpdateProfileAsync(_userManager);
 
                 if (updateResult)
                 {

@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Stackoverflow.Infrastructure.Membership;
 using System.ComponentModel.DataAnnotations;
 using SixLabors.ImageSharp.PixelFormats;
+using Amazon.S3;
+using Amazon.S3.Transfer;
+using Amazon;
+using Amazon.S3.Model;
 
 namespace Stackoverflow.Web.Models
 {
@@ -36,22 +40,43 @@ namespace Stackoverflow.Web.Models
 
         public UserUpdateModel() { }
 
-        public async Task<bool> UpdateProfileAsync(UserManager<ApplicationUser> userManager2, string uploadPath)
+        public async Task<bool> UpdateProfileAsync(UserManager<ApplicationUser> userManager2)
         {
             if (!string.IsNullOrEmpty(ProfilePictureFile?.FileName))
             {
                 string extension = Path.GetExtension(ProfilePictureFile.FileName);
                 string originalFileName = Path.GetFileNameWithoutExtension(ProfilePictureFile.FileName);
                 string fileName = $"{Guid.NewGuid()}{originalFileName}{extension}";
-                string filePath = Path.Combine(uploadPath, fileName);
+                //string filePath = Path.Combine(uploadPath, fileName);
 
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                //using (var stream = new FileStream(filePath, FileMode.Create))
+                //{
+                //    await ProfilePictureFile.CopyToAsync(stream);
+                //}
+
+                ////ProfilePicturePath = filePath;
+                //ProfilePicture = $"/files/{fileName}";
+
+
+                string awsAccessKeyId = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? "default_value";
+                string awsSecretkey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ?? "default_value";
+                RegionEndpoint bucketRegion = RegionEndpoint.USEast1;
+                var bucketName = "deborajaspb9";
+                var bucketFolder = "Image";
+
+
+
+                using (var client = new AmazonS3Client(awsAccessKeyId, awsSecretkey, bucketRegion))
                 {
-                    await ProfilePictureFile.CopyToAsync(stream);
+                    var transferUtility = new TransferUtility(client);
+                    //await transferUtility.UploadAsync(ProfilePictureFile.OpenReadStream(), "deborajaspb9", fileName);
+                    await transferUtility.UploadAsync(ProfilePictureFile.OpenReadStream(), bucketName, $"{bucketFolder}/{fileName}");
                 }
 
-                //ProfilePicturePath = filePath;
-                ProfilePicture = $"/files/{fileName}";
+                // Store the S3 file link in ProfilePicture
+                ProfilePicture = $"https://{bucketName}.s3.amazonaws.com/{bucketFolder}/{fileName}";
+                //ProfilePicture = $"https://us-east-1.console.aws.amazon.com/s3/object/deborajaspb9?region=us-east-1&bucketType=general&prefix=files/{fileName}";
+
             }
 
             var user = await userManager2.FindByEmailAsync(Email);

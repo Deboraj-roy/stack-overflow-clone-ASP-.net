@@ -44,9 +44,6 @@ namespace Stackoverflow.Web.Areas.User.Controllers
                 var token = HttpContext.Session.GetString("token");
                 var posts = await model.GetPostsAsync(token);
 
-                // Process the fetched posts
-                //var posts = await model.GetPostsAsync();
-
                 // Pass posts to your view
                 var pagedPosts = posts.Skip(skip).Take(pageSize).ToArray();
 
@@ -57,22 +54,11 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             }
             catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
             {
-                // Handle 401 Unauthorized exception
-                // Redirect to login page or display a message asking the user to login again
-
-
                 // Set a TempData message to be displayed in the view
                 TempData["ErrorMessage"] = "Your session has expired. Please login again.";
 
                 // Option 1: Redirect to login page
                 return RedirectToAction("Login", "Account", new { area = "" });
-
-                // Option 2: Display a message asking the user to login again
-                // Set a TempData message to be displayed in the view
-                //TempData["ErrorMessage"] = "Your session has expired. Please login again.";
-
-                // Redirect to a specific action that displays the message
-                //return RedirectToAction("Index");
             }
 
 
@@ -196,16 +182,6 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             return View(model);
         }
 
-        //public async Task<IActionResult> Search(string searchTerm)
-        //{
-        //    var model = _scope.Resolve<PostListModel>();
-
-        //    //await model.GetPostsSearchAPIAsync(searchTerm);
-        //    await model.GetPagedPostsAsync(searchTerm);
-
-        //    return View(model);
-        //}
-        //[HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Search(string searchString)
         {
@@ -220,8 +196,6 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             }
 
             return View(post);
-
-            //return View();
         }
 
     }
