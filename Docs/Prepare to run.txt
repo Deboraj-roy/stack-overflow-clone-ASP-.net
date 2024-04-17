@@ -1,0 +1,11 @@
+first create docker volume
+
+create volume
+
+docker volume create --driver local --opt type=none --opt device=Give_a_folder_Path --opt o=bind stackoverflow-data
+ 
+docker volume create --driver local --opt type=none --opt device=D:\Github\DEBORAJ-ROY-B9\src\Volume --opt o=bind stackoverflow-data
+docker volume create --driver local --opt type=none --opt device=D:\Github\DEBORAJ-ROY-B9\src\VolumeAPILog --opt o=bind stackoverflow-api-log
+
+docker-compose up -d --build
+

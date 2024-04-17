@@ -1,5 +1,18 @@
 version: "3"
 services:
+    api:
+        build: 
+            context: .
+            dockerfile: Stackoverflow.API/DockerFile
+        image: deboraj/stackoverflow.api
+        env_file: 
+            - Stackoverflow.API/web.env
+        volumes:
+            - stackoverflow-api-log:/app/Logs
+        ports:
+            - "5959:7278"
+        entrypoint: ["dotnet", "Stackoverflow.API.dll"]
+
     web:
         build: 
             context: .
@@ -14,5 +27,6 @@ services:
         entrypoint: ["dotnet", "Stackoverflow.Web.dll"]
 volumes:
     stackoverflow-data:
+    stackoverflow-api-log:
       external: true
      
