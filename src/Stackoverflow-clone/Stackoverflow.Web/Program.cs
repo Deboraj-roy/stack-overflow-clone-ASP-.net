@@ -36,7 +36,7 @@ Log.Logger = new LoggerConfiguration()
  
 try
 {
-    Log.Information("Application Starting...");
+    Log.Information("Web Application Bulding...");
 
     var builder = WebApplication.CreateBuilder(args);
 
@@ -153,6 +153,7 @@ try
 
     app.MapRazorPages();
 
+    Log.Information("Web Application Running...");
     app.Run();
 }
 catch (Exception ex)

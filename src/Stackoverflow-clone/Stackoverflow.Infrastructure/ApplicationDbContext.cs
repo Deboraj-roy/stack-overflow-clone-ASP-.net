@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Stackoverflow.Domain.Entities;
 using Stackoverflow.Infrastructure.Membership;
+using System.Linq;
 
 namespace Stackoverflow.Infrastructure
 {
@@ -98,6 +99,16 @@ namespace Stackoverflow.Infrastructure
                     IsDeleted = false
                 }
 
+            );
+
+            // Seed roles
+            modelBuilder.Entity<ApplicationRole>().HasData(
+                new ApplicationRole { Id = Guid.Parse("a1f7777a-6530-4fee-6f5a-08dc5edbc664"), Name = "Admin", NormalizedName = "ADMIN" },
+                new ApplicationRole { Id = Guid.Parse("16f53ba8-f8fd-4cf6-6f5b-08dc5edbc664"), Name = "User", NormalizedName = "USER" },
+                new ApplicationRole { Id = Guid.Parse("244902a4-a09b-410d-6f5c-08dc5edbc664"), Name = "Newbie", NormalizedName = "NEWBIE" },
+                new ApplicationRole { Id = Guid.Parse("4b78faf4-752b-4806-6f5d-08dc5edbc664"), Name = "Elite", NormalizedName = "ELITE" },
+                new ApplicationRole { Id = Guid.Parse("2f0576b4-9665-47bc-6f5e-08dc5edbc664"), Name = "Power User", NormalizedName = "POWER USER" },
+                new ApplicationRole { Id = Guid.Parse("d35e0e83-9cdf-4819-6f5f-08dc5edbc664"), Name = "VIP", NormalizedName = "VIP" }
             );
 
             base.OnModelCreating(modelBuilder);

@@ -306,16 +306,22 @@ namespace Stackoverflow.Web.Controllers
                     ModelState.AddModelError("ProfilePictureFile", "An error occurred while processing the uploaded file.");
                     return View(model);
                 }
-                string awsAccessKeyId1 = DotNetEnv.Env.GetString("AWS_ACCESS_KEY_ID", "Variable not found");
-                string awsAccessKeyId = System.Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? "default_value";
+
                 // Retrieve AWS credentials from environment variables
-                string awsAccessKeyId2 = DotNetEnv.Env.GetString("AWS_ACCESS_KEY_ID", "default_value");
-                //string awsSecretkey = DotNetEnv.Env.GetString("AWS_SECRET_ACCESS_KEY", "default_value");
+                string awsAccessKeyId = System.Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? "Variable not found";
+                
+                // Check if the access key ID is found
+                if (awsAccessKeyId != "Variable not found")
+                {
+                    // Access key ID is found, log it
+                    _logger.LogInformation("AWS access key ID found.");
+                }
+                else
+                {
+                    // Access key ID is not found, log a warning
+                    _logger.LogWarning("AWS access key ID not found in environment variables.");
+                }
 
-                _logger.LogInformation("AWS_ACCESS_KEY_ID: {AwsAccessKeyId}", awsAccessKeyId);
-
-                //string uploadPath = Path.Combine("~/", "files");
-                //bool updateResult = await model.UpdateProfileAsync(_userManager, uploadPath);
                 bool updateResult = await model.UpdateProfileAsync(_userManager);
 
                 if (updateResult)
@@ -345,7 +351,7 @@ namespace Stackoverflow.Web.Controllers
 
 
         //only for admin
-        [Authorize(Roles = UserRoles.Admin)]
+        //[Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> CreateRoles()
         {
             await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.Admin });

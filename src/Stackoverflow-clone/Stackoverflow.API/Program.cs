@@ -22,6 +22,8 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
+    Log.Information("API Application Bulding...");
+
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Host.UseSerilog((ctx, lc) => lc
@@ -30,7 +32,7 @@ try
             .Enrich.FromLogContext()
             .ReadFrom.Configuration(builder.Configuration));
 
-    var connectionString = builder.Configuration.GetConnectionString("DefaultAPIConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+    var connectionString = builder.Configuration.GetConnectionString("DefaultAPIConnection") ?? throw new InvalidOperationException("Connection string 'Default API Connection' not found.");
     var migrationAssembly = Assembly.GetExecutingAssembly().FullName;
 
     builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -100,6 +102,7 @@ try
     app.UseAuthorization();
 
     app.MapControllers();
+    Log.Information("API Application Running...");
 
     app.Run();
 }
