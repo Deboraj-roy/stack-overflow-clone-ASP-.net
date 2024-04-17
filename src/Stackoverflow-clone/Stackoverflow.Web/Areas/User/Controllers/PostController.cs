@@ -27,7 +27,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             _logger = logger;
         }
 
-        [AllowAnonymous] 
+        [Authorize] 
         public async Task<IActionResult> Index(int page = 1)
         {
             int pageSize = 10; // Number of posts per page
@@ -41,6 +41,8 @@ namespace Stackoverflow.Web.Areas.User.Controllers
 
             try
             {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
                 var token = HttpContext.Session.GetString("token");
                 var posts = await model.GetPostsAsync(token);
 

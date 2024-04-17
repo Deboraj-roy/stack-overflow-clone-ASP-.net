@@ -46,7 +46,7 @@ namespace Stackoverflow.API.Controllers
 
             return filteredPosts;
         }
-         
+
 
         //[HttpGet]
         [HttpGet, Authorize(Policy = "PostViewRequirementPolicy")]

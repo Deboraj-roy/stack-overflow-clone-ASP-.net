@@ -76,16 +76,13 @@ namespace Stackoverflow.Web.Models
             {
                 await _userManager.AddToRoleAsync(user, UserRoles.Elite);
                 await _userManager.AddToRoleAsync(user, UserRoles.Admin);
-                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("CreatePost", "true"));
-                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdatePost", "true"));
-                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewPost", "true"));
-                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("CreateComment", "true"));
-                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdateComment", "true"));
-                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewComment", "true"));
+                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("CreatePost", "true"));
+                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdatePost", "true"));
+                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewPost", "true"));
 
                 // Add policy assignment here
-                await AssignPoliciesToUser(user);
-                 
+                //await AssignPoliciesToUser(user);
+
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var callbackUrl = $"{urlPrefix}/Account/ConfirmEmail?userId={user.Id}&code={code}&returnUrl={ReturnUrl}";
@@ -114,9 +111,13 @@ namespace Stackoverflow.Web.Models
         private async Task AssignPoliciesToUser(ApplicationUser user)
         {
             // Assign policies to user
-            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("CreateComment", "true"));
-            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdateComment", "true"));
-            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewComment", "true"));
+            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("CreatePost", "true"));
+            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdatePost", "true"));
+            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewPost", "true"));
+
+            //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("CreateComment", "true"));
+            //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdateComment", "true"));
+            //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewComment", "true"));
             //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("CreateComment", "true"));
             //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("UpdateComment", "true"));
             //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("ViewComment", "true"));

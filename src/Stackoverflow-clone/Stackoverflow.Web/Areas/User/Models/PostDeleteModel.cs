@@ -22,7 +22,7 @@ namespace Stackoverflow.Web.Areas.User.Models
         {
             _postManagementService = postManagementService;
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:5759/v3/");
+            _httpClient.BaseAddress = new Uri("https://localhost:5293/v3/");
         }
 
         public void Resolve(ILifetimeScope scope)

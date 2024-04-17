@@ -1,0 +1,33 @@
+version: "3"
+services:
+    api:
+        build: 
+            context: .
+            dockerfile: Stackoverflow.API/DockerFile
+        image: deboraj/stackoverflow.api
+        env_file: 
+            - Stackoverflow.API/web.env
+        volumes:
+            - stackoverflow-api-log:/app/Logs
+        ports:
+            - "5759:82"
+        entrypoint: ["dotnet", "Stackoverflow.API.dll"]
+
+    web:
+        build: 
+            context: .
+            dockerfile: Stackoverflow.Web/DockerFile
+        image: deboraj/stackoverflow.web
+        env_file: 
+            - Stackoverflow.Web/web.env
+        volumes:
+            - stackoverflow-data:/app/Logs
+        ports:
+            - "5153:80"
+        entrypoint: ["dotnet", "Stackoverflow.Web.dll"]
+volumes:
+    stackoverflow-data:
+      external: true
+    stackoverflow-api-log:
+      external: true
+     

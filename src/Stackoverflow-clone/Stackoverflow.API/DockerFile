@@ -16,7 +16,5 @@ RUN dotnet publish "Stackoverflow.API.csproj" -c Release -o /app
 FROM build AS final
 WORKDIR /app
 COPY --from=publish /app .
-EXPOSE 82
-ENTRYPOINT ["dotnet", "Stackoverflow.API.dll"]
-# Add the following line to tag the image
-LABEL maintainer="your-email@example.com"
+EXPOSE 80
+ENTRYPOINT ["dotnet", "Stackoverflow.API.dll"] 
