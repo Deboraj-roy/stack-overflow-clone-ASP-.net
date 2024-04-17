@@ -8,11 +8,12 @@ using System.Web;
 namespace Stackoverflow.Web.Areas.User.Models
 {
     public class PostDeleteModel
-    { 
+    {
         private ILifetimeScope _scope;
         private IPostManagementService _postManagementService;
         public PostSearch searchTitle { get; set; }
         private readonly HttpClient _httpClient;
+        private string _baseAddress;
 
         public PostDeleteModel()
         {
@@ -22,7 +23,8 @@ namespace Stackoverflow.Web.Areas.User.Models
         {
             _postManagementService = postManagementService;
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:5293/v3/");
+            _baseAddress = DetermineBaseAddress();
+            _httpClient.BaseAddress = new Uri(_baseAddress);
         }
 
         public void Resolve(ILifetimeScope scope)
@@ -38,15 +40,24 @@ namespace Stackoverflow.Web.Areas.User.Models
 
         internal async Task DeletePostAsyncAPI(Guid id)
         {
-            //var response = await _httpClient.GetAsync($"Post/{postId}");
-            //response.EnsureSuccessStatusCode(); // Throw exception if not success
-
-            //var content = await response.Content.ReadAsStringAsync();
-            //return JsonConvert.DeserializeObject<Post>(content);
-
-            var response = await _httpClient.DeleteAsync($"https://localhost:7278/v3/Post/{id}");
+            var response = await _httpClient.DeleteAsync($"Post/{id}");
             response.EnsureSuccessStatusCode(); // Throw exception if not successful
+        }
 
+        private string DetermineBaseAddress()
+        {
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            switch (environment)
+            {
+                case "Development":
+                    return "http://localhost:5293/v3/";
+                default:
+                    return "https://localhost:7278/v3/";
+                //default:
+                //    return "http://localhost:26441/v3/"; // Update with your IIS application URL
+            }
         }
     }
+
 }

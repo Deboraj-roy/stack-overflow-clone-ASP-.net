@@ -15,11 +15,13 @@ namespace Stackoverflow.Web.Areas.User.Models
         private ILifetimeScope _scope;
         public string Title { get; set; }
         private readonly HttpClient _httpClient;
+        private string _baseAddress;
 
         public PostSearchModel()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:5293/v3/");
+            _baseAddress = DetermineBaseAddress();
+            _httpClient.BaseAddress = new Uri(_baseAddress);
         }
 
         public void Resolve(ILifetimeScope scope)
@@ -41,6 +43,21 @@ namespace Stackoverflow.Web.Areas.User.Models
             var content = await response.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<Post[]>(content);
+        }
+
+        private string DetermineBaseAddress()
+        {
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            switch (environment)
+            {
+                case "Development":
+                    return "http://localhost:5293/v3/";
+                default:
+                    return "https://localhost:7278/v3/";
+                //default:
+                //    return "http://localhost:26441/v3/"; // Update with your IIS application URL
+            }
         }
     }
 

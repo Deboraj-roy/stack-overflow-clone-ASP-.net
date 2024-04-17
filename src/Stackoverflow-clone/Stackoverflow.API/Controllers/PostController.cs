@@ -21,8 +21,7 @@ namespace Stackoverflow.API.Controllers
             _logger = logger;
             _scope = scope;
         }
-
-        //[HttpPost("view"), Authorize(Policy = "PostViewRequirementPolicy")]
+         
         //[HttpPost]
         [HttpPost, Authorize(Policy = "PostViewRequirementPolicy")]
         public async Task<object> Post([FromBody] ViewPostRequestHandler handler)
