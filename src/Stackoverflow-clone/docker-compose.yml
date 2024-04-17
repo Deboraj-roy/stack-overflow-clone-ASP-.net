@@ -10,7 +10,8 @@ services:
         volumes:
             - stackoverflow-api-log:/app/Logs
         ports:
-            - "5759:80"
+            - "5153:80"
+            - "6008:443"
         entrypoint: ["dotnet", "Stackoverflow.API.dll"]
 
     web:
@@ -21,13 +22,13 @@ services:
         env_file: 
             - Stackoverflow.Web/web.env
         volumes:
-            - stackoverflow-data:/app/Logs
+            - stackoverflow-web-log:/app/Logs
         ports:
-            - "5153:80"
+            - "5759:80"
         entrypoint: ["dotnet", "Stackoverflow.Web.dll"]
 volumes:
-    stackoverflow-data:
-      external: true
     stackoverflow-api-log:
+      external: true
+    stackoverflow-web-log:
       external: true
      

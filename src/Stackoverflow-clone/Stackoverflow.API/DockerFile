@@ -5,6 +5,7 @@ COPY ["Stackoverflow.API/*.csproj", "Stackoverflow.API/"]
 COPY ["Stackoverflow.Application/*.csproj", "Stackoverflow.Application/"]
 COPY ["Stackoverflow.Domain/*.csproj", "Stackoverflow.Domain/"]
 COPY ["Stackoverflow.Infrastructure/*.csproj", "Stackoverflow.Infrastructure/"]
+COPY ["Stackoverflow.Web/*.csproj", "Stackoverflow.Web/"]
 RUN dotnet restore "Stackoverflow.API/Stackoverflow.API.csproj"
 COPY . .
 WORKDIR "/src/Stackoverflow.API"
@@ -17,4 +18,5 @@ FROM build AS final
 WORKDIR /app
 COPY --from=publish /app .
 EXPOSE 80
+EXPOSE 443 
 ENTRYPOINT ["dotnet", "Stackoverflow.API.dll"]
