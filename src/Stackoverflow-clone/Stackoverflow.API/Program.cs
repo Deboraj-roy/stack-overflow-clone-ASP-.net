@@ -72,7 +72,7 @@ try
             builder =>
             {
                 //builder.WithOrigins("https://localhost:7000", "https://localhost:5041", "http://localhost:7000", "http://localhost:5001", "http://localhost:5041", "http://localhost")
-                builder.WithOrigins("https://localhost:7000", "http://localhost:5041", "http://localhost", "http://localhost:6969", "http://localhost:80")
+                builder.WithOrigins("https://localhost:7000", "http://localhost:5041", "http://localhost", "http://localhost:6969", "http://localhost:5153", "http://localhost:80")
                    .AllowAnyMethod()
                    .AllowAnyHeader();
             });

@@ -19,7 +19,7 @@ namespace Stackoverflow.Web.Areas.User.Models
         public PostSearchModel()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:82/v3/");
+            _httpClient.BaseAddress = new Uri("https://localhost:5759/v3/");
         }
 
         public void Resolve(ILifetimeScope scope)
