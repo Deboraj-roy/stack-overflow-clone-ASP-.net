@@ -18,20 +18,33 @@ using Stackoverflow.Infrastructure.Requirements;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using DotNetEnv.Configuration;
-using DotNetEnv;
+using DotNetEnv; 
+using System.IO;
 
-DotNetEnv.Env.Load();
-DotNetEnv.Env.TraversePath().Load();
+//DotNetEnv.Env.Load();
+//DotNetEnv.Env.TraversePath().Load();
+
+
+string envFilePath = Path.Combine(Directory.GetCurrentDirectory(), "web.env");
+
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json")
-    .AddDotNetEnv(".env", LoadOptions.TraversePath()) // Simply add the DotNetEnv configuration source!
+    .AddDotNetEnv(envFilePath) // Specify the full path to the .env file) // Simply add the DotNetEnv configuration source!
     .Build();
 
 Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
-            .CreateBootstrapLogger(); 
+            .CreateBootstrapLogger();
+
+// Access environment variables
+string apiKey = DotNetEnv.Env.GetString("AWS_ACCESS_KEY_ID");
+string dbHost = DotNetEnv.Env.GetString("AWS_SECRET_ACCESS_KEY", "localhost"); // Default value if not found
+
+// Use the environment variables
+Console.WriteLine($"API Key: {apiKey}");
+Console.WriteLine($"DB Host: {dbHost}");
 
 try
 {

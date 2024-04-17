@@ -45,7 +45,7 @@ namespace Stackoverflow.Web.Models
         {
             if (!string.IsNullOrEmpty(ProfilePictureFile?.FileName))
             {
-                DotNetEnv.Env.Load();
+                //DotNetEnv.Env.Load();
                 string extension = Path.GetExtension(ProfilePictureFile.FileName);
                 string originalFileName = Path.GetFileNameWithoutExtension(ProfilePictureFile.FileName);
                 string fileName = $"{Guid.NewGuid()}{originalFileName}{extension}";
