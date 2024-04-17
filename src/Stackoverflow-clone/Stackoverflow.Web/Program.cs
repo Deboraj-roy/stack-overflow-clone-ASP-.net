@@ -20,11 +20,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using DotNetEnv.Configuration;
 using DotNetEnv; 
 using System.IO;
-
-//DotNetEnv.Env.Load();
-//DotNetEnv.Env.TraversePath().Load();
-
-
+  
 string envFilePath = Path.Combine(Directory.GetCurrentDirectory(), "web.env");
 
 
@@ -37,15 +33,7 @@ var configuration = new ConfigurationBuilder()
 Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .CreateBootstrapLogger();
-
-// Access environment variables
-string apiKey = DotNetEnv.Env.GetString("AWS_ACCESS_KEY_ID");
-string dbHost = DotNetEnv.Env.GetString("AWS_SECRET_ACCESS_KEY", "localhost"); // Default value if not found
-
-// Use the environment variables
-Console.WriteLine($"API Key: {apiKey}");
-Console.WriteLine($"DB Host: {dbHost}");
-
+ 
 try
 {
     Log.Information("Application Starting...");

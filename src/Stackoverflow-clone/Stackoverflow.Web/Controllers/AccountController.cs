@@ -306,13 +306,6 @@ namespace Stackoverflow.Web.Controllers
                     ModelState.AddModelError("ProfilePictureFile", "An error occurred while processing the uploaded file.");
                     return View(model);
                 }
-                //DotNetEnv.Env.Load();
-                //DotNetEnv.Env.TraversePath().Load();
-                //System.Environment.GetEnvironmentVariable
-                //string wwwRootPath = _webHostEnvironment.WebRootPath;
-                //string productPath = @"Files";
-                //string uploadPath = Path.Combine(wwwRootPath, productPath);
-                //string awsAccessKeyId = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
                 string awsAccessKeyId1 = DotNetEnv.Env.GetString("AWS_ACCESS_KEY_ID", "Variable not found");
                 string awsAccessKeyId = System.Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? "default_value";
                 // Retrieve AWS credentials from environment variables
@@ -320,8 +313,6 @@ namespace Stackoverflow.Web.Controllers
                 //string awsSecretkey = DotNetEnv.Env.GetString("AWS_SECRET_ACCESS_KEY", "default_value");
 
                 _logger.LogInformation("AWS_ACCESS_KEY_ID: {AwsAccessKeyId}", awsAccessKeyId);
-
-                //string uploadPath = "https://us-east-1.console.aws.amazon.com/s3/object/deborajaspb9?region=us-east-1&bucketType=general&prefix=files/";
 
                 //string uploadPath = Path.Combine("~/", "files");
                 //bool updateResult = await model.UpdateProfileAsync(_userManager, uploadPath);

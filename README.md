@@ -20,6 +20,7 @@ By - Jalal Uddin
 - Dockerize the application to make it easily deployable.
 - Use clean architecture to maintain flexible design.
 - ReCaptcha implemented
+- Use AWS bucket
 - Integrate logger and use exception handling for fault tolerance.
 - Use autofac and automapper to make the code flexible.
 - Use entity framework, repository and unit of work pattern to make the project robust. 
