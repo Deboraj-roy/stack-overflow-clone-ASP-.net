@@ -34,6 +34,8 @@ try
 
     var connectionString = builder.Configuration.GetConnectionString("DefaultAPIConnection") ?? throw new InvalidOperationException("Connection string 'Default API Connection' not found.");
     var migrationAssembly = Assembly.GetExecutingAssembly().FullName;
+    //Get connectionstrings in log
+    Log.Information("Connection String:" + connectionString);
 
     builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
     builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>

@@ -16,5 +16,5 @@ RUN dotnet publish "Stackoverflow.API.csproj" -c Release -o /app
 FROM build AS final
 WORKDIR /app
 COPY --from=publish /app .
-EXPOSE 7278
+EXPOSE 82
 ENTRYPOINT ["dotnet", "Stackoverflow.API.dll"]
