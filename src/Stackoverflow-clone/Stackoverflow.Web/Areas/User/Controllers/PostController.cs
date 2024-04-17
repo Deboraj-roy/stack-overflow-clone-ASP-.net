@@ -45,7 +45,10 @@ namespace Stackoverflow.Web.Areas.User.Controllers
 
                 var token = HttpContext.Session.GetString("token");
                 var posts = await model.GetPostsAsync(token);
-
+                if (posts == null)
+                {
+                   return View("NotFoundPartial");
+                }
                 // Pass posts to your view
                 var pagedPosts = posts.Skip(skip).Take(pageSize).ToArray();
 
@@ -113,7 +116,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
 
             if (post == null)
             {
-                return NotFound();
+                  return View("NotFoundPartial");
             }
 
             return View(post);
@@ -194,7 +197,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
 
             if (post == null)
             {
-                return NotFound();
+                  return View("NotFoundPartial");
             }
 
             return View(post);

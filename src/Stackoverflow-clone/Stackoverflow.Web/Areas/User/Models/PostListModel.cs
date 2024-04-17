@@ -75,12 +75,14 @@ namespace Stackoverflow.Web.Areas.User.Models
             {
                 // Handle 401 Unauthorized exception
                 // Redirect to login page or display a message asking the user to login again
-                throw; // Rethrow the exception if you want to handle it further up the call stack
+                // throw; // Rethrow the exception if you want to handle it further up the call stack
+                return null; // Return null if an exception occurs
             }
             catch (Exception ex)
             {
                 // Handle other exceptions
-                throw;
+                // throw;
+                return null; // Return null if an exception occurs
             }
         }
 
@@ -88,14 +90,23 @@ namespace Stackoverflow.Web.Areas.User.Models
         {
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-            switch (environment)
+            //switch (environment)
+            //{
+            //    case "Development":
+            //        return "http://localhost:5293/v3/";
+            //    default:
+            //        return "https://localhost:7278/v3/";
+            //    //default:
+            //    //    return "http://localhost:26441/v3/"; // Update with your IIS application URL
+            //}
+
+            if (environment == "Development")
             {
-                case "Development":
-                    return "http://localhost:5293/v3/";
-                default:
-                    return "https://localhost:7278/v3/";
-                //default:
-                //    return "http://localhost:26441/v3/"; // Update with your IIS application URL
+                return "http://localhost:5293/v3/"; // Use the local address and port
+            }
+            else
+            {
+                return "https://api:80/v3/"; // Use the service name "api" and port 80 in Docker
             }
         }
     }

@@ -17,4 +17,4 @@ FROM build AS final
 WORKDIR /app
 COPY --from=publish /app .
 EXPOSE 80
-ENTRYPOINT ["dotnet", "Stackoverflow.API.dll"] 
+ENTRYPOINT ["dotnet", "Stackoverflow.API.dll"]

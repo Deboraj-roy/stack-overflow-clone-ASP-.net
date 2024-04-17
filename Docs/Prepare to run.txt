@@ -1,5 +1,10 @@
 first create docker volume
 
+check your local ip 
+and pass or set database conncetion strings
+like
+ConnectionStrings:DefaultAPIConnection="Data Source=192.168.0.103,49172\\SQLEXPRESS;Initial Catalog=AspnetB9;User ID=aspnetb9;Password=123456;TrustServerCertificate=True;"
+
 create volume
 
 docker volume create --driver local --opt type=none --opt device=Give_a_folder_Path --opt o=bind stackoverflow-data

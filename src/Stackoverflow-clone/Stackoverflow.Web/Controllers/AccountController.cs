@@ -253,7 +253,7 @@ namespace Stackoverflow.Web.Controllers
         {
             if (string.IsNullOrEmpty(userId))
             {
-                return NotFound();
+                  return View("NotFoundPartial");
             }
 
             // Check if the user is already authenticated
@@ -262,7 +262,7 @@ namespace Stackoverflow.Web.Controllers
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user == null)
                 {
-                    return NotFound();
+                      return View("NotFoundPartial");
                 }
                 return View(user);
             }
