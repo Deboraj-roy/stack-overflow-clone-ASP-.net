@@ -56,18 +56,25 @@ namespace Stackoverflow.Web.Models
                 var bucketName = "deborajaspb9";
                 var bucketFolder = "Image";
 
-
-
-                using (var client = new AmazonS3Client(awsAccessKeyId, awsSecretkey, bucketRegion))
+                try
                 {
-                    var transferUtility = new TransferUtility(client);
-                    //await transferUtility.UploadAsync(ProfilePictureFile.OpenReadStream(), "deborajaspb9", fileName);
-                    await transferUtility.UploadAsync(ProfilePictureFile.OpenReadStream(), bucketName, $"{bucketFolder}/{fileName}");
-                }
 
-                // Store the S3 file link in ProfilePicture
-                ProfilePicture = $"https://{bucketName}.s3.amazonaws.com/{bucketFolder}/{fileName}";
-                //ProfilePicture = $"https://us-east-1.console.aws.amazon.com/s3/object/deborajaspb9?region=us-east-1&bucketType=general&prefix=files/{fileName}";
+                    using (var client = new AmazonS3Client(awsAccessKeyId, awsSecretkey, bucketRegion))
+                    {
+                        var transferUtility = new TransferUtility(client);
+                        //await transferUtility.UploadAsync(ProfilePictureFile.OpenReadStream(), "deborajaspb9", fileName);
+                        await transferUtility.UploadAsync(ProfilePictureFile.OpenReadStream(), bucketName, $"{bucketFolder}/{fileName}");
+                    }
+
+                    // Store the S3 file link in ProfilePicture
+                    ProfilePicture = $"https://{bucketName}.s3.amazonaws.com/{bucketFolder}/{fileName}";
+                    //ProfilePicture = $"https://us-east-1.console.aws.amazon.com/s3/object/deborajaspb9?region=us-east-1&bucketType=general&prefix=files/{fileName}";
+
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
 
             }
 
