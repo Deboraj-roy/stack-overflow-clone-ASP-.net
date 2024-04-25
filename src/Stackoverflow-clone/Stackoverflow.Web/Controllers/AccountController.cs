@@ -333,20 +333,6 @@ namespace Stackoverflow.Web.Controllers
             }
 
         }
-
-
-        //only for admin
-        //[Authorize(Roles = UserRoles.Admin)]
-        public async Task<IActionResult> CreateRoles()
-        {
-            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.Admin });
-            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.User });
-            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.Newbie });
-            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.Elite });
-            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.PowerUser });
-            await _roleManager.CreateAsync(new ApplicationRole { Name = UserRoles.VIP });
-
-            return View();
-        }
+         
     }
 }
