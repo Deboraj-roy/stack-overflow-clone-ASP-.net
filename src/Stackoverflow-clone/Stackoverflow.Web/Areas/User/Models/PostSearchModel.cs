@@ -10,7 +10,7 @@ namespace Stackoverflow.Web.Areas.User.Models
         private ILifetimeScope _scope;
         public string Title { get; set; }
         private readonly HttpClient _httpClient;
-        private string _baseAddress = WebConstants.ApiUrl;
+        private string _baseAddress = System.Environment.GetEnvironmentVariable("API_URL") ?? "http://localhost:5293/v3/";
 
         public PostSearchModel()
         {

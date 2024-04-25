@@ -2,6 +2,17 @@
 Full Stack Asp.net Core MVC Web Development Batch - 9
 By - Jalal Uddin
 
+## Befour you run the Application check Connection Strings and Environment variables
+- set web.env File in same location of Program.cs
+
+- but in run application
+``DefaultConnection="Server=IP,Port\\SQLEXPRESS;Database=Database;User Id=User name;Password=Password;Trust Server Certificate=True;"``
+- For Docker
+
+``ConnectionStrings:DefaultConnection="Server=IP,Port\\SQLEXPRESS;Database=Database;User Id=User name;Password=Password;Trust Server Certificate=True;"
+API_URL=https://api.example.com
+AWS_ACCESS_KEY_ID=your_access_key_id
+AWS_SECRET_ACCESS_KEY=your_secret_access_key``
 
 ## Functional requirements Applied 
 - Users can register and login. Email verification

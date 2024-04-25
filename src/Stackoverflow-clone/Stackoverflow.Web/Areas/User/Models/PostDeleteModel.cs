@@ -1,10 +1,5 @@
 ﻿using Autofac;
-using Newtonsoft.Json;
 using Stackoverflow.Application.Features.Services;
-using Stackoverflow.Domain.Entities;
-using Stackoverflow.Infrastructure;
-using Stackoverflow.Web.Models;
-using System.Web;
 
 namespace Stackoverflow.Web.Areas.User.Models
 {
@@ -14,7 +9,7 @@ namespace Stackoverflow.Web.Areas.User.Models
         private IPostManagementService _postManagementService;
         public PostSearch searchTitle { get; set; }
         private readonly HttpClient _httpClient;
-        private string _baseAddress = WebConstants.ApiUrl;
+        private string _baseAddress = System.Environment.GetEnvironmentVariable("API_URL") ?? "http://localhost:5293/v3/";
 
         public PostDeleteModel()
         {
