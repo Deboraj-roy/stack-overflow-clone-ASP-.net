@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Stackoverflow.API.RequestHandlers;
 using Stackoverflow.Domain.Entities;
@@ -49,6 +50,7 @@ namespace Stackoverflow.API.Controllers
         //[HttpGet]
         [HttpGet, Authorize(Policy = "PostViewRequirementPolicy")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IEnumerable<Post>> Get()
         {
             try
@@ -56,12 +58,21 @@ namespace Stackoverflow.API.Controllers
                 var model = _scope.Resolve<ViewPostRequestHandler>();
 
                 _logger.LogInformation("All Posts found");
-                return await model?.GetPostsAsync();
+                var posts = await model?.GetPostsAsync();
+
+                if (posts != null)
+                {
+                    return (IEnumerable<Post>)Ok(posts);
+                }
+                else
+                {
+                    return (IEnumerable<Post>)NotFound("No posts found");
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Couldn't get Posts");
-                return null;
+                return (IEnumerable<Post>)Unauthorized(new { Message = ex.Message });
             }
         }
 
@@ -167,7 +178,6 @@ namespace Stackoverflow.API.Controllers
                 return BadRequest();
             }
         }
-
 
     }
 }
