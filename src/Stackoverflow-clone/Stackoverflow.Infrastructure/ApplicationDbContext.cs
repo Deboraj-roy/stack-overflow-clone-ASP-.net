@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Stackoverflow.Domain.Entities;
 using Stackoverflow.Infrastructure.Membership;
-using System.Linq;
 
 namespace Stackoverflow.Infrastructure
 {

@@ -1,16 +1,10 @@
 ﻿using Autofac;
 using Stackoverflow.Application;
 using Stackoverflow.Application.Utilities;
-using Stackoverflow.Domain;
 using Stackoverflow.Domain.Repositories;
 using Stackoverflow.Infrastructure.Email;
 using Stackoverflow.Infrastructure.Membership;
 using Stackoverflow.Infrastructure.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Stackoverflow.Infrastructure
 {

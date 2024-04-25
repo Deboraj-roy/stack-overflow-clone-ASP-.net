@@ -1,14 +1,8 @@
 ﻿using Stackoverflow.Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Stackoverflow.Infrastructure
-{ 
+{
     public abstract class UnitOfWork : IUnitOfWork, IDisposable, IAsyncDisposable
     {
         private readonly DbContext _dbContext;

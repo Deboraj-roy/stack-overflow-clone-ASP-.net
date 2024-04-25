@@ -1,6 +1,5 @@
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Stackoverflow.Application;
 using Stackoverflow.Infrastructure;
@@ -13,14 +12,11 @@ using Stackoverflow.Infrastructure.Email;
 using Stackoverflow.Infrastructure.Membership;
 using GoogleReCaptcha.V3.Interface;
 using GoogleReCaptcha.V3;
-using Microsoft.AspNetCore.Builder;
 using Stackoverflow.Infrastructure.Requirements;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using DotNetEnv.Configuration;
-using DotNetEnv; 
-using System.IO;
-  
+
 string envFilePath = Path.Combine(Directory.GetCurrentDirectory(), "web.env");
 
 

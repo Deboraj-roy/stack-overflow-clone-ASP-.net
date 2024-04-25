@@ -1,15 +1,9 @@
 ﻿using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.Ocsp;
-using Stackoverflow.Domain.Entities;
 using Stackoverflow.Domain.Exceptions;
-using Stackoverflow.Infrastructure;
-using Stackoverflow.Infrastructure.Membership;
 using Stackoverflow.Web.Areas.User.Models;
 using System.Net;
-using System.Net.Http;
 
 namespace Stackoverflow.Web.Areas.User.Controllers
 {

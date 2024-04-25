@@ -2,7 +2,6 @@
 using AutoMapper;
 using Stackoverflow.Application.Features.Services;
 using Stackoverflow.Domain.Entities;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using System.ComponentModel.DataAnnotations;
 
 namespace Stackoverflow.Web.Areas.User.Models

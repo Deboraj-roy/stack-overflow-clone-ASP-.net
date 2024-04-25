@@ -6,8 +6,6 @@ using SixLabors.ImageSharp.PixelFormats;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using Amazon;
-using Amazon.S3.Model;
-using DotNetEnv;
 
 namespace Stackoverflow.Web.Models
 {

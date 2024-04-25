@@ -1,29 +1,14 @@
 ﻿using Autofac;
 using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Stackoverflow.Infrastructure.Membership;
 using Stackoverflow.Web.Models;
-using System.Drawing;
 using System.Text;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.PixelFormats;
-using System.IO;
-using Stackoverflow.Domain.Exceptions;
-using Stackoverflow.Web.Areas.User.Models;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Stackoverflow.Application.Utilities;
-using Amazon.S3;
-using Amazon.S3.Transfer;
-using Amazon;
-using Amazon.S3.Model;
-using static System.Net.WebRequestMethods;
-using Microsoft.Extensions.Configuration;
-using DotNetEnv;
 
 
 namespace Stackoverflow.Web.Controllers

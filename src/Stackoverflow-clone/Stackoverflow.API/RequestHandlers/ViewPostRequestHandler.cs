@@ -3,8 +3,6 @@ using AutoMapper;
 using Stackoverflow.Application.Features.Services;
 using Stackoverflow.Domain.Entities;
 using Stackoverflow.Infrastructure;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Stackoverflow.API.RequestHandlers
 {

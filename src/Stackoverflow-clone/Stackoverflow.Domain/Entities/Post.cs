@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Stackoverflow.Domain.Entities
+﻿namespace Stackoverflow.Domain.Entities
 {
     public class Post : IEntity<Guid>
     {

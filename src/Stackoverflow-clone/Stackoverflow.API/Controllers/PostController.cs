@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting; 
 using Stackoverflow.API.RequestHandlers;
 using Stackoverflow.Domain.Entities;
 
