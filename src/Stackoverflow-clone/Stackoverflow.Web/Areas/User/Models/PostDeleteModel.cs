@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Stackoverflow.Application.Features.Services;
 using Stackoverflow.Domain.Entities;
 using Stackoverflow.Infrastructure;
+using Stackoverflow.Web.Models;
 using System.Web;
 
 namespace Stackoverflow.Web.Areas.User.Models
@@ -13,7 +14,7 @@ namespace Stackoverflow.Web.Areas.User.Models
         private IPostManagementService _postManagementService;
         public PostSearch searchTitle { get; set; }
         private readonly HttpClient _httpClient;
-        private string _baseAddress;
+        private string _baseAddress = WebConstants.ApiUrl;
 
         public PostDeleteModel()
         {
@@ -22,8 +23,7 @@ namespace Stackoverflow.Web.Areas.User.Models
         public PostDeleteModel(IPostManagementService postManagementService)
         {
             _postManagementService = postManagementService;
-            _httpClient = new HttpClient();
-            _baseAddress = DetermineBaseAddress();
+            _httpClient = new HttpClient(); 
             _httpClient.BaseAddress = new Uri(_baseAddress);
         }
 
@@ -43,21 +43,7 @@ namespace Stackoverflow.Web.Areas.User.Models
             var response = await _httpClient.DeleteAsync($"Post/{id}");
             response.EnsureSuccessStatusCode(); // Throw exception if not successful
         }
-
-        private string DetermineBaseAddress()
-        {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-            switch (environment)
-            {
-                case "Development":
-                    return "http://localhost:5293/v3/";
-                default:
-                    return "https://localhost:7278/v3/";
-                //default:
-                //    return "http://localhost:26441/v3/"; // Update with your IIS application URL
-            }
-        }
+         
     }
 
 }

@@ -62,7 +62,7 @@ namespace Stackoverflow.API.Controllers
 
                 if (posts != null)
                 {
-                    return (IEnumerable<Post>)Ok(posts);
+                    return posts;
                 }
                 else
                 {

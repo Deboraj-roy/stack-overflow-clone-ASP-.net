@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Stackoverflow.Application.Features.Services;
 using Stackoverflow.Domain.Entities;
 using Stackoverflow.Infrastructure;
+using Stackoverflow.Web.Models;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Web;
@@ -15,7 +16,7 @@ namespace Stackoverflow.Web.Areas.User.Models
         private IPostManagementService _postManagementService;
         public PostSearch searchTitle { get; set; }
         private readonly HttpClient _httpClient;
-        private string _baseAddress;
+        private string _baseAddress = WebConstants.ApiUrl;
 
         public PostListModel()
         {
@@ -24,8 +25,7 @@ namespace Stackoverflow.Web.Areas.User.Models
         public PostListModel(IPostManagementService postManagementService)
         {
             _postManagementService = postManagementService;
-            _httpClient = new HttpClient();
-            _baseAddress = DetermineBaseAddress();
+            _httpClient = new HttpClient(); 
             _httpClient.BaseAddress = new Uri(_baseAddress);
         }
 
@@ -86,29 +86,6 @@ namespace Stackoverflow.Web.Areas.User.Models
             }
         }
 
-        private string DetermineBaseAddress()
-        {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-            switch (environment)
-            {
-                case "Development":
-                    return "http://localhost:5293/v3/";
-                default:
-                    return "https://localhost:7278/v3/";
-                    //default:
-                    //    return "http://localhost:26441/v3/"; // Update with your IIS application URL
-            }
-
-            //if (environment == "Development")
-            //{
-            //    return "http://localhost:5293/v3/"; // Use the local address and port
-            //}
-            //else
-            //{
-            //    return "https://api:80/v3/"; // Use the service name "api" and port 80 in Docker
-            //}
-        }
     }
 
 }
