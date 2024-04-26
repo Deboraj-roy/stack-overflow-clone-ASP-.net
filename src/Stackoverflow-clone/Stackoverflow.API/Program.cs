@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Stackoverflow.Infrastructure.Requirements;
 using Stackoverflow.API.RequestHandlers;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -33,7 +34,8 @@ try
             .Enrich.FromLogContext()
             .ReadFrom.Configuration(builder.Configuration));
 
-    var connectionString = builder.Configuration.GetConnectionString("DefaultAPIConnection") ?? throw new InvalidOperationException("Connection string 'Default API Connection' not found.");
+    var connectionStringConfig = builder.Configuration.GetConnectionString("DefaultAPIConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+    var connectionString = System.Environment.GetEnvironmentVariable("DefaultAPIConnection") ?? connectionStringConfig;
     var migrationAssembly = Assembly.GetExecutingAssembly().FullName;
     //Get connectionstrings in log
     Log.Information("Connection String:" + connectionString);
@@ -81,6 +83,7 @@ try
 
 
     builder.Services.AddSingleton<IAuthorizationHandler, PostViewRequirementHandler>();
+    builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
