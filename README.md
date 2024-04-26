@@ -6,7 +6,7 @@ By - Jalal Uddin
 - set web.env File in same location of Program.cs
 
 - but in run application
-``DefaultConnection="Server=IP,Port\\SQLEXPRESS;Database=Database;User Id=User name;Password=Password;Trust Server Certificate=True;"``
+``DefaultConnection="Server=192.168.0.2,40002\\SQLEXPRESS\\SQLEXPRESS;Database=Database;User Id=User name;Password=Password;Trust Server Certificate=True;"``
 - For Docker
 
 ``ConnectionStrings:DefaultConnection="Server=IP,Port\\SQLEXPRESS;Database=Database;User Id=User name;Password=Password;Trust Server Certificate=True;"

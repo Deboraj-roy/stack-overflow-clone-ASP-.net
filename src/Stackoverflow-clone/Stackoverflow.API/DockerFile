@@ -4,8 +4,7 @@ RUN apt-get update && apt-get install -y nodejs
 COPY ["Stackoverflow.API/*.csproj", "Stackoverflow.API/"]
 COPY ["Stackoverflow.Application/*.csproj", "Stackoverflow.Application/"]
 COPY ["Stackoverflow.Domain/*.csproj", "Stackoverflow.Domain/"]
-COPY ["Stackoverflow.Infrastructure/*.csproj", "Stackoverflow.Infrastructure/"]
-COPY ["Stackoverflow.Web/*.csproj", "Stackoverflow.Web/"]
+COPY ["Stackoverflow.Infrastructure/*.csproj", "Stackoverflow.Infrastructure/"] 
 RUN dotnet restore "Stackoverflow.API/Stackoverflow.API.csproj"
 COPY . .
 WORKDIR "/src/Stackoverflow.API"

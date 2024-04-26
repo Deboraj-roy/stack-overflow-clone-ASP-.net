@@ -9,8 +9,9 @@ create volume
 
 docker volume create --driver local --opt type=none --opt device=Give_a_folder_Path --opt o=bind stackoverflow-data
  
-docker volume create --driver local --opt type=none --opt device=D:\Github\DEBORAJ-ROY-B9\src\VolumeWebLog --opt o=bind stackoverflow-web-log
-docker volume create --driver local --opt type=none --opt device=D:\Github\DEBORAJ-ROY-B9\src\VolumeAPILog --opt o=bind stackoverflow-api-log
+docker volume create --driver local --opt type=none --opt device=D:\Github\stack-overflow-clone-ASP-.net\src\Stackoverflow-clone\Stackoverflow.API\APIVolume --opt o=bind stackoverflow-api-log
+docker volume create --driver local --opt type=none --opt device=D:\Github\stack-overflow-clone-ASP-.net\src\Stackoverflow-clone\Stackoverflow.Web\WEBVolume --opt o=bind stackoverflow-web-log
+
 
 docker-compose up -d --build
 
