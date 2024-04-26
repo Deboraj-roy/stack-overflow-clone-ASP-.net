@@ -23,8 +23,6 @@ services:
             context: .
             dockerfile: Stackoverflow.Web/DockerFile
         image: deboraj/stackoverflow.web
-        environment:   # Pass environment variables here
-            DefaultStackoverflowConnection: "Server=sql.bsite.net\\MSSQL2016;Database=kartik_StackOverflow;User Id=kartik_StackOverflow;Password=hsn#2*#YW9Q%!M5;Trust Server Certificate=True;"
         
         env_file: 
             - Stackoverflow.Web/web.env
