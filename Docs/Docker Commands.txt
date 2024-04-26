@@ -179,6 +179,12 @@ docker tag deboraj/stackoverflow.web:latest deboraj/b9finalproject:v1
 docker push deboraj/b9finalproject:v1
 
 ----------------------------------------------------------------------------------
+how to run API project on Docker
+programeticaly set API Url
+static or env
+rebuild
+
+docker resourse clean
 
 
 ----------------------------------------------------------------------------------

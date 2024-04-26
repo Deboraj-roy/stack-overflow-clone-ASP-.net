@@ -18,3 +18,5 @@ WORKDIR /app
 COPY --from=publish /app .
 EXPOSE 80
 ENTRYPOINT ["dotnet", "Stackoverflow.Web.dll"]
+# Set environment variables
+ENV DefaultStackoverflowConnection="Server=sql.bsite.net\\MSSQL2016;Database=kartik_StackOverflow;User Id=kartik_StackOverflow;Password=hsn#2*#YW9Q%!M5;Trust Server Certificate=True;"

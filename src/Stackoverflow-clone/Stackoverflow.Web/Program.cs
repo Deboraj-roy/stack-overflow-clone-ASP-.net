@@ -36,7 +36,8 @@ try
 
     var builder = WebApplication.CreateBuilder(args);
 
-    var connectionString = builder.Configuration.GetConnectionString("DefaultStackoverflowConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+    var connectionStringConfig = builder.Configuration.GetConnectionString("DefaultStackoverflowConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+    var connectionString = System.Environment.GetEnvironmentVariable("DefaultStackoverflowConnection") ?? connectionStringConfig;
     var migrationAssembly = Assembly.GetExecutingAssembly().FullName;
 
     Log.Information("Connection String:" + connectionString);
