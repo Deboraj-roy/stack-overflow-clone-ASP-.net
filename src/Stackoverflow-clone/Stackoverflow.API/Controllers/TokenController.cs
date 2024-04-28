@@ -1,10 +1,12 @@
 ﻿using Stackoverflow.Infrastructure.Membership;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 
 namespace Stackoverflow.API.Controllers
 {
     [Route("v3/[controller]")]
+    [EnableCors("AllowSites")]
     [ApiController]
 
     public class TokenController : ControllerBase

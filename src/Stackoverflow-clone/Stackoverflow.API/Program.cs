@@ -12,10 +12,13 @@ using Microsoft.AspNetCore.Authorization;
 using Stackoverflow.Infrastructure.Requirements;
 using Stackoverflow.API.RequestHandlers;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-
+using DotNetEnv.Configuration;
+string envFilePath = Path.Combine(Directory.GetCurrentDirectory(), "api.env");
+ 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json")
+    .AddDotNetEnv(envFilePath) // Specify the full path to the .env file) // Simply add the DotNetEnv configuration source!
     .Build();
 
 Log.Logger = new LoggerConfiguration()
@@ -75,7 +78,8 @@ try
             builder =>
             {
                 //builder.WithOrigins("https://localhost:7000", "https://localhost:5041", "http://localhost:7000", "http://localhost:5001", "http://localhost:5041", "http://localhost")
-                builder.WithOrigins("https://localhost:7000", "http://localhost:5041", "http://localhost", "http://localhost:6969", "http://localhost:5153", "http://localhost:80")
+                //builder.WithOrigins("https://localhost:7000", "http://localhost:8080", "https://localhost:8080", "http://localhost", "http://localhost:6969", "http://localhost:5153", "http://localhost:80")
+                builder.WithOrigins("http://localhost:8080", "https://localhost:8080/", "http://localhost:8080/", "http://localhost:8080","https://localhost:8080", "http://localhost", "http://localhost:6969", "http://localhost:5153", "http://localhost:80", "https://localhost:7000", "http://localhost:7000", "http://localhost:5041", "https://localhost:5041")
                    .AllowAnyMethod()
                    .AllowAnyHeader();
             });
@@ -95,17 +99,17 @@ try
     Log.Information("Application Starting...");
 
     // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+    //if (app.Environment.IsDevelopment())
+    //{
+    //    app.UseSwagger();
+    //    app.UseSwaggerUI();
+    //}
 
-    //app.UseSwagger();
-    //app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     app.UseHttpsRedirection();
-    
+
     app.UseCors();
 
     app.UseAuthorization();

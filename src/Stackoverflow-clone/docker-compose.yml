@@ -6,17 +6,13 @@ services:
             dockerfile: Stackoverflow.API/DockerFile
         image: deboraj/stackoverflow.api
         env_file: 
-            - Stackoverflow.API/web.env
+            - Stackoverflow.API/api.env
         volumes:
             - stackoverflow-api-log:/app/Logs
         ports:
             - "6969:80" 
         entrypoint: ["dotnet", "Stackoverflow.API.dll"] 
         
-        # Resource constraints
-        mem_limit: 1g  # Limit memory usage to 1GB
-        cpu_shares: 50  # Limit CPU usage to 50%
-
     web:
         build: 
             context: .
@@ -31,9 +27,6 @@ services:
             - "8080:80"
         entrypoint: ["dotnet", "Stackoverflow.Web.dll"]
 
-        # Resource constraints
-        mem_limit: 1g  # Limit memory usage to 1GB
-        cpu_shares: 50  # Limit CPU usage to 50%
 volumes:
     stackoverflow-api-log:
       external: true
