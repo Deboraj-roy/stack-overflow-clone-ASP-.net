@@ -28,9 +28,59 @@ namespace Stackoverflow.Infrastructure
             }
             base.OnConfiguring(optionsBuilder);
         }
+        public DbSet<Post> posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<UserBadge> UserBadges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            //modelBuilder.Entity<ApplicationUser>(b =>
+            //{
+            //    b.ToTable("AspNetUsers");
+            //    b.HasIndex(u => u.Id).IsUnique();
+            //});
+
+
+            //// Configure relationships using Fluent API
+
+            //modelBuilder.Entity<Post>(b =>
+            //{
+            //    b.ToTable("posts");
+            //    b.HasOne(p => p.AspNetUsers) 
+            //       .WithMany(u => u.posts)
+            //       .HasForeignKey(p => p.Id) 
+            //       .OnDelete(DeleteBehavior.Cascade);
+            //});
+
+            //modelBuilder.Entity<Tag>(b =>
+            //{
+            //    b.ToTable("Tags");
+            //});
+
+            //modelBuilder.Entity<UserBadge>(b =>
+            //{
+            //    b.ToTable("UserBadges");
+            //    b.HasOne(ub => ub.AspNetUsers)
+            //       .WithMany(u => u.Badges)
+            //       .HasForeignKey(ub => ub.Id)
+            //       .OnDelete(DeleteBehavior.Cascade);
+            //});
+
+            //modelBuilder.Entity<Comment>(b =>
+            //{
+            //    b.ToTable("Comments");
+            //    b.HasOne(c => c.AspNetUsers)
+            //       .WithMany(u => u.Comments)
+            //       .HasForeignKey(c => c.Id)
+            //       .OnDelete(DeleteBehavior.Cascade);
+            //    b.HasOne(c => c.Post)
+            //       .WithMany(p => p.Comments)
+            //       .HasForeignKey(c => c.PostId)
+            //       .OnDelete(DeleteBehavior.Cascade);
+            //});
+
             modelBuilder.Entity<Post>().HasData(
                 new Post
                 {
@@ -112,8 +162,6 @@ namespace Stackoverflow.Infrastructure
 
             base.OnModelCreating(modelBuilder);
         }
-
-        public DbSet<Post> posts { get; set; }
 
     }
 }
