@@ -28,7 +28,7 @@ namespace Stackoverflow.Infrastructure
             }
             base.OnConfiguring(optionsBuilder);
         }
-        public DbSet<Post> posts { get; set; }
+        public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<UserBadge> UserBadges { get; set; }
@@ -43,27 +43,22 @@ namespace Stackoverflow.Infrastructure
             //});
 
 
-            //// Configure relationships using Fluent API
+            // Configure relationships using Fluent API
 
             //modelBuilder.Entity<Post>(b =>
             //{
-            //    b.ToTable("posts");
-            //    b.HasOne(p => p.AspNetUsers) 
-            //       .WithMany(u => u.posts)
-            //       .HasForeignKey(p => p.Id) 
+            //    b.ToTable("Posts");
+            //    b.HasOne(p => p.AspNetUsers) // Corrected from 'p.AspNetUsers' to 'p.ApplicationUser'
+            //       .WithMany(u => u.Posts) // Corrected from 'u => u.Posts' to 'u => u.Posts'
+            //       .HasForeignKey(p => p.Id)
             //       .OnDelete(DeleteBehavior.Cascade);
-            //});
-
-            //modelBuilder.Entity<Tag>(b =>
-            //{
-            //    b.ToTable("Tags");
             //});
 
             //modelBuilder.Entity<UserBadge>(b =>
             //{
             //    b.ToTable("UserBadges");
-            //    b.HasOne(ub => ub.AspNetUsers)
-            //       .WithMany(u => u.Badges)
+            //    b.HasOne(ub => ub.AspNetUsers) // Corrected from 'ub.AspNetUsers' to 'ub.ApplicationUser'
+            //       .WithMany(u => u.UserBadges)
             //       .HasForeignKey(ub => ub.Id)
             //       .OnDelete(DeleteBehavior.Cascade);
             //});
@@ -71,7 +66,7 @@ namespace Stackoverflow.Infrastructure
             //modelBuilder.Entity<Comment>(b =>
             //{
             //    b.ToTable("Comments");
-            //    b.HasOne(c => c.AspNetUsers)
+            //    b.HasOne(c => c.AspNetUsers) // Corrected from 'c.AspNetUsers' to 'c.ApplicationUser'
             //       .WithMany(u => u.Comments)
             //       .HasForeignKey(c => c.Id)
             //       .OnDelete(DeleteBehavior.Cascade);
@@ -80,6 +75,16 @@ namespace Stackoverflow.Infrastructure
             //       .HasForeignKey(c => c.PostId)
             //       .OnDelete(DeleteBehavior.Cascade);
             //});
+
+            modelBuilder.Entity<Post>(b =>
+            {
+                b.ToTable("Posts");
+                b.HasMany(p => p.Comments)
+                    .WithOne(c => c.Post)
+                    .HasForeignKey(c => c.PostId);
+            });
+
+            // Seed data
 
             modelBuilder.Entity<Post>().HasData(
                 new Post

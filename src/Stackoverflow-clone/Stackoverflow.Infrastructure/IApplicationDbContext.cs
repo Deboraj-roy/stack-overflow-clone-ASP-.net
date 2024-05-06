@@ -6,7 +6,7 @@ namespace Stackoverflow.Infrastructure
 {
     public interface IApplicationDbContext
     {
-        DbSet<Post> posts { get; set; }
+        DbSet<Post> Posts { get; set; }
         DbSet<Comment> Comments { get; set; }
         DbSet<Tag> Tags { get; set; }
         DbSet<UserBadge> UserBadges { get; set; }

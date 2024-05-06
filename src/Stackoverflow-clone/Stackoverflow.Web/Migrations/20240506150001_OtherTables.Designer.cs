@@ -12,8 +12,8 @@ using Stackoverflow.Infrastructure;
 namespace Stackoverflow.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240505193337_otherTables")]
-    partial class otherTables
+    [Migration("20240506150001_OtherTables")]
+    partial class OtherTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,6 +51,8 @@ namespace Stackoverflow.Web.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PostId");
 
                     b.ToTable("Comments");
                 });
@@ -92,17 +94,17 @@ namespace Stackoverflow.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("posts");
+                    b.ToTable("Posts");
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("cad5f124-3a9f-45fc-8553-669146dd08d3"),
                             Body = "I'm looking for tips and advice on how to become a better programmer. Any recommendations on books, online courses, or coding challenges would be greatly appreciated!",
-                            CreationDate = new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(3978),
+                            CreationDate = new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2699),
                             Downvotes = 2,
                             IsDeleted = false,
-                            LastModifiedDate = new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(3992),
+                            LastModifiedDate = new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2711),
                             PostType = 0,
                             Title = "How to improve programming skills?",
                             Upvotes = 10,
@@ -112,10 +114,10 @@ namespace Stackoverflow.Web.Migrations
                         {
                             Id = new Guid("613641bf-ea84-491a-902f-982db227cb1a"),
                             Body = "One way to improve your programming skills is by practicing regularly. Try to solve coding problems daily and participate in coding competitions. Also, consider contributing to open-source projects on platforms like GitHub.",
-                            CreationDate = new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4007),
+                            CreationDate = new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2714),
                             Downvotes = 1,
                             IsDeleted = false,
-                            LastModifiedDate = new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4007),
+                            LastModifiedDate = new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2715),
                             PostType = 1,
                             Title = "Re: How to improve programming skills?",
                             Upvotes = 15,
@@ -125,10 +127,10 @@ namespace Stackoverflow.Web.Migrations
                         {
                             Id = new Guid("c40c756c-f117-4fa4-b7c6-a28f01eb6995"),
                             Body = "I'm new to programming and wondering which language I should start learning first. Any recommendations based on ease of learning and job opportunities?",
-                            CreationDate = new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4010),
+                            CreationDate = new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2729),
                             Downvotes = 3,
                             IsDeleted = false,
-                            LastModifiedDate = new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4011),
+                            LastModifiedDate = new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2729),
                             PostType = 0,
                             Title = "Best programming language for beginners?",
                             Upvotes = 8,
@@ -138,10 +140,10 @@ namespace Stackoverflow.Web.Migrations
                         {
                             Id = new Guid("4d64c300-950a-4f2b-867f-d3ed6f4f0e2c"),
                             Body = "Python is often recommended for beginners due to its simple syntax and versatility. It's used in various domains such as web development, data science, and automation. Additionally, there are plenty of resources available online for learning Python.",
-                            CreationDate = new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4014),
+                            CreationDate = new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2732),
                             Downvotes = 0,
                             IsDeleted = false,
-                            LastModifiedDate = new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4014),
+                            LastModifiedDate = new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2732),
                             PostType = 1,
                             Title = "Re: Best programming language for beginners?",
                             Upvotes = 12,
@@ -151,10 +153,10 @@ namespace Stackoverflow.Web.Migrations
                         {
                             Id = new Guid("a924e31a-0d24-46e5-a3ca-80d31a1a445b"),
                             Body = "I'm preparing for technical interviews and would like some advice on the best way to study and practice. What topics should I focus on, and are there any resources you recommend?",
-                            CreationDate = new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4017),
+                            CreationDate = new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2735),
                             Downvotes = 1,
                             IsDeleted = false,
-                            LastModifiedDate = new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4018),
+                            LastModifiedDate = new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2736),
                             PostType = 0,
                             Title = "How to prepare for technical interviews?",
                             Upvotes = 6,
@@ -455,6 +457,17 @@ namespace Stackoverflow.Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Stackoverflow.Domain.Entities.Comment", b =>
+                {
+                    b.HasOne("Stackoverflow.Domain.Entities.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+                });
+
             modelBuilder.Entity("Stackoverflow.Infrastructure.Membership.ApplicationRoleClaim", b =>
                 {
                     b.HasOne("Stackoverflow.Infrastructure.Membership.ApplicationRole", null)
@@ -504,6 +517,11 @@ namespace Stackoverflow.Web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Stackoverflow.Domain.Entities.Post", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

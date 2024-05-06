@@ -15,5 +15,6 @@ namespace Stackoverflow.Domain.Entities
         public DateTime CreationDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public bool IsDeleted { get; set; }
+        public Post Post { get; set; }
     }
 }

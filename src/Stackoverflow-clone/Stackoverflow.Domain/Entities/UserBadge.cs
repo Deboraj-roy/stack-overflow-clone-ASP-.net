@@ -12,6 +12,6 @@ namespace Stackoverflow.Domain.Entities
         public Guid UserId { get; set; } // foreign key referencing the User who earned the badge
         public string BadgeName { get; set; }
         public string BadgeDescription { get; set; }
-        public DateTime DateEarned { get; set; }
+        public DateTime DateEarned { get; set; } 
     }
 }

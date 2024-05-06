@@ -6,11 +6,24 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Stackoverflow.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class otherTables : Migration
+    public partial class OtherTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_posts",
+                table: "posts");
+
+            migrationBuilder.RenameTable(
+                name: "posts",
+                newName: "Posts");
+
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_Posts",
+                table: "Posts",
+                column: "Id");
+
             migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
@@ -26,6 +39,12 @@ namespace Stackoverflow.Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_Posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Posts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -56,39 +75,44 @@ namespace Stackoverflow.Web.Migrations
                 });
 
             migrationBuilder.UpdateData(
-                table: "posts",
+                table: "Posts",
                 keyColumn: "Id",
                 keyValue: new Guid("4d64c300-950a-4f2b-867f-d3ed6f4f0e2c"),
                 columns: new[] { "CreationDate", "LastModifiedDate" },
-                values: new object[] { new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4014), new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4014) });
+                values: new object[] { new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2732), new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2732) });
 
             migrationBuilder.UpdateData(
-                table: "posts",
+                table: "Posts",
                 keyColumn: "Id",
                 keyValue: new Guid("613641bf-ea84-491a-902f-982db227cb1a"),
                 columns: new[] { "CreationDate", "LastModifiedDate" },
-                values: new object[] { new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4007), new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4007) });
+                values: new object[] { new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2714), new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2715) });
 
             migrationBuilder.UpdateData(
-                table: "posts",
+                table: "Posts",
                 keyColumn: "Id",
                 keyValue: new Guid("a924e31a-0d24-46e5-a3ca-80d31a1a445b"),
                 columns: new[] { "CreationDate", "LastModifiedDate" },
-                values: new object[] { new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4017), new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4018) });
+                values: new object[] { new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2735), new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2736) });
 
             migrationBuilder.UpdateData(
-                table: "posts",
+                table: "Posts",
                 keyColumn: "Id",
                 keyValue: new Guid("c40c756c-f117-4fa4-b7c6-a28f01eb6995"),
                 columns: new[] { "CreationDate", "LastModifiedDate" },
-                values: new object[] { new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4010), new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(4011) });
+                values: new object[] { new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2729), new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2729) });
 
             migrationBuilder.UpdateData(
-                table: "posts",
+                table: "Posts",
                 keyColumn: "Id",
                 keyValue: new Guid("cad5f124-3a9f-45fc-8553-669146dd08d3"),
                 columns: new[] { "CreationDate", "LastModifiedDate" },
-                values: new object[] { new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(3978), new DateTime(2024, 5, 6, 1, 33, 37, 172, DateTimeKind.Local).AddTicks(3992) });
+                values: new object[] { new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2699), new DateTime(2024, 5, 6, 21, 0, 1, 814, DateTimeKind.Local).AddTicks(2711) });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_PostId",
+                table: "Comments",
+                column: "PostId");
         }
 
         /// <inheritdoc />
@@ -102,6 +126,19 @@ namespace Stackoverflow.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserBadges");
+
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_Posts",
+                table: "Posts");
+
+            migrationBuilder.RenameTable(
+                name: "Posts",
+                newName: "posts");
+
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_posts",
+                table: "posts",
+                column: "Id");
 
             migrationBuilder.UpdateData(
                 table: "posts",
