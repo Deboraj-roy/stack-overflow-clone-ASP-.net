@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Stackoverflow.Domain.Exceptions;
 using Stackoverflow.Web.Areas.User.Models;
 using System.Net;
+using System.Security.Claims;
 
 namespace Stackoverflow.Web.Areas.User.Controllers
 {
@@ -67,19 +68,20 @@ namespace Stackoverflow.Web.Areas.User.Controllers
         public IActionResult Create()
         {
             var model = _scope.Resolve<PostCreateModel>();
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            model.userId = userId;
             return View(model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
         [Authorize(Policy = "PostCreatePolicy")]
-        public async Task<IActionResult> Create(PostCreateModel model, Guid userId)
+        public async Task<IActionResult> Create(PostCreateModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     model.Resolve(_scope);
-                    model.userId = userId;
                     await model.CreatePostAsync();
 
                     TempData["success"] = "Post created successfuly ";
