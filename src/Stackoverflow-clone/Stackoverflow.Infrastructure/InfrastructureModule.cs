@@ -42,9 +42,8 @@ namespace Stackoverflow.Infrastructure
             builder.RegisterType<TokenService>().As<ITokenService>()
                .InstancePerLifetimeScope();
 
-            //builder.RegisterType<UnitOfWork>()
-            //            .As<IUnitOfWork>()
-            //            .InstancePerLifetimeScope();
+            builder.RegisterType<CommentRepository>().As<ICommentRepository>()
+                .InstancePerLifetimeScope();
         }
     }
 }

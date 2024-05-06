@@ -9,6 +9,8 @@ namespace Stackoverflow.Application
         {
             builder.RegisterType<PostManagementService>().As<IPostManagementService>()
                 .InstancePerLifetimeScope();
+            builder.RegisterType<CommentManagementService>().As<ICommentManagementService>()
+                .InstancePerLifetimeScope();
         }
     }
 }

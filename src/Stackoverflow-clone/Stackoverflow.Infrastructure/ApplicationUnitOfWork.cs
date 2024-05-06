@@ -7,11 +7,14 @@ namespace Stackoverflow.Infrastructure
     public class ApplicationUnitOfWork : UnitOfWork, IApplicationUnitOfWork
 	{
 		public IPostRepository PostRepository { get; private set; }
+        public ICommentRepository CommentRepository { get; private set; }
 
         public ApplicationUnitOfWork(IPostRepository postRepository,
-             IApplicationDbContext dbContext) : base((DbContext)dbContext)
+            ICommentRepository commentRepository,
+            IApplicationDbContext dbContext) : base((DbContext)dbContext)
         {
             PostRepository = postRepository;
+            CommentRepository = commentRepository;
         }
 
     }
