@@ -110,6 +110,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             var model = _scope.Resolve<PostDetailsModel>();
 
             model.Post = await model.GetPostsDetailsAsync(id);
+            model.Comments = await model.GetCommentsAsync(id);
 
             if (model.Post == null)
             {

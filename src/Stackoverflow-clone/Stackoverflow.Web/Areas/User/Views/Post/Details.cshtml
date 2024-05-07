@@ -24,6 +24,25 @@
         Comments
     </div>
     <div class="card-body">
+
+        <!-- Display existing comments -->
+        @if (Model.Comments != null && Model.Comments.Any())
+        {
+            var counter = 1;
+            <ul class="list-unstyled">
+                @foreach (var comment in Model.Comments)
+                {
+                    <li>
+                        <strong>@counter:</strong> - @Html.Raw(comment.Body)
+                    </li>
+                    counter++;
+                }
+            </ul>
+        }
+
+    </div>
+
+    <div class="card-body">
         <!-- Add a form for creating a new comment -->
         @* <form asp-action="CreateComment" asp-controller="Post" asp-area="user" asp-antiforgery="true"> *@
         
@@ -41,18 +60,6 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
 
-        <!-- Display existing comments -->
-        @if (Model.Post.Comments != null && Model.Post.Comments.Any())
-        {
-            <ul class="list-unstyled">
-                @foreach (var comment in Model.Post.Comments)
-                {
-                    <li>
-                        <strong>@comment.UserId</strong> - @comment.Body
-                    </li>
-                }
-            </ul>
-        }
     </div>
 </div>
 
@@ -64,49 +71,61 @@
     <a asp-action="Index">Back to Index</a>
 </div>
 
-<script>
-    function DeletePost(id) {
-        // Confirm deletion using a modal or alert
-        $.ajax({
-            url: '/Post/Delete/' + id,
-            type: 'DELETE',
-        });
-    } 
+@section Scripts {
+    <script>
+        function DeletePost(id) {
+            // Confirm deletion using a modal or alert
+            $.ajax({
+                url: '/Post/Delete/' + id,
+                type: 'DELETE',
+            });
+        } 
     
-    function editPost(id) {
-        // Redirect to the edit page with the post ID as a parameter
-        window.location.href = '/Post/Edit/' + id;
-    }
+        function editPost(id) {
+            // Redirect to the edit page with the post ID as a parameter
+            window.location.href = '/Post/Edit/' + id;
+        }
 
-    function Delete(url) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: url,
-                    type: 'DELETE',
-                    success: function (data) {
-                        // Update the UI after successful deletion
-                        // For example, you can reload the page or show a message
-                        // Reload the page
-                        window.location.href = '/User/Post'; // Assuming "User" is the area and "Post" is the controller
-                        //http://localhost/user/post/
-                        toastr.success(data.message); // Show success message using Toastr
-                    },
-                    error: function (xhr, status, error) {
-                        // Handle error if deletion fails
-                        console.error("Error deleting post:", error);
+        function Delete(url) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+               }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: url,
+                            type: 'DELETE',
+                            success: function (data) {
+                                // Update the UI after successful deletion
+                                // For example, you can reload the page or show a message
+                                // Reload the page
+                                window.location.href = '/User/Post'; // Assuming "User" is the area and "Post" is the controller
+                                //http://localhost/user/post/
+                                toastr.success(data.message); // Show success message using Toastr
+                            },
+                            error: function (xhr, status, error) {
+                                // Handle error if deletion fails
+                                console.error("Error deleting post:", error);
+                            }
+                        })
                     }
-                })
-            }
-    })
-}
+            })
+        }
 
-</script>   
+    </script>
+
+    <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
+    </script>
+    
+ }

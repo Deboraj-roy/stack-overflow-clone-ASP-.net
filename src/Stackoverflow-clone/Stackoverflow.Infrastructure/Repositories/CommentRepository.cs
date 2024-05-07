@@ -11,7 +11,12 @@ namespace Stackoverflow.Infrastructure.Repositories
         {
             
         }
-
+        //public async Task<IList<Comment>> GetAllByPostIdAsync(Guid postId)
+        //{
+        //    return await context.Comments
+        //        .Where(c => c.PostId == postId)
+        //        .ToListAsync();
+        //}
         //public async Task<(IList<Post> records, int total, int totalDisplay)> 
         //    GetTableDataAsync(string searchTitle, string orderBy, int pageIndex, int pageSize)
         //{

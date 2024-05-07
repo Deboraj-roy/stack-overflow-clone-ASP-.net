@@ -53,7 +53,7 @@ namespace Stackoverflow.Application.Features.Services
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IList<Comment>>? GetCommentAsync()
+        public async Task<IList<Comment>>? GetCommentListAsync()
         {
             return await _unitOfWork.CommentRepository.GetAllAsync();
         }

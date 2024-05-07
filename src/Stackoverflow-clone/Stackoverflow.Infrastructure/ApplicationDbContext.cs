@@ -34,28 +34,24 @@ namespace Stackoverflow.Infrastructure
         public DbSet<UserBadge> UserBadges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-
-            //modelBuilder.Entity<Post>(b =>
-            //{
-            //    b.ToTable("Posts");
-            //    b.HasMany(p => p.Comments)
-            //        .WithOne(c => c.Post)
-            //        .HasForeignKey(c => c.PostId);
-            //});
-
+        {  
             modelBuilder.Entity<PostAndComment>().ToTable("PostAndComments");
             modelBuilder.Entity<PostAndComment>().HasKey(x => new { x.PostId, x.CommentId });
 
-            modelBuilder.Entity<PostAndComment>()
-                .HasOne<Post>()
-                .WithMany()
-                .HasForeignKey(x => x.PostId);
+            //modelBuilder.Entity<PostAndComment>()
+            //    .HasOne<Post>()
+            //    .WithMany()
+            //    .HasForeignKey(x => x.PostId);
 
-            modelBuilder.Entity<PostAndComment>()
-                .HasOne<Comment>()
-                .WithMany()
-                .HasForeignKey(x => x.CommentId);
+            //modelBuilder.Entity<PostAndComment>()
+            //    .HasOne<Comment>()
+            //    .WithMany()
+            //    .HasForeignKey(x => x.CommentId);
+            modelBuilder.Entity<Post>()
+                    .HasMany(p => p.Comments)
+                    .WithOne()
+                    .HasForeignKey(c => c.PostId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
             // Seed data
 

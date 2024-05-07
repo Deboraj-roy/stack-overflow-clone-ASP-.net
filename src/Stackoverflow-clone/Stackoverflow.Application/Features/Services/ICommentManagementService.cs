@@ -9,6 +9,6 @@ namespace Stackoverflow.Application.Features.Services
         Task DeleteCommentAPIAsync(Guid id);
         Task<Comment> GetCommentAsync(Guid id);
         Task UpdateCommentAsync(Guid id, string body);
-        Task<IList<Comment>>? GetCommentAsync();
+        Task<IList<Comment>>? GetCommentListAsync();
     }
 }
