@@ -10,12 +10,16 @@ namespace Stackoverflow.Application.Features.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task CreateCommentAsync(string body, Guid userId)
+        public async Task CreateCommentAsync(string body, Guid userId, Guid postId)
         {
             Comment Comment = new Comment
-            {
+            { 
+                UserId = userId,
+                PostId = postId,
                 Body = body,
-                UserId = userId
+                CreationDate = DateTime.UtcNow,
+                LastModifiedDate = DateTime.UtcNow,
+                IsDeleted = false
             };
 
             await _unitOfWork.CommentRepository.AddAsync(Comment);

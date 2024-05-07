@@ -10,7 +10,7 @@ services:
         volumes:
             - stackoverflow-api-log:/app/Logs
         ports:
-            - "7278:80" 
+            - "6969:80" 
         entrypoint: ["dotnet", "Stackoverflow.API.dll"] 
         
 volumes:

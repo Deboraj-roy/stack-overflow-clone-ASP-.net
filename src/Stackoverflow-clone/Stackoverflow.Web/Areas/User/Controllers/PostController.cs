@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stackoverflow.Domain.Entities;
 using Stackoverflow.Domain.Exceptions;
 using Stackoverflow.Web.Areas.User.Models;
 using System.Net;
@@ -22,11 +23,11 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             _logger = logger;
         }
 
-        [Authorize] 
+        [Authorize]
         public async Task<IActionResult> Index(int page = 1)
         {
             int pageSize = 10; // Number of posts per page
-            
+
             // Calculate the number of posts to skip based on the page number
             int skip = (page - 1) * pageSize;
 
@@ -42,7 +43,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
                 var posts = await model.GetPostsAsync(token);
                 if (posts == null)
                 {
-                   return View("NotFoundPartial");
+                    return View("NotFoundPartial");
                 }
                 // Pass posts to your view
                 var pagedPosts = posts.Skip(skip).Take(pageSize).ToArray();
@@ -63,7 +64,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
 
 
         }
-         
+
         [Authorize(Policy = "PostCreatePolicy")]
         public IActionResult Create()
         {
@@ -101,23 +102,23 @@ namespace Stackoverflow.Web.Areas.User.Controllers
 
             return View(model);
         }
-         
+
         //[Authorize(Policy = "PostViewPolicy")]
         [Authorize(Policy = "PostViewRequirementPolicy")]
         public async Task<IActionResult> Details(Guid id)
         {
             var model = _scope.Resolve<PostDetailsModel>();
 
-            var post = await model.GetPostsDetailsAsync(id);
+            model.Post = await model.GetPostsDetailsAsync(id);
 
-            if (post == null)
+            if (model.Post == null)
             {
-                  return View("NotFoundPartial");
+                return View("NotFoundPartial");
             }
 
-            return View(post);
+            return View(model);
         }
-         
+
 
         [HttpDelete, Authorize(Policy = "SupperAdmin")]
         public async Task<IActionResult> Delete(Guid id)
@@ -138,10 +139,10 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             var model = _scope.Resolve<PostUpdateModel>();
 
             await model.LoadAsync(id);
-             
+
             return View(model);
         }
-         
+
         [HttpPost, ValidateAntiForgeryToken]
         [Authorize(Policy = "PostUpdatePolicy")]
         public async Task<IActionResult> Update(PostUpdateModel model)
@@ -152,7 +153,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             {
                 try
                 {
-                    await model.UpdatePostAsync(); 
+                    await model.UpdatePostAsync();
                     TempData["success"] = "Your Post updated successfuly ";
                     return RedirectToAction("Index");
                 }
@@ -169,7 +170,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
             }
             else
             {
-               
+
                 foreach (var modelStateEntry in ModelState.Values)
                 {
                     foreach (var error in modelStateEntry.Errors)
@@ -177,7 +178,7 @@ namespace Stackoverflow.Web.Areas.User.Controllers
                         _logger.LogError($"Validation error: {error.ErrorMessage}");
                     }
                 }
-                
+
             }
 
             return View(model);
@@ -193,11 +194,42 @@ namespace Stackoverflow.Web.Areas.User.Controllers
 
             if (post == null)
             {
-                  return View("NotFoundPartial");
+                return View("NotFoundPartial");
             }
 
             return View(post);
         }
 
+        //[Authorize(Policy = "CommentCreatePolicy")]
+        [HttpPost]
+        public async Task<IActionResult> CreateComment(PostDetailsModel model)
+        {
+
+            //if (ModelState.IsValid)
+            //{
+            model.Resolve(_scope);
+
+            var CommentModel = _scope.Resolve<CommentCreateModel>();
+
+            // Set the postId property of the model before returning the view
+            model.postId = model.Post.Id;
+
+
+            // Get the current user's ID
+            CommentModel.userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            CommentModel.postId = model.postId; // Set the postId property
+            CommentModel.Body = model.Comment.Body;
+            await CommentModel.CreateCommentAsync();
+
+            // Redirect back to the post details page
+            return RedirectToAction("Details", "Post", new { id = model.postId });
+            //}
+            //else
+            //{
+            //    //return BadRequest(ModelState);
+            //    return View("NotFoundPartial");
+            //}
+
+        }
     }
 }

@@ -1,28 +1,66 @@
 ﻿@using Stackoverflow.Domain.Entities
-@model Post
+@model PostDetailsModel
 @{
     ViewData["Title"] = "Details";
 }
 
 <div>
-    <h2>@Model.Title</h2> 
-    <p class="text-secondary lh-sm">@Html.Raw(@Model.Body)</p>
-    <p>Created on: @Model.CreationDate</p>
+    <h2>@Model.Post.Title</h2> 
+    <p class="text-secondary lh-sm">@Html.Raw(@Model.Post.Body)</p>
+    <p>Created on: @Model.Post.CreationDate</p>
     <!-- Display other details of the post -->
     <div>
-        <p><strong>Post Type:</strong> @Model.PostType</p>
-        <p><strong>Upvotes:</strong> @Model.Upvotes</p>
-        <p><strong>Downvotes:</strong> @Model.Downvotes</p>
-        <p><strong>Creation Date:</strong> @Model.CreationDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
-        <p><strong>Last Modified Date:</strong> @Model.LastModifiedDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+        <p><strong>Post Type:</strong> @Model.Post.PostType</p>
+        <p><strong>Upvotes:</strong> @Model.Post.Upvotes</p>
+        <p><strong>Downvotes:</strong> @Model.Post.Downvotes</p>
+        <p><strong>Creation Date:</strong> @Model.Post.CreationDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+        <p><strong>Last Modified Date:</strong> @Model.Post.LastModifiedDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+    </div>
+</div>
+
+<!-- Add a section for the comments -->
+<div class="card mt-4">
+    <div class="card-header">
+        Comments
+    </div>
+    <div class="card-body">
+        <!-- Add a form for creating a new comment -->
+        @* <form asp-action="CreateComment" asp-controller="Post" asp-area="user" asp-antiforgery="true"> *@
+        
+        <form asp-action="CreateComment" asp-controller="Post" asp-area="user" asp-antiforgery="true">
+
+            <div class="form-floating py-2 col-12">
+                <label>Add a comment:</label>
+
+                <textarea asp-for="@Model.Comment.Body" class="form-control border-0 shadow"></textarea>
+            </div>
+
+            <div class="form-floating py-2 col-12">
+                <input type="hidden" asp-for="@Model.Post.Id" value="@Model.Post.Id" />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <!-- Display existing comments -->
+        @if (Model.Post.Comments != null && Model.Post.Comments.Any())
+        {
+            <ul class="list-unstyled">
+                @foreach (var comment in Model.Post.Comments)
+                {
+                    <li>
+                        <strong>@comment.UserId</strong> - @comment.Body
+                    </li>
+                }
+            </ul>
+        }
     </div>
 </div>
 
 <!-- Add a section for the options -->
   
 <div>
-    <a href="@Url.Action("Update", "Post", new { id = Model.Id })" class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
-    <a onclick="Delete('@Url.Action("Delete", "Post", new { id = @Model.Id })')" class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
+    <a href="@Url.Action("Update", "Post", new { id = Model.Post.Id })" class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
+    <a onclick="Delete('@Url.Action("Delete", "Post", new { id = @Model.Post.Id })')" class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
     <a asp-action="Index">Back to Index</a>
 </div>
 

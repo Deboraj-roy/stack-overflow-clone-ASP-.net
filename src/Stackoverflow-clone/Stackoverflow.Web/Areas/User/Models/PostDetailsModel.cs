@@ -9,7 +9,11 @@ namespace Stackoverflow.Web.Areas.User.Models
     {
         private ILifetimeScope _scope;
         private readonly HttpClient _httpClient;
+        public Post? Post { get; set; } = new Post();
+        public CommentCreateModel? Comment { get; set; } = new CommentCreateModel();
+         
         private string _baseAddress = System.Environment.GetEnvironmentVariable("API_URL") ?? "http://localhost:5293/v3/";
+        public Guid postId { get; set; }
 
         public PostDetailsModel()
         {
@@ -29,6 +33,7 @@ namespace Stackoverflow.Web.Areas.User.Models
 
             var content = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<Post>(content);
+           
         }
          
     }

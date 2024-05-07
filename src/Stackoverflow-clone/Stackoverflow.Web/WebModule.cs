@@ -18,6 +18,9 @@ namespace Stackoverflow.Web
             builder.RegisterType<UserUpdateModel>().AsSelf();
             builder.RegisterType<EmailConfirmationModel>().AsSelf();
             builder.RegisterType<LoginModel>().AsSelf();
+
+
+            builder.RegisterType<CommentCreateModel>().AsSelf();
         }
     
     }
