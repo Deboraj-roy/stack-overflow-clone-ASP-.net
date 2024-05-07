@@ -13,6 +13,7 @@ using Stackoverflow.Infrastructure.Requirements;
 using Stackoverflow.API.RequestHandlers;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using DotNetEnv.Configuration;
+
 string envFilePath = Path.Combine(Directory.GetCurrentDirectory(), "api.env");
  
 var configuration = new ConfigurationBuilder()

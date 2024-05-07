@@ -6,12 +6,14 @@ services:
             dockerfile: Stackoverflow.API/DockerFile
         image: deboraj/stackoverflow.api
         env_file: 
-            - Stackoverflow.API/web.env
+            - Stackoverflow.API/api.env
         volumes:
             - stackoverflow-api-log:/app/Logs
         ports:
-            - "5759:80"
-        entrypoint: ["dotnet", "Stackoverflow.API.dll"]
+            - "7278:80" 
+        entrypoint: ["dotnet", "Stackoverflow.API.dll"] 
+        
 volumes:
     stackoverflow-api-log:
       external: true
+     
