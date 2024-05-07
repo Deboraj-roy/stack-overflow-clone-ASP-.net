@@ -36,53 +36,26 @@ namespace Stackoverflow.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            //modelBuilder.Entity<ApplicationUser>(b =>
-            //{
-            //    b.ToTable("AspNetUsers");
-            //    b.HasIndex(u => u.Id).IsUnique();
-            //});
-
-
-            // Configure relationships using Fluent API
-
             //modelBuilder.Entity<Post>(b =>
             //{
             //    b.ToTable("Posts");
-            //    b.HasOne(p => p.AspNetUsers) // Corrected from 'p.AspNetUsers' to 'p.ApplicationUser'
-            //       .WithMany(u => u.Posts) // Corrected from 'u => u.Posts' to 'u => u.Posts'
-            //       .HasForeignKey(p => p.Id)
-            //       .OnDelete(DeleteBehavior.Cascade);
+            //    b.HasMany(p => p.Comments)
+            //        .WithOne(c => c.Post)
+            //        .HasForeignKey(c => c.PostId);
             //});
 
-            //modelBuilder.Entity<UserBadge>(b =>
-            //{
-            //    b.ToTable("UserBadges");
-            //    b.HasOne(ub => ub.AspNetUsers) // Corrected from 'ub.AspNetUsers' to 'ub.ApplicationUser'
-            //       .WithMany(u => u.UserBadges)
-            //       .HasForeignKey(ub => ub.Id)
-            //       .OnDelete(DeleteBehavior.Cascade);
-            //});
+            modelBuilder.Entity<PostAndComment>().ToTable("PostAndComments");
+            modelBuilder.Entity<PostAndComment>().HasKey(x => new { x.PostId, x.CommentId });
 
-            //modelBuilder.Entity<Comment>(b =>
-            //{
-            //    b.ToTable("Comments");
-            //    b.HasOne(c => c.AspNetUsers) // Corrected from 'c.AspNetUsers' to 'c.ApplicationUser'
-            //       .WithMany(u => u.Comments)
-            //       .HasForeignKey(c => c.Id)
-            //       .OnDelete(DeleteBehavior.Cascade);
-            //    b.HasOne(c => c.Post)
-            //       .WithMany(p => p.Comments)
-            //       .HasForeignKey(c => c.PostId)
-            //       .OnDelete(DeleteBehavior.Cascade);
-            //});
+            modelBuilder.Entity<PostAndComment>()
+                .HasOne<Post>()
+                .WithMany()
+                .HasForeignKey(x => x.PostId);
 
-            modelBuilder.Entity<Post>(b =>
-            {
-                b.ToTable("Posts");
-                b.HasMany(p => p.Comments)
-                    .WithOne(c => c.Post)
-                    .HasForeignKey(c => c.PostId);
-            });
+            modelBuilder.Entity<PostAndComment>()
+                .HasOne<Comment>()
+                .WithMany()
+                .HasForeignKey(x => x.CommentId);
 
             // Seed data
 

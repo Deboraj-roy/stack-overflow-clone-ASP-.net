@@ -13,7 +13,6 @@
         public DateTime LastModifiedDate { get; set; }
         public bool IsDeleted { get; set; }
         public List<Comment> Comments { get; set; }
-        
     }
 
     public enum PostType
