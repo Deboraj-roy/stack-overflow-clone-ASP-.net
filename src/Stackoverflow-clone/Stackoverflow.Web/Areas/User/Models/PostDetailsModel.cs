@@ -13,7 +13,7 @@ namespace Stackoverflow.Web.Areas.User.Models
         public CommentCreateModel? Comment { get; set; } = new CommentCreateModel();
          
         private string _baseAddress = System.Environment.GetEnvironmentVariable("API_URL") ?? "http://localhost:5293/v3/";
-        public Guid postId { get; set; }
+        public Guid? postId { get; set; }
 
         public PostDetailsModel()
         {

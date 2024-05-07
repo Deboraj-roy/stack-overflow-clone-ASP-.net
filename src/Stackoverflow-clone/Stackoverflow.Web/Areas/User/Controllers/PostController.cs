@@ -204,31 +204,51 @@ namespace Stackoverflow.Web.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateComment(PostDetailsModel model)
         {
+            ModelState.Remove("Post.Body");
+            ModelState.Remove("Post.Title");
+            ModelState.Remove("Post.Comments");
 
-            //if (ModelState.IsValid)
-            //{
-            model.Resolve(_scope);
+            if (!ModelState.IsValid)
+            {
+                foreach (var modelStateKey in ModelState.Keys)
+                {
+                    var modelStateValue = ModelState[modelStateKey];
+                    foreach (var error in modelStateValue.Errors)
+                    {
+                        // Log the error or write it to the response
+                        Console.WriteLine($"Error for {modelStateKey}: {error.ErrorMessage}");
+                        _logger.LogError($"Error for {modelStateKey}: {error.ErrorMessage}");
+                    }
+                }
 
-            var CommentModel = _scope.Resolve<CommentCreateModel>();
+                return View("NotFoundPartial");
+            }
 
-            // Set the postId property of the model before returning the view
-            model.postId = model.Post.Id;
+            if (ModelState.IsValid)
+            {
+                model.Resolve(_scope);
+
+                var CommentModel = _scope.Resolve<CommentCreateModel>();
+
+                // Set the postId property of the model before returning the view
+                model.postId = model.Post.Id;
 
 
-            // Get the current user's ID
-            CommentModel.userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            CommentModel.postId = model.postId; // Set the postId property
-            CommentModel.Body = model.Comment.Body;
-            await CommentModel.CreateCommentAsync();
+                // Get the current user's ID
+                CommentModel.userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                CommentModel.postId = (Guid)model.postId; // Set the postId property
+                CommentModel.Body = model.Comment.Body;
+                await CommentModel.CreateCommentAsync();
+                _logger.LogInformation("Comment created successfuly");
 
-            // Redirect back to the post details page
-            return RedirectToAction("Details", "Post", new { id = model.postId });
-            //}
-            //else
-            //{
-            //    //return BadRequest(ModelState);
-            //    return View("NotFoundPartial");
-            //}
+                // Redirect back to the post details page
+                return RedirectToAction("Details", "Post", new { id = model.postId });
+            }
+            else
+            {
+                //return BadRequest(ModelState);
+                return View("NotFoundPartial");
+            }
 
         }
     }
