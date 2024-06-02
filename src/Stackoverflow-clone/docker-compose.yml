@@ -10,7 +10,7 @@ services:
         volumes:
             - stackoverflow-api-log:/app/Logs
         ports:
-            - "6969:80" 
+            - "6969:80"  
         entrypoint: ["dotnet", "Stackoverflow.API.dll"] 
         
     web:
@@ -25,6 +25,8 @@ services:
             - stackoverflow-web-log:/app/Logs
         ports:
             - "8080:80"
+        environment:
+             - API_URL=http://localhost:6969/v3/
         entrypoint: ["dotnet", "Stackoverflow.Web.dll"]
 
 volumes:

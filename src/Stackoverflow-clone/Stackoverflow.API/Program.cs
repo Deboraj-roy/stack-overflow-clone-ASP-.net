@@ -13,6 +13,7 @@ using Stackoverflow.Infrastructure.Requirements;
 using Stackoverflow.API.RequestHandlers;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using DotNetEnv.Configuration;
+using Autofac.Core;
 
 string envFilePath = Path.Combine(Directory.GetCurrentDirectory(), "api.env");
  
@@ -73,17 +74,30 @@ try
     });
 
 
+    //builder.Services.AddCors(options =>
+    //{
+    //    options.AddPolicy("AllowSites",
+    //        builder =>
+    //        {
+    //            //builder.WithOrigins("https://localhost:7000", "https://localhost:5041", "http://localhost:7000", "http://localhost:5001", "http://localhost:5041", "http://localhost")
+    //            //builder.WithOrigins("https://localhost:7000", "http://localhost:8080", "https://localhost:8080", "http://localhost", "http://localhost:6969", "http://localhost:5153", "http://localhost:80")
+    //            //builder.WithOrigins("http://localhost:8080", "https://localhost:44361", "localhost:6969", "https://localhost:8080/", "http://localhost:8080/", "http://localhost:8080","https://localhost:8080", "http://localhost", "http://localhost:6969", "http://localhost:5153", "http://localhost:80", "https://localhost:7000", "http://localhost:7000", "http://localhost:5041", "https://localhost:5041")
+    //            builder.AllowAnyOrigin()
+    //               .AllowAnyMethod()
+    //               .AllowAnyHeader();
+    //        });
+    //});
+
+
     builder.Services.AddCors(options =>
     {
-        options.AddPolicy("AllowSites",
+        options.AddPolicy("AllowWebApp",
             builder =>
             {
-                //builder.WithOrigins("https://localhost:7000", "https://localhost:5041", "http://localhost:7000", "http://localhost:5001", "http://localhost:5041", "http://localhost")
-                //builder.WithOrigins("https://localhost:7000", "http://localhost:8080", "https://localhost:8080", "http://localhost", "http://localhost:6969", "http://localhost:5153", "http://localhost:80")
-                //builder.WithOrigins("http://localhost:8080", "https://localhost:44361", "localhost:6969", "https://localhost:8080/", "http://localhost:8080/", "http://localhost:8080","https://localhost:8080", "http://localhost", "http://localhost:6969", "http://localhost:5153", "http://localhost:80", "https://localhost:7000", "http://localhost:7000", "http://localhost:5041", "https://localhost:5041")
-                builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
+                builder
+                  .WithOrigins("http://localhost:5759", "http://localhost:8080", "https://localhost:44361") // Replace with the URL of your web app
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
             });
     });
 
@@ -112,7 +126,7 @@ try
 
     app.UseHttpsRedirection();
 
-    app.UseCors();
+    app.UseCors("AllowWebApp");
 
     app.UseAuthorization();
 

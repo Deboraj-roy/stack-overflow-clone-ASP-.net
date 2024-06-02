@@ -16,6 +16,7 @@ using Stackoverflow.Infrastructure.Requirements;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using DotNetEnv.Configuration;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 string envFilePath = Path.Combine(Directory.GetCurrentDirectory(), "web.env");
 
@@ -120,6 +121,14 @@ try
 
 
     var app = builder.Build();
+
+    // Print all environment variables
+    Log.Information("Print all environment variables\n\n\n");
+    foreach (var (key, value) in app.Configuration.AsEnumerable())
+    {
+        Console.WriteLine($"{key} = {value}");
+        Log.Information($"{key} = {value}");
+    }
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
