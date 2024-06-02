@@ -80,7 +80,8 @@ try
             {
                 //builder.WithOrigins("https://localhost:7000", "https://localhost:5041", "http://localhost:7000", "http://localhost:5001", "http://localhost:5041", "http://localhost")
                 //builder.WithOrigins("https://localhost:7000", "http://localhost:8080", "https://localhost:8080", "http://localhost", "http://localhost:6969", "http://localhost:5153", "http://localhost:80")
-                builder.WithOrigins("http://localhost:8080", "localhost:8080", "localhost:6969", "https://localhost:8080/", "http://localhost:8080/", "http://localhost:8080","https://localhost:8080", "http://localhost", "http://localhost:6969", "http://localhost:5153", "http://localhost:80", "https://localhost:7000", "http://localhost:7000", "http://localhost:5041", "https://localhost:5041")
+                //builder.WithOrigins("http://localhost:8080", "https://localhost:44361", "localhost:6969", "https://localhost:8080/", "http://localhost:8080/", "http://localhost:8080","https://localhost:8080", "http://localhost", "http://localhost:6969", "http://localhost:5153", "http://localhost:80", "https://localhost:7000", "http://localhost:7000", "http://localhost:5041", "https://localhost:5041")
+                builder.AllowAnyOrigin()
                    .AllowAnyMethod()
                    .AllowAnyHeader();
             });
