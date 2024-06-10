@@ -27,7 +27,7 @@ namespace Stackoverflow.Web.Areas.User.Models
         public PostListModel(IPostManagementService postManagementService, ILogger<PostListModel> logger)
         {
             _postManagementService = postManagementService;
-            _httpClient = new HttpClient(); 
+            _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri(_baseAddress);
             _logger = logger;
         }

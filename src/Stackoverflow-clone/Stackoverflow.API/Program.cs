@@ -16,7 +16,7 @@ using DotNetEnv.Configuration;
 using Autofac.Core;
 
 string envFilePath = Path.Combine(Directory.GetCurrentDirectory(), "api.env");
- 
+
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json")
@@ -113,13 +113,6 @@ try
     var app = builder.Build();
 
     Log.Information("Application Starting...");
-
-    // Configure the HTTP request pipeline.
-    //if (app.Environment.IsDevelopment())
-    //{
-    //    app.UseSwagger();
-    //    app.UseSwaggerUI();
-    //}
 
     app.UseSwagger();
     app.UseSwaggerUI();
