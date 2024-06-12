@@ -189,6 +189,10 @@ docker resourse clean
 
 ----------------------------------------------------------------------------------
 
+az
+az login
+ az storage account list --query "[].{Name:name, ResourceGroup:resourceGroup}" --output table
+ az storage account keys list --account-name azurefreestorage1 --resource-group Storage_Free
 
 
 ----------------------------------------------------------------------------------

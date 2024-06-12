@@ -5,7 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using SixLabors.ImageSharp.PixelFormats;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Azure.Storage; 
+using Azure.Storage;
+using Azure.Storage.Sas;
 
 //using Amazon.S3;
 //using Amazon.S3.Transfer;
@@ -50,7 +51,7 @@ namespace Stackoverflow.Web.Models
                 //DotNetEnv.Env.Load();
                 string extension = Path.GetExtension(ProfilePictureFile.FileName);
                 string originalFileName = Path.GetFileNameWithoutExtension(ProfilePictureFile.FileName);
-                string fileName = $"{Guid.NewGuid()}{originalFileName}{extension}";
+                string fileName = $"{Guid.NewGuid()}_{originalFileName}{extension}";
                 
                 //AWS CREDENTIALS
 
@@ -61,23 +62,47 @@ namespace Stackoverflow.Web.Models
 
                 BlobServiceClient blobServiceClient = new BlobServiceClient(new Uri($"https://{storageAccountName}.blob.core.windows.net/"), new StorageSharedKeyCredential(storageAccountName, storageAccountKey));
 
-                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                BlobContainerClient blobClient = blobServiceClient.GetBlobContainerClient(containerName);
                 
                 // Create the container if it does not exist
-                if (containerClient.Exists() == false)
+                if (blobClient.Exists() == false)
                 {  
-                    await containerClient.CreateIfNotExistsAsync();
+                    await blobClient.CreateIfNotExistsAsync();
                 }
 
                 try
                 {
-                    BlobClient blobClient = containerClient.GetBlobClient(fileName);
-                    await blobClient.UploadAsync(ProfilePictureFile.OpenReadStream(), new BlobUploadOptions());
 
-                    
-                    // Set the blob to be publicly accessible
-                    BlobProperties properties = await blobClient.GetPropertiesAsync();
-                    await blobClient.SetAccessTierAsync(AccessTier.Hot);
+                    // Get a reference to the blob
+                    //BlobClient blobClient = blobServiceClient.GetBlobClient(containerName, fileName);
+
+                    // Generate a SAS token with read permissions
+                    BlobSasBuilder sasBuilder = new BlobSasBuilder
+                    {
+                        BlobContainerName = containerName,
+                        BlobName = fileName,
+                        Resource = "b",
+                        StartsOn = DateTimeOffset.UtcNow,
+                        ExpiresOn = DateTimeOffset.UtcNow.AddHours(1) // adjust the expiration time as needed
+                    };
+
+                    sasBuilder.SetPermissions(BlobSasPermissions.Read);
+
+                    string sasToken = sasBuilder.ToSasQueryParameters(new StorageSharedKeyCredential(storageAccountName, storageAccountKey)).ToString();
+
+                    // Construct the URL with the SAS token
+                    string blobUrl = $"{blobClient.Uri.AbsoluteUri}?{sasToken}";
+
+                    // Store the Azure Blob Storage URL in ProfilePicture
+                    ProfilePicture = blobUrl;
+
+                    //BlobClient blobClient = containerClient.GetBlobClient(fileName);
+                    //await blobClient.UploadAsync(ProfilePictureFile.OpenReadStream(), new BlobUploadOptions());
+
+
+                    //// Set the blob to be publicly accessible
+                    //BlobProperties properties = await blobClient.GetPropertiesAsync();
+                    //await blobClient.SetAccessTierAsync(AccessTier.Hot);
 
                     // To make the blob publicly accessible, you need to set the blob's ACL to PublicBlob
                     //await blobClient.SetPermissionsAsync / PublicAccess.Blob);
@@ -88,7 +113,7 @@ namespace Stackoverflow.Web.Models
                     //await blobClient.GetPropertiesAsync(properties);
 
                     // Store the Azure Blob Storage URL in ProfilePicture
-                    ProfilePicture = blobClient.Uri.AbsoluteUri;
+                    //ProfilePicture = blobClient.Uri.AbsoluteUri;
                 }
 
                 //AWS CREDENTIALS
