@@ -3,9 +3,13 @@ using Microsoft.AspNetCore.Identity;
 using Stackoverflow.Infrastructure.Membership;
 using System.ComponentModel.DataAnnotations;
 using SixLabors.ImageSharp.PixelFormats;
-using Amazon.S3;
-using Amazon.S3.Transfer;
-using Amazon;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage; 
+
+//using Amazon.S3;
+//using Amazon.S3.Transfer;
+//using Amazon;
 
 namespace Stackoverflow.Web.Models
 {
@@ -47,32 +51,75 @@ namespace Stackoverflow.Web.Models
                 string extension = Path.GetExtension(ProfilePictureFile.FileName);
                 string originalFileName = Path.GetFileNameWithoutExtension(ProfilePictureFile.FileName);
                 string fileName = $"{Guid.NewGuid()}{originalFileName}{extension}";
+                
+                //AWS CREDENTIALS
 
-                string awsAccessKeyId = System.Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? "default_value";
-                string awsSecretkey = System.Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ?? "default_value";
-                //string awsAccessKeyId = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? "AWS_ACCESS_KEY_ID";
-                //string awsSecretkey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ?? "AWS_SECRET_ACCESS_KEY";
-                RegionEndpoint bucketRegion = RegionEndpoint.USEast1;
-                var bucketName = "deborajaspb9";
-                var bucketFolder = "Image";
+                string storageAccountName = System.Environment.GetEnvironmentVariable("AZURE_STORAGE_ACCOUNT") ?? "default_value";
+                string storageAccountKey = System.Environment.GetEnvironmentVariable("AZURE_STORAGE_KEY") ?? "default_value";
+                string containerName = System.Environment.GetEnvironmentVariable("AZURE_STORAGE_CONTAINER") ?? "profilepictures";
+                // create a container for profile pictures
+
+                BlobServiceClient blobServiceClient = new BlobServiceClient(new Uri($"https://{storageAccountName}.blob.core.windows.net/"), new StorageSharedKeyCredential(storageAccountName, storageAccountKey));
+
+                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                
+                // Create the container if it does not exist
+                if (containerClient.Exists() == false)
+                {  
+                    await containerClient.CreateIfNotExistsAsync();
+                }
 
                 try
                 {
+                    BlobClient blobClient = containerClient.GetBlobClient(fileName);
+                    await blobClient.UploadAsync(ProfilePictureFile.OpenReadStream(), new BlobUploadOptions());
 
-                    using (var client = new AmazonS3Client(awsAccessKeyId, awsSecretkey, bucketRegion))
-                    {
-                        var transferUtility = new TransferUtility(client);
-                        //await transferUtility.UploadAsync(ProfilePictureFile.OpenReadStream(), "deborajaspb9", fileName);
-                        await transferUtility.UploadAsync(ProfilePictureFile.OpenReadStream(), bucketName, $"{bucketFolder}/{fileName}");
-                    }
+                    
+                    // Set the blob to be publicly accessible
+                    BlobProperties properties = await blobClient.GetPropertiesAsync();
+                    await blobClient.SetAccessTierAsync(AccessTier.Hot);
 
-                    // Store the S3 file link in ProfilePicture
-                    ProfilePicture = $"https://{bucketName}.s3.amazonaws.com/{bucketFolder}/{fileName}";
-                    //ProfilePicture = $"https://us-east-1.console.aws.amazon.com/s3/object/deborajaspb9?region=us-east-1&bucketType=general&prefix=files/{fileName}";
+                    // To make the blob publicly accessible, you need to set the blob's ACL to PublicBlob
+                    //await blobClient.SetPermissionsAsync / PublicAccess.Blob);
 
+
+                    //properties.AccessTier = AccessTier.Hot;
+                    //properties.BlobAccessType = BlobAccessType.Blob;
+                    //await blobClient.GetPropertiesAsync(properties);
+
+                    // Store the Azure Blob Storage URL in ProfilePicture
+                    ProfilePicture = blobClient.Uri.AbsoluteUri;
                 }
+
+                //AWS CREDENTIALS
+
+                //string awsAccessKeyId = System.Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? "default_value";
+                //string awsSecretkey = System.Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ?? "default_value";
+                //string awsAccessKeyId = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? "AWS_ACCESS_KEY_ID";
+                //string awsSecretkey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ?? "AWS_SECRET_ACCESS_KEY";
+
+                //RegionEndpoint bucketRegion = RegionEndpoint.USEast1;
+                //var bucketName = "deborajaspb9";
+                //var bucketFolder = "Image";
+
+                //try
+                //{
+
+                //    using (var client = new AmazonS3Client(awsAccessKeyId, awsSecretkey, bucketRegion))
+                //    {
+                //        var transferUtility = new TransferUtility(client);
+                //        //await transferUtility.UploadAsync(ProfilePictureFile.OpenReadStream(), "deborajaspb9", fileName);
+                //        await transferUtility.UploadAsync(ProfilePictureFile.OpenReadStream(), bucketName, $"{bucketFolder}/{fileName}");
+                //    }
+
+                //    // Store the S3 file link in ProfilePicture
+                //    ProfilePicture = $"https://{bucketName}.s3.amazonaws.com/{bucketFolder}/{fileName}";
+                //    //ProfilePicture = $"https://us-east-1.console.aws.amazon.com/s3/object/deborajaspb9?region=us-east-1&bucketType=general&prefix=files/{fileName}";
+
+                //}
                 catch (Exception ex)
                 {
+                    Console.WriteLine("Error uploading file: " + ex.Message);
                     return false;
                 }
 
