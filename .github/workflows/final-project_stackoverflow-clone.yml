@@ -1,61 +1,97 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - stackoverflow-clone
+name: CI/CD Implementation - Login to Azure - (secrets) Build and deploy ASP.Net Core app to Azure Web App - stackoverflow-clone
 
+# Trigger the workflow on push events to the main branch or on manual workflow dispatch
 on:
   push:
     branches:
       - Final-Project
   workflow_dispatch:
 
+# Define two jobs: build and deploy
 jobs:
   build:
     runs-on: windows-latest
 
+    # Steps for the Build job
     steps:
       - uses: actions/checkout@v4
-
+    
+      # Set up.NET Core environment
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.x'
           include-prerelease: true
-
+      
+      # Build the ASP.Net Core app
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: |
+          cd ./src/Stackoverflow-clone/Stackoverflow.Web 
+          dotnet build --configuration Release
+        # This step changes the working directory to the ECMS.Web project folder and runs the dotnet build command with Release configuration
 
+      # Publish the ASP.Net Core app
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: | 
+          cd ./src/Stackoverflow-clone/Stackoverflow.Web 
+          dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        # This step changes the working directory to the ECMS.Web project folder and runs the dotnet publish command with Release configuration and outputs to the myapp directory
 
+      # Verify the contents of the myapp directory
+      - name: Verify directory contents
+        run: dir ${{env.DOTNET_ROOT}}/myapp
+        # This step verifies that the myapp directory exists and contains files
+          
+          
+      # Upload the artifact for deployment 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
+        # This step uploads the myapp directory as an artifact named.net-app
 
+  # Steps for the Deploy job
   deploy:
+    # Run the deploy job on a Windows latest environment
     runs-on: windows-latest
+    # This job depends on the build job
     needs: build
+
+    # Environment variables for the deploy job
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    
+    # Permissions for the deploy job
     permissions:
-      id-token: write #This is required for requesting the JWT
-
+      id-token: write
+      # This is required for requesting the JWT
+       
+     
+   # Steps for the deploy job
     steps:
+      # Download the artifact from the build job
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: .net-app
+          name: .net-app 
+          path: ${{github.workspace}}/myapp
+        # This step downloads the.net-app artifact from the build job
       
+      # Login to Azure
       - name: Login to Azure
         uses: azure/login@v1
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_EBB1AEDBC1D44A40AAE251D897F2C283 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_259985DDD77A4306B670332B599190AC }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_488000FC71704AFD99A20ABE948D4081 }}
+           # This step logs in to Azure using the client ID, tenant ID, and subscription ID
 
+      # Deploy to Azure Web App
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
