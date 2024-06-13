@@ -98,5 +98,6 @@ jobs:
         with:
           app-name: 'stackoverflow-clone'
           slot-name: 'Production'
-          package: .
+          package: ${{github.workspace}}/myapp
+        # This step deploys the myapp package to the ECMSAIUB1 Azure Web App in the Production slot
           
