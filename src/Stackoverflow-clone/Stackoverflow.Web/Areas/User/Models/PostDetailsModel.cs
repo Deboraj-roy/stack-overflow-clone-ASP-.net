@@ -16,7 +16,7 @@ namespace Stackoverflow.Web.Areas.User.Models
         public CommentCreateModel? Comment { get; set; } = new CommentCreateModel();
         public List<Comment>? Comments { get; set; }
          
-        private string _baseAddress = System.Environment.GetEnvironmentVariable("API_URL") ?? "http://localhost:5293/v3/";
+        private string _baseAddress = System.Environment.GetEnvironmentVariable("API_URL") ?? WebConstants.ApiUrl;
         public Guid? postId { get; set; }
 
         public PostDetailsModel()
