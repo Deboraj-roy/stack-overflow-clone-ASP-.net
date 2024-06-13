@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using DotNetEnv.Configuration;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Stackoverflow.Web.Models;
 
 string envFilePath = Path.Combine(Directory.GetCurrentDirectory(), "web.env");
 
@@ -38,7 +39,7 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     var connectionStringConfig = builder.Configuration.GetConnectionString("DefaultStackoverflowConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-    var connectionString = System.Environment.GetEnvironmentVariable("DefaultStackoverflowConnection") ?? connectionStringConfig;
+    var connectionString = WebConstants.DefaultStackoverflowConnection ?? connectionStringConfig;
     var migrationAssembly = Assembly.GetExecutingAssembly().FullName;
 
     Log.Information("Connection String:" + connectionString);
