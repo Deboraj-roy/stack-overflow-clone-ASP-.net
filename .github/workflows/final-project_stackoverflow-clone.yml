@@ -25,6 +25,10 @@ jobs:
         with:
           dotnet-version: '8.x'
           include-prerelease: true
+          
+      # Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.WORKING_DIRECTORY }}
       
       # Build the ASP.Net Core app
       - name: Build with dotnet
@@ -32,6 +36,10 @@ jobs:
           cd ./src/Stackoverflow-clone/Stackoverflow.Web 
           dotnet build --configuration Release
         # This step changes the working directory to the ECMS.Web project folder and runs the dotnet build command with Release configuration
+
+      # Test
+      - name: Test
+        run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
 
       # Publish the ASP.Net Core app
       - name: dotnet publish
