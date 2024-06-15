@@ -9,7 +9,9 @@ on:
     branches:
       - Final-Project
   workflow_dispatch:
-
+# Sets an environment variable WORKING_DIRECTORY to ./src/MyProject.
+env:
+    WORKING_DIRECTORY: ./src/Stackoverflow-clone
 # Define two jobs: build and deploy
 jobs:
   build:
