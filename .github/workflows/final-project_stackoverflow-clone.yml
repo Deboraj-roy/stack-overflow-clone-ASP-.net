@@ -39,10 +39,16 @@ jobs:
           dotnet build --configuration Release
         # This step changes the working directory to the ECMS.Web project folder and runs the dotnet build command with Release configuration
 
-      # Test
-      - name: Test
-        run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
+     # Test
+      - name: Run tests and generate report
+        run: dotnet test ${{ env.WORKING_DIRECTORY }} --no-build --logger "trx;LogFileName=test_results.trx"
 
+      - name: Publish test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test Results
+          path: ${{ env.WORKING_DIRECTORY }}/TestResults
+        
       # Publish the ASP.Net Core app
       - name: dotnet publish
         run: | 
