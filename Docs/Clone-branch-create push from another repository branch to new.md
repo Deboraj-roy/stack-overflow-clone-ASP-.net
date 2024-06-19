@@ -175,4 +175,5 @@ To rename a branch in Git, you can use the following steps:
 That's it! The branch `c` will now be renamed to `a` both locally and, if you've pushed the changes, on the remote repository as well.
 
 ========================================================================================================================================================================
+check how to publish on Linux server: https://www.blackbox.ai/publish/YhmuH-lxn-srkILdqNyRm
 
