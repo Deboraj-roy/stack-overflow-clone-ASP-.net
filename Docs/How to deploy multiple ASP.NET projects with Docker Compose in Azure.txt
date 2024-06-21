@@ -1,0 +1,275 @@
+ 
+----------------------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------
+
+server username: demoUbuntu
+pass: 
+
+----------------------------------------------------------------------------------
+sudo apt-get update
+sudo apt-get upgrade
+sudo su
+sudo apt-get install curl
+sudo apt-get install git
+sudo apt-get install vim
+
+
+----------------------------------------------------------------------------------
+sudo apt update
+sudo apt install apache2
+sudo systemctl start apache2
+sudo systemctl enable apache2
+----------------------------------------------------------------------------------
+mkdir project
+git clone https://github.com/Deboraj-roy/stack-overflow-clone-ASP-.net.git
+----------------------------------------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deboraj Roy Portfolio</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl7/1L_dstPt3HV5HzF6Gvk/e3s4Wz6iJgD/+ub2oU" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="bg-primary text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1>Deboraj Roy</h1>
+                    <p>Software Developer</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="mailto:deboraj.roy@example.com" class="btn btn-light">Email</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>About Me</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo, velit eget euismod
+                        congue, mi ipsum congue nisi, vel aliquam nunc nisi et velit.</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>Skills</h3>
+                    <ul class="list-unstyled">
+                        <li>HTML/CSS</li>
+                        <li>JavaScript</li>
+                        <li>Bootstrap</li>
+                        <li>C#</li>
+                        <li>.NET</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h3>Contact</h3>
+                    <address>
+                        Deboraj Roy<br>
+                        123 Main St.<br>
+                        Anytown, USA<br>
+                        <abbr title="Phone">P:</abbr> (123) 456-7890<br>
+                        <a href="mailto:deboraj.roy@example.com">deboraj.roy@example.com</a>
+                    </address>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>My Work</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo, velit eget euismod
+                        congue, mi ipsum congue nisi, vel aliquam nunc nisi et velit.</p>
+                </div>
+                <div class="col-md-6">
+                    <img src="my-work.jpg" alt="My Work" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-primary text-white py-3">
+        <div class="container">
+            <p class="text-center">Copyright &copy; 2023 Deboraj Roy. All rights reserved.</p>
+            <ul class="list-inline text-center">
+                <li class="list-inline-item"><a href="#" class="text-white"><i class="fa-brands fa-facebook-f"></i></a></li>
+                <li class="list-inline-item"><a href="#" class="text-white"><i class="fa-brands fa-twitter"></i></a></li>
+                <li class="list-inline-item"><a href="#" class="text-white"><i class="fa-brands fa-linkedin-in"></i></a></li>
+                <li class="list-inline-item"><a href="#" class="text-white"><i class="fa-brands fa-github"></i></a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4ClPipBUdRQ+yhW0EcVfaF+RHaGcRQ9TjoYQX+pfsWzsjAiqxXQGxTfFyQ"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
+----------------------------------------------------------------------------------
+Docker install https://docs.docker.com/engine/install/ubuntu/
+
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo docker run hello-world
+
+
+sudo apt install docker-compose
+
+----------------------------------------------------------------------------------
+
+mkdir logsAPI
+
+mkdir logsWeb
+
+vim web.env
+vim api.env
+
+edite progam.cs od api cors enable
+
+
+
+----------------------------------------------------------------------------------
+
+version: "3"
+services:
+    api:
+        build:
+            context: .
+            dockerfile: Stackoverflow.API/DockerFile
+        image: deboraj/stackoverflow.api
+        env_file:
+            - Stackoverflow.API/api.env
+        volumes:
+            - stackoverflow-api-log:/app/Logs
+        ports:
+            - "6969:80"
+        entrypoint: ["dotnet", "Stackoverflow.API.dll"]
+
+    web:
+        build:
+            context: .
+            dockerfile: Stackoverflow.Web/DockerFile
+        image: deboraj/stackoverflow.web
+
+        env_file:
+            - Stackoverflow.Web/web.env
+        volumes:
+            - stackoverflow-web-log:/app/Logs
+        ports:
+            - "8080:80"
+        environment:
+             - API_URL=http://172.191.113.191:6969/v3/
+        entrypoint: ["dotnet", "Stackoverflow.Web.dll"]
+
+volumes:
+    stackoverflow-api-log:
+      external: true
+    stackoverflow-web-log:
+      external: true
+
+
+----------------------------------------------------------------------------------
+
+
+
+ 
+docker volume create --driver local --opt type=none --opt device=/home/demoUbuntu/project/stack-overflow-clone-ASP-.net/src/Stackoverflow-clone/logsAPI --opt o=bind stackoverflow-api-log 
+docker volume create --driver local --opt type=none --opt device=/home/demoUbuntu/project/stack-overflow-clone-ASP-.net/src/Stackoverflow-clone/logsWeb --opt o=bind stackoverflow-web-log
+
+docker volume ls
+
+
+
+----------------------------------------------------------------------------------
+
+docker-compose up -d --build
+docker-compose down
+
+
+docker volume prune
+
+----------------------------------------------------------------------------------
+
+
+----------------------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------------------
+
+
+----------------------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------------------
+ 
+
+
+
+
+
