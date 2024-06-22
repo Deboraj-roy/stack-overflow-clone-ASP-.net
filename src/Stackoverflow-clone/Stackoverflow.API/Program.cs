@@ -95,7 +95,8 @@ try
             builder =>
             {
                 builder
-                  .WithOrigins("http://localhost:5759", "http://localhost:8080", "https://localhost:44361", "https://stackoverflow-clone.azurewebsites.net/") // Replace with the URL of your web app
+                  .AllowAnyOrigin()  
+                  //.WithOrigins("http://localhost:5759", "http://localhost:8080", "https://localhost:44361", "https://stackoverflow-clone.azurewebsites.net/") // Replace with the URL of your web app
                   .AllowAnyMethod()
                   .AllowAnyHeader();
             });
